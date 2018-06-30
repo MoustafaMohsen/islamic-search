@@ -1,12 +1,22 @@
 
 <!--<button (click)='logInput()'>log input</button>-->
 
-<label>chapter: </label>
-<input [(ngModel)]='chapter' type="number" >
-<label>number: </label>
-<input [(ngModel)]='number' type="number" >
+<mat-form-field class="spacing">
+<input [(ngModel)]='chapter'  placeholder="chapter" type="number"  matInput>
+</mat-form-field>
 
-<button (click)='load(this.chapter,this.number)' >load</button>
-<button (click)='reload()' >reload</button>
+<mat-form-field class="spacing">
+<input [(ngModel)]='number' placeholder="number" type="number" matInput>
+</mat-form-field>
 
-<app-source [(BASEURL)]="this.BASEURL"></app-source>
+<!--mat-form-field>
+        <mat-select placeholder="Select">
+          <mat-option value="option">Option</mat-option>
+        </mat-select>
+      </mat-form-field-->
+      
+<button (click)='pushLoad(this.chapter,this.number)' mat-button>push</button>
+
+<app-hadith-box [(apiURL)]='this.apiURL' [(update)]='this.update'  ></app-hadith-box>
+
+<!--app-source [(BASEURL)]="this.BASEURL"></app-source-->

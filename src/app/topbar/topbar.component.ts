@@ -1,4 +1,9 @@
 import { Component, OnInit,Input } from '@angular/core';
+import { EventEmitter } from 'protractor';
+import { WebService } from '../web.service';
+import { PartialObserver, Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material';
+
 declare var $:any;
 
 @Component({
@@ -8,19 +13,34 @@ declare var $:any;
 })
 export class TopbarComponent implements OnInit {
 
+  apiURL='https://muflihun.com/svc/hadith?c=1&b=85&h=80';
   BASEURL = "https://muflihun.com/bukhari/";
   @Input() chapter;
   @Input() number;
-  constructor() { }
+  
+  public observer: Observable<any>;
+  update ;
+
+  constructor(private web:WebService,private snack:MatSnackBar) { }
 
   ngOnInit() {
   }
-  load(chapter,number){//click load
-    this.BASEURL= "https://muflihun.com/bukhari/"+chapter+"/"+number
-  }
 
-  reload(){//click reload
-    $('iframe').attr('src', $('iframe').attr('src'));
+lasturl
+  pushLoad(chapter,number){
+    this.apiURL='https://muflihun.com/svc/hadith?c=1&b='+chapter+'&h='+number;
+
+    if (this.lasturl!=this.apiURL) {
+      this.lasturl=this.apiURL
+      this.web.Loading.next(true)
+      this.web.subject.next();
+      console.log(this.apiURL);
+    }
+    else{
+      this.snack.open("Already sent","X",{duration:1000})
+    }
+    
+
   }
 
   
