@@ -1,0 +1,12 @@
+
+<!--<button (click)='logInput()'>log input</button>-->
+
+<label>chapter: </label>
+<input [(ngModel)]='chapter' type="number" >
+<label>number: </label>
+<input [(ngModel)]='number' type="number" >
+
+<button (click)='load(this.chapter,this.number)' >load</button>
+<button (click)='reload()' >reload</button>
+
+<app-source [(BASEURL)]="this.BASEURL"></app-source>
