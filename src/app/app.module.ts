@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { SourceComponent } from './source/source.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -18,6 +18,7 @@ import {
 import { MatInputModule } from "@angular/material/input";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { HadithBoxComponent } from './hadith-box/hadith-box.component';
+import {MatSelectModule} from '@angular/material/select';
 
 
 export const appRoutes:Routes =[
@@ -41,7 +42,8 @@ const material=[
   ],
   imports: [
     BrowserModule,
-
+    ReactiveFormsModule,
+    MatSelectModule,
     HttpClientModule,
     FormsModule,
     //material

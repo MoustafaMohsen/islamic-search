@@ -30,7 +30,10 @@ export class HadithBoxComponent implements OnInit {
             this.boxcontent=r ;
             this.web.Loading.next(false)
           },
-          s=>{this.snack.open(this.State+this.apiURL+" Not found", "X", {duration: 5000,});this.web.Loading.next(false) }
+          s=>{
+            this.snack.open(this.State+this.apiURL+" Not found", "X", {duration: 5000,});
+            this.web.Loading.next(false) 
+          }
         )
 
         } 
