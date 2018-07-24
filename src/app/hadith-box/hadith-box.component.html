@@ -1,11 +1,28 @@
+<div class="row">
 
-<div class="source-site">
+  <div class="col-1"></div>
 
-<h4 *ngIf="hadithaddress&&this.CurrentSource=='hadith'">Ch:{{hadithaddress.chapter}} Hadith:{{hadithaddress.hadith}}</h4>
-  <div>
-      <mat-spinner *ngIf='loading' class="Loading"></mat-spinner>
-    <p [innerHTML]="boxcontent" class="HadithText lead" *ngIf='!loading'></p>
+  <div class="col">
+
+
+    <!--=====Card====-->
+    <mat-spinner *ngIf='loading&&!CurrentSource' class="Loading" [diameter]="40"></mat-spinner>
+    <mat-card *ngIf='CurrentSource'>
+      <mat-card-title >
+          <h5 *ngIf="hadithaddress&&CurrentSource=='hadith'&&!loading">Ch:{{hadithaddress.chapter}} Hadith:{{hadithaddress.hadith}}</h5>
+      </mat-card-title>
+          <mat-spinner *ngIf='loading' class="Loading" [diameter]="40"></mat-spinner>
+          <p [innerHTML]="boxcontent" class="HadithText lead" *ngIf="!loading"></p>
+
+    </mat-card>
+
   </div>
-  
+
+  <div class="col-1"></div>
+
+
+
+
+
 
 </div>

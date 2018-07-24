@@ -4,11 +4,10 @@ import { WebService } from '../web.service';
 import { PartialObserver, Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
 import {FormControl, Validators} from '@angular/forms';
-import { BukhariC } from "../SourceOptions/Hadith";
+import { BukhariEngilshIndex } from "../SourceOptions/Hadith";
 import { HttpClient } from "@angular/common/http";
 import { HadithBook,hadith, ApiRequest,hadithaddress } from "../interfaces";
-import { BukhariChapter } from "../SourceOptions/Bukhari";
-import { flattenStyles } from '@angular/platform-browser/src/dom/dom_renderer';
+import { BukhariLog } from "../SourceOptions/Bukhari";
 declare var $:any;
 
 @Component({
@@ -19,15 +18,14 @@ declare var $:any;
 export class TopbarComponent implements OnInit {
 
   apiURL=""//'https://muflihun.com/svc/hadith?c=1&b=85&h=80';
-  BASEURL = "https://muflihun.com/bukhari/";
   @Input() chapter;
   @Input() number_chapter;
   @Input() number_hadith:number;
   @Input() verse;
   @Input() chapter_book;
   Select_source;
-  bukhariChapter=BukhariChapter;
-  BukhariC=BukhariC;
+  bukhariChapter=BukhariLog;
+  BukhariEngilshIndex=BukhariEngilshIndex;
   public observer: Observable<any>;
   update ;//input to hadith component
   lasturl;
@@ -37,7 +35,7 @@ export class TopbarComponent implements OnInit {
   showHadith:boolean;
   disableChapterSelect=false;
   TheHadithaddress:hadithaddress;
-  CurrentChapterSource=BukhariC.length;
+  CurrentChapterSource=BukhariEngilshIndex.length;
 
   lastChaptervalue;  
   lasthadithNumbervalue;
@@ -86,7 +84,7 @@ export class TopbarComponent implements OnInit {
 
         //----update hadithcount and set validator
         this.currentChapter=value;
-        this.TheHadithaddress  = this.GetHadithsFromTo(this.currentChapter,BukhariChapter);
+        this.TheHadithaddress  = this.GetHadithsFromTo(this.currentChapter,BukhariLog);
         
         this.hadithnumberChapterFC.setValidators([Validators.min(this.TheHadithaddress.from),
           Validators.max(this.TheHadithaddress.to)]);
@@ -227,6 +225,7 @@ export class TopbarComponent implements OnInit {
   GetHadithsFromTo(book:number,CHAPTER:HadithBook[]):hadithaddress{
     var from =  Number(CHAPTER[book-1].hadiths[0].hadith) ;
     var to =  Number(CHAPTER[book-1].hadiths[CHAPTER[book-1].hadiths.length-1].hadith)
+    var volume 
     var hadithaddress:hadithaddress={
       book:book,
       from:from,
@@ -302,11 +301,11 @@ hadiths:hadith[];
     //update Hadith Count
     //By chapter option
     if(this.chapter_book!=null){
-     // this.hadithinChapterCount=this.GetHadithsCountinBook(this.chapter_book,BukhariChapter)
+     // this.hadithinChapterCount=this.GetHadithsCountinBook(this.chapter_book,BukhariLog)
     }
     //By chapter number
       else{
-       // this.hadithinChapterCount=this.GetHadithsCountinBook(this.chapter,BukhariChapter)
+       // this.hadithinChapterCount=this.GetHadithsCountinBook(this.chapter,BukhariLog)
       }
       
 
