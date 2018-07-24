@@ -14,6 +14,7 @@ export interface Quranaddress{
   verse:number;
 }
 export interface ApiRequest{
+  c:number;
   url:string;
   source:string;
   hadithaddress?:HadithAddress;
@@ -22,7 +23,12 @@ export interface ApiRequest{
 }
 export interface hadithaddress {
   book:number;
+  volume?:number;
   from:number;
   to:number;
 }
-
+export interface hadithEnglishIndex{ 
+  book: string; 
+  bookName: string; 
+  volume: string; 
+}

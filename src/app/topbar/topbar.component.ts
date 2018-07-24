@@ -6,8 +6,9 @@ import { MatSnackBar } from '@angular/material';
 import {FormControl, Validators} from '@angular/forms';
 import { BukhariEngilshIndex } from "../SourceOptions/Hadith";
 import { HttpClient } from "@angular/common/http";
-import { HadithBook,hadith, ApiRequest,hadithaddress } from "../interfaces";
+import { HadithBook,hadith, ApiRequest,hadithaddress,hadithEnglishIndex } from "../interfaces";
 import { BukhariLog } from "../SourceOptions/Bukhari";
+import { MuslimEnglishIndex,MuslimLog} from "../SourceOptions/Muslim";
 declare var $:any;
 
 @Component({
@@ -31,12 +32,15 @@ export class TopbarComponent implements OnInit {
   lasturl;
   //html controllers
   currentChapter;
+  currentVolume;
   showQuran:boolean;
   showHadith:boolean;
   disableChapterSelect=false;
   TheHadithaddress:hadithaddress;
-  CurrentChapterSource=BukhariEngilshIndex.length;
-
+  CurrentChapterSource=null;
+  HADITHINDEX;
+  HADITHLOG;
+  C;
   lastChaptervalue;  
   lasthadithNumbervalue;
   //FormControll
@@ -49,10 +53,10 @@ export class TopbarComponent implements OnInit {
     [Validators.required]
   );
   chapterFC:FormControl=new FormControl(//hadith chapter
-      null,[Validators.required,Validators.max(this.CurrentChapterSource),Validators.min(1)]
+      null,[Validators.required]
   );
   chapterOptionsFC:FormControl=new FormControl(//hadith chapter Option
-    null,[Validators.required,Validators.max(this.CurrentChapterSource)]
+    null,[Validators.required]
 );
   constructor(private web:WebService,private snack:MatSnackBar,private http:HttpClient) { }
 
@@ -62,10 +66,22 @@ export class TopbarComponent implements OnInit {
     //what to do with Source Select
     this.web.Select_source.subscribe( r=>{
       switch (r) {
-        case "Bukhari":{this.showQuran=false;this.showHadith=true}
+        case "Bukhari":{
+          this.showQuran=false;this.showHadith=true;
+          this.CurrentChapterSource=BukhariEngilshIndex.length;
+          this.HADITHINDEX=BukhariEngilshIndex;
+          this.HADITHLOG=BukhariLog;
+          this.C=1;
+        }
           break;
 
-        case "Muslim":{this.showQuran=false;this.showHadith=true}
+        case "Muslim":{
+          this.showQuran=false;this.showHadith=true;
+          this.CurrentChapterSource=MuslimEnglishIndex.length;
+          this.HADITHINDEX=MuslimEnglishIndex;
+          this.HADITHLOG=MuslimLog;
+          this.C=2;
+        }
           break;
 
         case "Quran":{this.showQuran=true;this.showHadith=false;}
@@ -80,15 +96,22 @@ export class TopbarComponent implements OnInit {
     this.chapterFC.valueChanges.subscribe(
       value=>{
         //check validity
-        if(value <= 0) return;
+        if(this.lastChaptervalue==value&&this.chapterFC.status!='VALID') return;
 
         //----update hadithcount and set validator
         this.currentChapter=value;
-        this.TheHadithaddress  = this.GetHadithsFromTo(this.currentChapter,BukhariLog);
+        this.TheHadithaddress  = this.GetHadithsFromTo(this.currentChapter,this.HADITHLOG,this.HADITHINDEX);
+        this.currentVolume = this.TheHadithaddress!=null ?this.TheHadithaddress.volume:null ;
+
+        if(this.TheHadithaddress==null)return
+
+        this.hadithnumberChapterFC.setValue(this.TheHadithaddress.from)
+        console.log(this.TheHadithaddress);
         
         this.hadithnumberChapterFC.setValidators([Validators.min(this.TheHadithaddress.from),
           Validators.max(this.TheHadithaddress.to)]);
 
+        
         this.hadithnumberOptionChapterFC.setValidators([Validators.min(this.TheHadithaddress.from),
           Validators.max(this.TheHadithaddress.to)]);
 
@@ -153,15 +176,28 @@ export class TopbarComponent implements OnInit {
 
 
   pushLoad(){//Look up
+/*
+    if(!this.hadithnumberChapterFC.invalid&&!this.chapterFC.invalid&&!this.chapterOptionsFC.invalid&&!this.hadithnumberOptionChapterFC.invalid)
+{this.snack.open("invalid request","X",{duration:1000});return}
+*/
+    console.log(this.hadithnumberChapterFC.invalid);
+    console.log(this.chapterFC.invalid);
+    console.log(this.chapterOptionsFC.invalid);
+    console.log(this.hadithnumberOptionChapterFC.invalid);
+    console.log(this.hadithnumberOptionChapterFC.errors);
+    
 
-    this.apiURL='https://muflihun.com/svc/hadith?c=1&b='+this.currentChapter+'&h='+this.hadithnumberChapterFC.value;
+    this.apiURL='https://muflihun.com/svc/hadith?c='+this.C+'&b='+this.currentChapter+'&h='+this.hadithnumberChapterFC.value;
     //Send Request & check so to not send the same request twice
     if(this.lasturl==this.apiURL){this.snack.open("Already sent","X",{duration:1000});return}
+
+
 
     this.lasturl=this.apiURL;
     this.web.Loading.next(true);
 
     var _apiRequest:ApiRequest={
+      c:this.C,
       url:this.apiURL,
       source:"hadith",
       hadithaddress:{chapter:this.currentChapter,hadith:this.hadithnumberChapterFC.value},
@@ -212,29 +248,63 @@ export class TopbarComponent implements OnInit {
     this.hadithnumberOptionChapterFC.reset();
   }
   ////testing
-  logInput(){
-    console.log(this.chapter);
-    console.log(this.hadithnumberChapterFC.value);
-  }
+  test(){
+    console.log(this.hadithnumberChapterFC.invalid);
+    console.log(this.chapterFC.invalid);
+    console.log(this.chapterOptionsFC.invalid);
+    console.log(this.hadithnumberOptionChapterFC.invalid);
+    console.log(this.hadithnumberOptionChapterFC.errors);  
+    console.log(this.hadithnumberOptionChapterFC.value);    
+    }
 
 
   GetHadithsCountinBook(book:number,CHAPTER:HadithBook[]){
     return CHAPTER[book-1]==null?  0:  CHAPTER[book-1].hadiths.length;
   }
 
-  GetHadithsFromTo(book:number,CHAPTER:HadithBook[]):hadithaddress{
+  GetHadithsFromTo(book:number,CHAPTER:HadithBook[],index?:hadithEnglishIndex[]):hadithaddress{
+    if(CHAPTER[book-1]==null){return null}
+
     var from =  Number(CHAPTER[book-1].hadiths[0].hadith) ;
-    var to =  Number(CHAPTER[book-1].hadiths[CHAPTER[book-1].hadiths.length-1].hadith)
-    var volume 
+    var to =  Number(CHAPTER[book-1].hadiths[CHAPTER[book-1].hadiths.length-1].hadith);
+    let filtered = index.filter( inx=>inx.book == ''+book);
+    var volume =Number(filtered!=null? filtered[0].volume : null);
+
     var hadithaddress:hadithaddress={
       book:book,
       from:from,
-      to:to
+      to:to,
+      volume:volume
     }
+
     console.log(hadithaddress);    
     return hadithaddress;
   }
 
+
+  //muslim https://muflihun.com/svc/hadith?c=2&b=1&h=1
+
+  Hadithbooks:HadithBook[]=[{book:0,hadiths:null},{book:0,hadiths:null}];
+  hadiths:hadith[];
+    //Loop Script
+    loop(){
+      for (let i = 1; i <= 43; i++) {
+        this.http.get<hadith[]>("https://muflihun.com/svc/hadith?c=2&b="+i).subscribe(
+          r=>{
+            var hold :HadithBook={book:0,hadiths:null}
+            hold.book=i
+            hold.hadiths=r
+            this.Hadithbooks.push(hold)
+  
+          });
+       // books.push(hold)
+      }
+    }//loop
+
+    printloop(){
+      console.log(this.Hadithbooks);
+      
+    }
 }//class
 
 

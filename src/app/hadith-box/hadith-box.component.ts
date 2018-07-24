@@ -3,7 +3,7 @@ import { DomSanitizer} from '@angular/platform-browser';
 import { HttpClient } from "@angular/common/http";
 import { filter,map ,pluck} from 'rxjs/operators';
 import {  WebService } from "../web.service";
-import { PartialObserver, Observable } from 'rxjs';
+import { PartialObserver, Observable, Subject } from 'rxjs';
 
 import { MatSnackBar } from "@angular/material";
 import { HadithAddress,Quranaddress } from '../interfaces';
@@ -21,7 +21,8 @@ export class HadithBoxComponent implements OnInit {
   CurrentSource;
   hadithaddress:HadithAddress;
   quranaddress:Quranaddress;
-
+  theC:string;
+  theC$:Subject<number>=new Subject();
   constructor(private sanitizer:DomSanitizer,private http:HttpClient,private web:WebService,private snack:MatSnackBar) { }
 
   ngOnInit() {
@@ -37,14 +38,25 @@ export class HadithBoxComponent implements OnInit {
             this.hadithaddress=data.hadithaddress;
             this.quranaddress=data.quranaddress;
             this.CurrentSource=data.source;
+            this.theC$.next(data.c);
+            
           },
           s=>{
             this.snack.open(this.CurrentSource +this.apiURL+" Not found", "X", {duration: 5000,});
-            this.web.Loading.next(false) 
+            this.web.Loading.next(false)
           }
         )
       }
     )//apiRequest subscribe
+
+    this.theC$.subscribe(
+      data=>{
+        switch (data){
+          case 1:{this.theC='Bukhari';break}
+          case 2:{this.theC='Muslim';break}
+        }
+      } 
+    )
   }//ngOnInit
 
   ngOnChanges(update){

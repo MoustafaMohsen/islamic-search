@@ -20,12 +20,11 @@
 
     <!--=======Options========-->
     <mat-form-field>
-      <span matPrefix>{{this.currentChapter}} &nbsp;</span>
+      <span matPrefix class="font-weight-bold">{{this.currentVolume}} &nbsp;</span>
       <mat-select placeholder="Choose Chapter" [(formControl)]="chapterOptionsFC" tabindex="-1">
 
         <div *ngFor="let c of BukhariEngilshIndex">
           <mat-option [value]="c.book">
-            <span class="font-weight-bold">{{c.volume}} :</span>
             <span>{{c.book}}</span>- {{c.bookName}}
           </mat-option>
         </div>
@@ -65,9 +64,15 @@
       <input [(ngModel)]='verse' placeholder="Verse" type="number" matInput>
     </mat-form-field>
   </div>
-  <button (click)='GetHadithsFromTo(this.currentChapter,bukhariChapter)' mat-button>test</button>
-  <!--Look up-->
   <button (click)='pushLoad()' mat-button *ngIf="showQuran||showHadith">Look up</button>
+
+  <button (click)='test()' mat-button>test</button>
+
+  <!---
+  <button (click)='loop()' mat-button>loop</button>
+  <button (click)='printloop()' mat-button>print loop</button>
+  -->
+  <!--Look up-->
 
 
 
