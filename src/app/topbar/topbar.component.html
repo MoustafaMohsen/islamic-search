@@ -10,51 +10,51 @@
 
 
 
-            <!--===============Hadith===================-->
+  <!--===============Hadith===================-->
   <div class="Bukhari" *ngIf="showHadith">
     <!--=======Chapter========-->
     <mat-form-field class="spacing">
-      <input  [(formControl)]="chapterFC" placeholder="Chapter" type="number" matInput >
+      <input [(formControl)]="chapterFC" placeholder="Chapter" type="number" matInput>
       <mat-error *ngIf="chapterFC.invalid">{{getChapternumberError()}}</mat-error>
     </mat-form-field>
 
     <!--=======Options========-->
     <mat-form-field>
-        <span matPrefix>+1 &nbsp;</span>
-            <mat-select placeholder="Choose Chapter" [(formControl)]="chapterOptionsFC" tabindex="-1">
+      <span matPrefix>+1 &nbsp;</span>
+      <mat-select placeholder="Choose Chapter" [(formControl)]="chapterOptionsFC" tabindex="-1">
 
-            <div *ngFor="let c of BukhariC" >
-              <mat-option [value]="c.book">
-                <span class="font-weight-bold">{{c.volume}} :</span>
-                <span>{{c.book}}</span>- {{c.bookName}}
-              </mat-option>
-            </div>
+        <div *ngFor="let c of BukhariC">
+          <mat-option [value]="c.book">
+            <span class="font-weight-bold">{{c.volume}} :</span>
+            <span>{{c.book}}</span>- {{c.bookName}}
+          </mat-option>
+        </div>
 
-            </mat-select>
-          <mat-hint>Errors appear instantly!</mat-hint>
+      </mat-select>
+      <mat-hint>Errors appear instantly!</mat-hint>
     </mat-form-field>
 
     <!--=======Number-in-chapter========-->
     <mat-form-field class="spacing">
-        <input placeholder="Number-in-Chapter" type="number" matInput [formControl]="hadithnumberChapterFC">
-        <mat-error *ngIf="hadithnumberChapterFC.invalid">{{getHadithChapternumberError()}}</mat-error>
-      </mat-form-field>
+      <input placeholder="Number-in-Chapter" type="number" matInput [formControl]="hadithnumberChapterFC">
+      <mat-error *ngIf="hadithnumberChapterFC.invalid">{{getHadithChapternumberError()}}</mat-error>
+    </mat-form-field>
 
     <!--===============-->
     <mat-form-field>
-        <mat-select placeholder="Hadith Number" [(formControl)]="hadithnumberOptionChapterFC" tabindex="-1">
+      <mat-select placeholder="Hadith Number" [(formControl)]="hadithnumberOptionChapterFC" tabindex="-1">
 
-          <mat-option *ngFor="let x of TheHadithaddress | addressArray;" [value]="x">{{x}}</mat-option>
+        <mat-option *ngFor="let x of TheHadithaddress | addressArray;" [value]="x">{{x}}</mat-option>
 
-        </mat-select>
-</mat-form-field>
+      </mat-select>
+    </mat-form-field>
 
 
   </div>
 
 
 
-            <!--================Quran=====================-->
+  <!--================Quran=====================-->
   <div class="Quran" *ngIf="showQuran">
     <!--=======Chapter========-->
     <mat-form-field class="spacing">
@@ -65,35 +65,34 @@
       <input [(ngModel)]='verse' placeholder="Verse" type="number" matInput>
     </mat-form-field>
   </div>
-<button (click)='GetHadithsFromTo(this.currentChapter,bukhariChapter)' mat-button >test</button>
+  <button (click)='GetHadithsFromTo(this.currentChapter,bukhariChapter)' mat-button>test</button>
   <!--Look up-->
-  <button (click)='pushLoad()' mat-button
-  *ngIf="showQuran||showHadith">Look up</button>
+  <button (click)='pushLoad()' mat-button *ngIf="showQuran||showHadith">Look up</button>
 
 
   <!--Hadith Box-->
   <app-hadith-box [(apiURL)]='this.apiURL' [(update)]='this.update'></app-hadith-box>
-<div *ngIf='TheHadithaddress' >
-</div>
+  <div *ngIf='TheHadithaddress'>
+  </div>
 
 </div>
 
-    <!--=======Number========-
+<!--=======Number========-
     <mat-form-field class="spacing">
         <input [(ngModel)]='number_hadith' placeholder="Hadith Number" type="number" matInput>
       </mat-form-field>
     -->
 
-    
+
 
 <!--app-source [(BASEURL)]="this.BASEURL"></app-source-->
 
 <!--=====-->
-  <!--Testing Loop
+<!--Testing Loop
   <button (click)='loop()' mat-button >Tset Loop</button>
 
 
   -->
-  <!--
+<!--
   <button (click)='CalcHadithNumber(bukhariChapter,this.number_hadith)' mat-button >test</button>
   -->
