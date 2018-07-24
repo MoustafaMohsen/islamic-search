@@ -6,6 +6,7 @@ import {  WebService } from "../web.service";
 import { PartialObserver, Observable } from 'rxjs';
 
 import { MatSnackBar } from "@angular/material";
+import { HadithAddress,Quranaddress } from '../interfaces';
 
 @Component({
   selector: 'app-hadith-box',
@@ -17,28 +18,34 @@ export class HadithBoxComponent implements OnInit {
   @Input() update;
   boxcontent;
   loading;
-  State="Hadith";
+  CurrentSource;
+  hadithaddress:HadithAddress;
+  quranaddress:Quranaddress;
 
   constructor(private sanitizer:DomSanitizer,private http:HttpClient,private web:WebService,private snack:MatSnackBar) { }
 
   ngOnInit() {
-      this.web.Loading.subscribe(Bool=>this.loading=Bool)
-    this.web.subject.subscribe(
-       (r)=>{ 
-        this.web.get(this.apiURL,'textArabic').subscribe( 
-          r=>{
-            this.boxcontent=r ;
-            this.web.Loading.next(false)
+    this.web.Loading.subscribe(Bool=>this.loading=Bool)
+
+    this.web.apiRequest$.subscribe(
+      (data)=>{
+        this.web.get(data.url,data.language).subscribe(
+          response=>{
+            this.boxcontent=response ;
+            this.web.Loading.next(false);
+            //set addresses
+            this.hadithaddress=data.hadithaddress;
+            this.quranaddress=data.quranaddress;
+            this.CurrentSource=data.source;
           },
           s=>{
-            this.snack.open(this.State+this.apiURL+" Not found", "X", {duration: 5000,});
+            this.snack.open(this.CurrentSource +this.apiURL+" Not found", "X", {duration: 5000,});
             this.web.Loading.next(false) 
           }
         )
-
-        } 
-    )
-  }
+      }
+    )//apiRequest subscribe
+  }//ngOnInit
 
   ngOnChanges(update){
 

@@ -1,7 +1,7 @@
 
 <div class="source-site">
 
-
+<h4 *ngIf="hadithaddress&&this.CurrentSource=='hadith'">Ch:{{hadithaddress.chapter}} Hadith:{{hadithaddress.hadith}}</h4>
   <div>
       <mat-spinner *ngIf='loading' class="Loading"></mat-spinner>
     <p [innerHTML]="boxcontent" class="HadithText lead" *ngIf='!loading'></p>

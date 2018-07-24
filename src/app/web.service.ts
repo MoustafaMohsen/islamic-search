@@ -3,15 +3,17 @@ import { DomSanitizer} from '@angular/platform-browser';
 import { HttpClient } from "@angular/common/http";
 import { filter,map ,pluck,distinctUntilChanged} from 'rxjs/operators';
 import { Subject, PartialObserver } from 'rxjs';
+import { ApiRequest } from "./interfaces";
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebService {
 
-  public subject: Subject<any>=new Subject();
+  public Url$: Subject<any>=new Subject();
   public Select_source: Subject<any>=new Subject();
   public Loading:Subject<Boolean>=new Subject();
+  public apiRequest$:Subject<ApiRequest>=new Subject();
 
   constructor(private http:HttpClient) { }
 
@@ -23,5 +25,8 @@ export class WebService {
   .pipe( pluck(Jsonvalue),distinctUntilChanged() );
 
   }
+
+  
+  justget(apiURL){ return this.http.get(apiURL) }
 
 }
