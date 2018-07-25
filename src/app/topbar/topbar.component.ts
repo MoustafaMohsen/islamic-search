@@ -9,6 +9,7 @@ import { HttpClient } from "@angular/common/http";
 import { HadithBook,hadith, ApiRequest,hadithaddress,hadithEnglishIndex } from "../interfaces";
 import {  Bukhari } from "../SourceOptions/Bukhari";
 import { MuslimEnglishIndex, Muslim} from "../SourceOptions/Muslim";
+import { QuranIndex } from '../SourceOptions/Quran';
 declare var $:any;
 
 @Component({
@@ -180,6 +181,13 @@ export class TopbarComponent implements OnInit {
         
       }
     );
+
+    this.SurahnumberFC.valueChanges.subscribe(
+      value=>{
+
+        this.SetMaxAyat();
+      }
+    )
   }
 
 
@@ -242,7 +250,7 @@ export class TopbarComponent implements OnInit {
 
         
       }
-    
+
 
 
   }
@@ -345,6 +353,33 @@ export class TopbarComponent implements OnInit {
     return hadithaddress;
   }
 
+  SetMaxAyat(){
+    let value =this.SurahnumberFC.value;
+    if(value > 114 || value <= 0)return
+    let Surrah =QuranIndex.filter( f=>f.number==value);
+    this.ayatMax = Surrah[0].numberOfAyahs;
+  }
+
+
+  PreviousAyat(){
+    let ayat =this.AyatNumberFC.value-1;
+    if(ayat <= 0 )return;
+    this.AyatNumberFC.setValue(ayat)
+    this.pushLoad();
+  }
+  NextAyat(){
+    let ayat  =this.AyatNumberFC.value+1;
+    if(ayat > this.ayatMax)return;
+    this.AyatNumberFC.setValue(ayat)
+    this.pushLoad();
+  }
+  
+  
+
+  
+  
+
+
 
   //=================GETTING VALUES=================//
   //muslim https://muflihun.com/svc/hadith?c=2&b=1&h=1
@@ -388,6 +423,8 @@ export class TopbarComponent implements OnInit {
       console.log(this.Hadithbooks);
       
     }
+
+
 
 
 }//class

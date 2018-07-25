@@ -6,7 +6,7 @@
 
 
     <!--=====Card====-->
-    <mat-spinner *ngIf='loading&&!CurrentSource' class="Loading" [diameter]="40"></mat-spinner>
+    <mat-spinner *ngIf='loading&&!apiURL' class="Loading" [diameter]="40"></mat-spinner>
     <mat-card *ngIf='CurrentSource||boxcontent'>
           <mat-spinner *ngIf='loading' class="Loading" [diameter]="40"></mat-spinner>
           <p [innerHTML]="boxcontent" class="HadithText lead" *ngIf="!loading"></p>

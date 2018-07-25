@@ -12,10 +12,8 @@ import {
   MatButtonModule, MatCheckboxModule,MatButtonToggleModule,MatSliderModule,
   MatCardModule,MatProgressBarModule,MatToolbarModule,MatAutocompleteModule
   ,MatSlideToggleModule,MatSnackBarModule,MatDividerModule,MatProgressSpinnerModule
-  ,
+  ,MatIconModule
 } from '@angular/material';
-import {MatIconModule} from '@angular/material/icon';
-
 import { MatInputModule } from "@angular/material/input";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { HadithBoxComponent } from './hadith-box/hadith-box.component';
