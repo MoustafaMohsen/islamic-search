@@ -30,7 +30,9 @@ export class HadithBoxComponent implements OnInit {
 
     this.web.apiRequest$.subscribe(
       (data)=>{
-        this.web.get(data.url,data.language).subscribe(
+        //===If Hadith
+        if(data.source=='hadith'){
+        this.web.getHadith(data.url,data.language).subscribe(
           response=>{
             this.boxcontent=response ;
             this.web.Loading.next(false);
@@ -42,11 +44,36 @@ export class HadithBoxComponent implements OnInit {
             
           },
           s=>{
-            this.snack.open(this.CurrentSource +this.apiURL+" Not found", "X", {duration: 5000,});
+            this.snack.open(this.CurrentSource+' ' +this.apiURL+" Not found", "X", {duration: 5000,});
             this.web.Loading.next(false)
           }
         )
       }
+      //===If Quran
+      if(data.source=='quran'){
+        this.web.getQuran(data.url).subscribe(
+          (data)=>{
+            //clean data and storing it
+            this.boxcontent=data;
+            console.log(data);
+            console.log("Quran request sent");
+            
+            this.web.Loading.next(false)
+          },
+          s=>{
+            this.snack.open(this.CurrentSource +" "+this.apiURL+" Not found", "X", {duration: 5000,});
+            this.web.Loading.next(false)
+          }
+        )
+
+
+        console.log('Hadith-box');
+        
+      }
+
+      }
+
+
     )//apiRequest subscribe
 
     this.theC$.subscribe(

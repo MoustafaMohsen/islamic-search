@@ -14,6 +14,8 @@ import {
   ,MatSlideToggleModule,MatSnackBarModule,MatDividerModule,MatProgressSpinnerModule
   ,
 } from '@angular/material';
+import {MatIconModule} from '@angular/material/icon';
+
 import { MatInputModule } from "@angular/material/input";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { HadithBoxComponent } from './hadith-box/hadith-box.component';
@@ -30,7 +32,7 @@ const material=[
   MatButtonModule, MatCheckboxModule,MatButtonToggleModule,
   MatSliderModule,MatCardModule,MatProgressBarModule,MatToolbarModule,MatAutocompleteModule,
   MatFormFieldModule,MatSlideToggleModule,MatSnackBarModule,MatDividerModule,MatProgressSpinnerModule,
-  MatInputModule
+  MatInputModule,MatIconModule
 ]
 
 @NgModule({

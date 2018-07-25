@@ -17,7 +17,7 @@ export class WebService {
 
   constructor(private http:HttpClient) { }
 
-  get(apiURL , Jsonvalue:string){
+  getHadith(apiURL , Jsonvalue:string){
     console.log("web----");
     console.log(apiURL);
     console.log("----web");
@@ -26,6 +26,11 @@ export class WebService {
 
   }
 
+  getQuran(apiURL:string){
+    return this.http.get(apiURL).pipe(
+      pluck('data','text'),distinctUntilChanged()
+    )
+  }
   
   justget(apiURL){ return this.http.get(apiURL) }
 

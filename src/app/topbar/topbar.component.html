@@ -23,7 +23,7 @@
       <span matPrefix class="font-weight-bold">{{this.currentVolume}} &nbsp;</span>
       <mat-select placeholder="Choose Chapter" [(formControl)]="chapterOptionsFC" tabindex="-1">
 
-        <div *ngFor="let c of BukhariEngilshIndex">
+        <div *ngFor="let c of theIndex">
           <mat-option [value]="c.book">
             <span>{{c.book}}</span>- {{c.bookName}}
           </mat-option>
@@ -55,23 +55,32 @@
 
   <!--================Quran=====================-->
   <div class="Quran" *ngIf="showQuran">
-    <!--=======Chapter========-->
+
+    <!--=======Surah========-->
     <mat-form-field class="spacing">
-      <input [(ngModel)]='chapter' placeholder="Chapter" type="number" matInput>
+      <input [(formControl)]='SurahnumberFC' placeholder="Surah" type="number" matInput>
+      <mat-error *ngIf='SurahnumberFC.invalid'>{{getSurahError()}}</mat-error>
     </mat-form-field>
+
     <!--=======Verse========-->
     <mat-form-field class="spacing">
-      <input [(ngModel)]='verse' placeholder="Verse" type="number" matInput>
+      <input [(formControl)]='AyatNumberFC' placeholder="Verse" type="number" matInput>
+      <mat-error *ngIf='AyatNumberFC.invalid'>{{getAyatNumberError()}}</mat-error>
     </mat-form-field>
-  </div>
-  <button (click)='pushLoad()' mat-button *ngIf="showQuran||showHadith">Look up</button>
 
+  </div>
+
+
+
+  <!--====Buttons=====-->
+  <button (click)='pushLoad()' mat-button *ngIf="showQuran||showHadith">Look up</button>
+<!---
   <button (click)='test()' mat-button>test</button>
 
-  <!---
-  <button (click)='loop()' mat-button>loop</button>
+  <button (click)='loop2()' mat-button>loop</button>
   <button (click)='printloop()' mat-button>print loop</button>
-  -->
+
+-->
   <!--Look up-->
 
 
