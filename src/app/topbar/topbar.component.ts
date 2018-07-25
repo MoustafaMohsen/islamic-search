@@ -218,7 +218,7 @@ export class TopbarComponent implements OnInit {
     
       }
       else if(this.TheCuurentSource=='quran'){
-        let _url='http://api.alquran.cloud/ayah/'+ 
+        let _url='https://api.alquran.cloud/ayah/'+ 
         this.SurahnumberFC.value
          +':'+ 
         this.AyatNumberFC.value+
