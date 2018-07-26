@@ -1,7 +1,6 @@
 import { Component, OnInit,Input } from '@angular/core';
 import { DomSanitizer} from '@angular/platform-browser';
 import { HttpClient } from "@angular/common/http";
-import { filter,map ,pluck} from 'rxjs/operators';
 import {  WebService } from "../web.service";
 import { PartialObserver, Observable, Subject } from 'rxjs';
 
@@ -55,8 +54,6 @@ export class HadithBoxComponent implements OnInit {
           (ayat)=>{
             //clean data and storing it
             this.boxcontent=ayat;
-            console.log(ayat);
-            console.log("Quran request sent");
             //remove the start of the first ayat
             if(data.quranaddress.ayat==1&&data.quranaddress.surah!=1){
               let firstAyat:string= String(ayat);
@@ -71,9 +68,6 @@ export class HadithBoxComponent implements OnInit {
             this.web.Loading.next(false)
           }
         )
-
-
-        console.log('Hadith-box');
         
       }
 

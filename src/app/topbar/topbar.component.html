@@ -1,87 +1,88 @@
 <div class="row">
-
+  <form [formGroup]='rF'>
     <div class="col-md-2">
-  <!--=======Select Source========-->
-  <mat-form-field>
-    <mat-select placeholder="Select Source" [(formControl)]="SourceOptionsFC">
-      <mat-option value="Bukhari">Bukhari</mat-option>
-      <mat-option value="Muslim">Muslim</mat-option>
-      <mat-option value="Quran">Quran</mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
+      <!--=======Select Source========-->
+      <mat-form-field>
+        <mat-select placeholder="Select Source" formControlName='source_options'>
+          <mat-option value="Bukhari">Bukhari</mat-option>
+          <mat-option value="Muslim">Muslim</mat-option>
+          <mat-option value="Quran">Quran</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
 
-<div class="col-md">
+    <div class="col-md">
 
-  <!--===============Hadith===================-->
-  <div class="hadith-input" *ngIf="showHadith">
-    <!--=======Chapter========-->
-    <mat-form-field class="spacing">
-      <input [(formControl)]="chapterFC" placeholder="Chapter" type="number" matInput>
-      <mat-error *ngIf="chapterFC.invalid">{{getChapternumberError()}}</mat-error>
-    </mat-form-field>
+      <!--===============Hadith===================-->
 
-    <!--=======Options========-->
-    <mat-form-field>
-      <span matPrefix class="font-weight-bold">{{this.currentVolume}} &nbsp;</span>
-      <mat-select placeholder="Choose Chapter" [(formControl)]="chapterOptionsFC" tabindex="-1">
+      <div class="hadith-input" *ngIf="showHadith">
+        <!--=======Chapter========-->
+        <mat-form-field class="spacing">
+          <input formControlName='hadith_chapter' placeholder="Chapter" type="number" matInput>
+          <mat-error *ngIf='rF.get("hadith_chapter").invalid'>{{getChapternumberError()}}</mat-error>
+        </mat-form-field>
 
-        <div *ngFor="let c of HADITHADDRESS">
-          <mat-option [value]="c.book">
-            {{c.book}}
-          </mat-option>
-        </div>
+        <!--===Options-Chapter==-->
+        <mat-form-field>
+          <span matPrefix class="font-weight-bold">{{this.currentVolume}} &nbsp;</span>
+          <mat-select placeholder="Choose Chapter" formControlName='hadith_chapter_options' tabindex="-1">
 
-      </mat-select>
-      <mat-hint>Errors appear instantly!</mat-hint>
-    </mat-form-field>
+            <div *ngFor="let c of HADITHADDRESS">
+              <mat-option [value]="c.book">
+                {{c.book}}
+              </mat-option>
+            </div>
 
-    <!--=======Number-in-chapter========-->
-    <mat-form-field class="spacing">
-      <input placeholder="Number-in-Chapter" type="number" matInput [formControl]="hadithnumberChapterFC">
-      <mat-error *ngIf="hadithnumberChapterFC.invalid">{{getHadithChapternumberError()}}</mat-error>
-    </mat-form-field>
+          </mat-select>
+          <mat-hint>Errors appear instantly!</mat-hint>
+        </mat-form-field>
 
-    <!--===============-->
-    <mat-form-field>
-      <mat-select placeholder="Hadith Number" [(formControl)]="hadithnumberOptionChapterFC" tabindex="-1">
+        <!--===Number===-->
+        <mat-form-field class="spacing">
+          <input placeholder="Number-in-Chapter" type="number" matInput formControlName='hadith_number'>
+          <mat-error *ngIf='rF.get("hadith_number").invalid'>{{getHadithChapternumberError()}}</mat-error>
+        </mat-form-field>
 
-        <mat-option *ngFor="let x of TheHadithaddress | addressArray;" [value]="x">{{x}}</mat-option>
+        <!--=======Options-Number========-->
+        <mat-form-field>
+          <mat-select placeholder="Hadith Number" formControlName='hadith_number_options' tabindex="-1">
 
-      </mat-select>
-    </mat-form-field>
+            <mat-option *ngFor="let x of TheHadithaddress | addressArray;" [value]="x">{{x}}</mat-option>
+
+          </mat-select>
+        </mat-form-field>
+
+      </div>
 
 
+      <!--================Quran=====================-->
+      <div class="quran-input" *ngIf="showQuran">
+
+        <!--=======Surah========-->
+        <mat-form-field class="spacing">
+          <input formControlName='surah_number' placeholder="Surah" type="number" matInput>
+          <mat-error *ngIf='rF.get("surah_number").invalid'>{{getSurahError()}}</mat-error>
+        </mat-form-field>
+
+        <!--=======Verse========-->
+        <mat-form-field class="spacing">
+          <input formControlName='ayat_number' placeholder="Verse" type="number" matInput>
+          <mat-error *ngIf='rF.get("ayat_number").invalid'>{{getAyatNumberError()}}</mat-error>
+        </mat-form-field>
+
+      </div>
+
+      <button (click)='LookUp()' [disabled]="loading" type="submit" mat-raised-button color="primary" *ngIf="showQuran||showHadith">Look up</button>
+
+    </div>
+  </form>
+  <div class="col-md-2">
   </div>
-
-
-  <!--================Quran=====================-->
-  <div class="quran-input" *ngIf="showQuran">
-
-    <!--=======Surah========-->
-    <mat-form-field class="spacing">
-      <input [(formControl)]='SurahnumberFC' placeholder="Surah" type="number" matInput>
-      <mat-error *ngIf='SurahnumberFC.invalid'>{{getSurahError()}}</mat-error>
-    </mat-form-field>
-
-    <!--=======Verse========-->
-    <mat-form-field class="spacing">
-      <input [(formControl)]='AyatNumberFC' placeholder="Verse" type="number" matInput>
-      <mat-error *ngIf='AyatNumberFC.invalid'>{{getAyatNumberError()}}</mat-error>
-    </mat-form-field>
-
-  </div>
-
-
-</div>
-
-<div class="col-md-2">
-</div>
 
 
   <!--====Buttons=====-->
-<!---
+  <!---
   <button (click)='test()' mat-button>test</button>
 
   <button (click)='loop2()' mat-button>loop</button>
@@ -94,30 +95,29 @@
 
 
 </div>
-  <!--Hadith Box-->
+<!--Hadith Box-->
 
 
-<div class="row">  
+<div class="row">
   <div class="col"></div>
 
   <div class="col">
-  <button (click)='LookUp()' [disabled]="loading" type="submit" mat-raised-button color="primary" *ngIf="showQuran||showHadith">Look up</button>
-</div>
+  </div>
 
   <div class="col"></div>
 </div>
 
 
-  <app-hadith-box [(apiURL)]='this.apiURL' ></app-hadith-box>
+<app-hadith-box [(apiURL)]='this.apiURL'></app-hadith-box>
 
-  <div class="row navigation-buttons">
+<div class="row navigation-buttons">
 
-      <button (click)='Next()' mat-raised-button >Next</button>
+  <button (click)='Next()' mat-raised-button>Next</button>
 
-      <button (click)='Previous()' mat-raised-button >Previous</button>
+  <button (click)='Previous()' mat-raised-button>Previous</button>
 
-    </div>
-  
+</div>
+
 <!--=======Number========-
     <mat-form-field class="spacing">
         <input [(ngModel)]='number_hadith' placeholder="Hadith Number" type="number" matInput>
