@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebService } from '../web.service';
 import { MatSnackBar } from '@angular/material';
-import {FormControl, Validators} from '@angular/forms';
+import {FormControl, Validators,FormBuilder,FormGroup} from '@angular/forms';
 import { HttpClient } from "@angular/common/http";
 import {  ApiRequest,hadithaddress } from "../interfaces";
 import {  Bukhari } from "../SourceOptions/Bukhari";
@@ -16,10 +16,13 @@ declare var $:any;
 })
 
 export class TopbarComponent implements OnInit {
- constructor(private web:WebService,private snack:MatSnackBar,private http:HttpClient) { }
+ constructor(private web:WebService,private snack:MatSnackBar) {
+
+  }
 
   apiURL=""
   //html controllers
+  loading:boolean=false;
   currentChapter;
   currentVolume;
   showQuran:boolean;
@@ -43,18 +46,19 @@ export class TopbarComponent implements OnInit {
   chapterOptionsFC:FormControl=new FormControl(null,[Validators.required]);
 
   SurahnumberFC:FormControl=new FormControl(null,[Validators.required,Validators.max(114),Validators.min(1)]);
-  AyatNumberFC:FormControl=new FormControl(null,[Validators.required,Validators.min(1)]);
+  AyatNumberFC:FormControl=new FormControl(1,[Validators.required,Validators.min(1)]);
 
   SurahOptionsFC:FormControl=new FormControl(null,[Validators.required,Validators.max(114),Validators.min(1)]);
   AyatOptionsFC:FormControl=new FormControl(null,[Validators.required,Validators.min(1)]);
 
   ngOnInit() {
+    this.web.Loading.subscribe( b=> this.loading = b );
+
     this.SourceOptionsFC.valueChanges.subscribe(
       (value)=>{   
         this.web.Select_source.next(value);
         this.clean();}
     );
-
     this.web.Select_source.subscribe( r=>{
       switch (r) {
         case "Bukhari":{
@@ -183,7 +187,7 @@ export class TopbarComponent implements OnInit {
         this.AyatNumberFC.value+
         '/' + 'ar' +'.asad';
         if(_url==this.apiURL){
-          this.snack.open("Already sent","X",{duration:1000});
+          this.snack.open( "Already sent","X",{ duration:1000 } );
           return;
         }
 
@@ -194,7 +198,7 @@ export class TopbarComponent implements OnInit {
           c:null,
           url:this.apiURL,
           source:"quran",
-          quranaddress:{surah:this.SurahnumberFC.value,ayat:this.AyatNumberFC.value},
+          quranaddress:{ surah:this.SurahnumberFC.value, ayat:this.AyatNumberFC.value },
           language:"ar"
           };
           this.web.apiRequest$.next(_apiRequestHadith);

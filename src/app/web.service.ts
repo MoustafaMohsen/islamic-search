@@ -12,7 +12,7 @@ export class WebService {
 
   public Url$: Subject<any>=new Subject();
   public Select_source: Subject<any>=new Subject();
-  public Loading:Subject<Boolean>=new Subject();
+  public Loading:Subject<boolean>=new Subject();
   public apiRequest$:Subject<ApiRequest>=new Subject();
 
   constructor(private http:HttpClient) { }

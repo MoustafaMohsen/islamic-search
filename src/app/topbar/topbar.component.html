@@ -101,7 +101,7 @@
   <div class="col"></div>
 
   <div class="col">
-  <button (click)='LookUp()' type="submit" mat-raised-button color="primary" *ngIf="showQuran||showHadith">Look up</button>
+  <button (click)='LookUp()' [disabled]="loading" type="submit" mat-raised-button color="primary" *ngIf="showQuran||showHadith">Look up</button>
 </div>
 
   <div class="col"></div>
@@ -110,11 +110,11 @@
 
   <app-hadith-box [(apiURL)]='this.apiURL' ></app-hadith-box>
 
-  <div class="row">
+  <div class="row navigation-buttons">
 
-      <button (click)='Next()' mat-raised-button>Next</button>
+      <button (click)='Next()' mat-raised-button >Next</button>
 
-      <button (click)='Previous()' mat-raised-button>Previous</button>
+      <button (click)='Previous()' mat-raised-button >Previous</button>
 
     </div>
   

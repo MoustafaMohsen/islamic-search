@@ -5,3 +5,7 @@
 .quran-input{
     margin: 0.5rem auto;
 }
+.navigation-buttons{
+    position: fixed ;
+    bottom: 0;
+}
