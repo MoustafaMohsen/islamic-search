@@ -9,7 +9,7 @@ export class AddressArrayPipe implements PipeTransform {
     let res=[];
     if(hadithaddress==null)return;
     let start=hadithaddress.from;
-    for (let index = 0; index < (hadithaddress.to-hadithaddress.from); index++) {
+    for (let index = 0; index <= (hadithaddress.to-hadithaddress.from); index++) {
       res.push(start)
       start++;
     }

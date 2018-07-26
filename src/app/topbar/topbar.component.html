@@ -3,7 +3,7 @@
     <div class="col-md-2">
   <!--=======Select Source========-->
   <mat-form-field>
-    <mat-select placeholder="Select Source" [(ngModel)]="Select_source" (ngModelChange)="onChangeSourceSelect($event)">
+    <mat-select placeholder="Select Source" [(formControl)]="SourceOptionsFC">
       <mat-option value="Bukhari">Bukhari</mat-option>
       <mat-option value="Muslim">Muslim</mat-option>
       <mat-option value="Quran">Quran</mat-option>
@@ -27,9 +27,9 @@
       <span matPrefix class="font-weight-bold">{{this.currentVolume}} &nbsp;</span>
       <mat-select placeholder="Choose Chapter" [(formControl)]="chapterOptionsFC" tabindex="-1">
 
-        <div *ngFor="let c of theIndex">
+        <div *ngFor="let c of HADITHADDRESS">
           <mat-option [value]="c.book">
-            <span>{{c.book}}</span>- {{c.bookName}}
+            {{c.book}}
           </mat-option>
         </div>
 
@@ -101,19 +101,20 @@
   <div class="col"></div>
 
   <div class="col">
-  <button (click)='pushLoad()' mat-raised-button color="primary" *ngIf="showQuran||showHadith">Look up</button>
+  <button (click)='LookUp()' type="submit" mat-raised-button color="primary" *ngIf="showQuran||showHadith">Look up</button>
 </div>
 
   <div class="col"></div>
 </div>
 
-  <app-hadith-box [(apiURL)]='this.apiURL' [(update)]='this.update'></app-hadith-box>
+
+  <app-hadith-box [(apiURL)]='this.apiURL' ></app-hadith-box>
 
   <div class="row">
 
-      <button (click)='NextAyat()' mat-raised-button>Next</button>
+      <button (click)='Next()' mat-raised-button>Next</button>
 
-      <button (click)='PreviousAyat()' mat-raised-button>Previous</button>
+      <button (click)='Previous()' mat-raised-button>Previous</button>
 
     </div>
   

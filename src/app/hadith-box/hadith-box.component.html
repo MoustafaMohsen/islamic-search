@@ -8,13 +8,17 @@
     <!--=====Card====-->
     <mat-spinner *ngIf='loading&&!apiURL' class="Loading" [diameter]="40"></mat-spinner>
     <mat-card *ngIf='CurrentSource||boxcontent'>
+      <!--
           <mat-spinner *ngIf='loading' class="Loading" [diameter]="40"></mat-spinner>
-          <p [innerHTML]="boxcontent" class="HadithText lead" *ngIf="!loading"></p>
+      -->
+          <p [innerHTML]="boxcontent" class="HadithText lead" *ngIf="true"></p>
 
           <mat-card-footer>
               <h5 *ngIf="hadithaddress&&CurrentSource=='hadith'&&!loading">
                 Source: {{theC}}
                 Ch:{{hadithaddress.chapter}} Hadith:{{hadithaddress.hadith}}</h5>
+                
+                <mat-progress-bar mode="buffer" *ngIf='loading' ></mat-progress-bar>
           </mat-card-footer>
 
     </mat-card>

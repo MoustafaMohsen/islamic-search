@@ -52,12 +52,18 @@ export class HadithBoxComponent implements OnInit {
       //===If Quran
       if(data.source=='quran'){
         this.web.getQuran(data.url).subscribe(
-          (data)=>{
+          (ayat)=>{
             //clean data and storing it
-            this.boxcontent=data;
-            console.log(data);
+            this.boxcontent=ayat;
+            console.log(ayat);
             console.log("Quran request sent");
-            
+            //remove the start of the first ayat
+            if(data.quranaddress.ayat==1&&data.quranaddress.surah!=1){
+              let firstAyat:string= String(ayat);
+              firstAyat = firstAyat.replace('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ','')
+              this.boxcontent=firstAyat;
+            }
+            this.CurrentSource=data.source;
             this.web.Loading.next(false)
           },
           s=>{
@@ -85,10 +91,5 @@ export class HadithBoxComponent implements OnInit {
       } 
     )
   }//ngOnInit
-
-  ngOnChanges(update){
-
-  }
-
 
 }
