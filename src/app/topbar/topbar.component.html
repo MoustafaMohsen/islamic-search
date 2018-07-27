@@ -73,7 +73,7 @@
 
       </div>
 
-      <button (click)='LookUp()' [disabled]="loading" type="submit" mat-raised-button color="primary" *ngIf="showQuran||showHadith">Look up</button>
+      <button (click)='LookUp()' [disabled]="!isValid||loading" type="submit" mat-raised-button color="primary" *ngIf="showQuran||showHadith">Look up</button>
 
     </div>
   </form>
@@ -112,9 +112,10 @@
 
 <div class="row navigation-buttons">
 
-  <button (click)='Next()' mat-raised-button>Next</button>
+  <button (click)='Next()' [disabled]="!isValid||loading" mat-raised-button>Next</button>
 
-  <button (click)='Previous()' mat-raised-button>Previous</button>
+  <button (click)='Previous()' [disabled]="!isValid||loading" mat-raised-button>Previous</button>
+  <button (click)='getvalidations(this.rF)' mat-raised-button>Log Validations</button>
 
 </div>
 

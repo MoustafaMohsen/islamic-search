@@ -1,40 +1,13 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
-import {
-  WebService
-} from '../web.service';
-import {
-  MatSnackBar
-} from '@angular/material';
-import {
-  FormControl,
-  Validators,
-  FormBuilder,
-  FormGroup
-} from '@angular/forms';
-import {
-  HttpClient
-} from "@angular/common/http";
-import {
-  map,
-  filter,
-  pluck
-} from "rxjs/operators";
-import {
-  ApiRequest,
-  hadithaddress
-} from "../interfaces";
-import {
-  Bukhari
-} from "../SourceOptions/Bukhari";
-import {
-  Muslim
-} from "../SourceOptions/Muslim";
-import {
-  QuranIndex
-} from '../SourceOptions/Quran';
+import {  Component,  OnInit} from '@angular/core';
+import {  WebService} from '../web.service';
+import {  MatSnackBar} from '@angular/material';
+import {  FormControl,  Validators,  FormBuilder,  FormGroup, ValidationErrors} from '@angular/forms';
+import {  HttpClient} from "@angular/common/http";
+import {  map,  filter,  pluck} from "rxjs/operators";
+import {  ApiRequest,  hadithaddress} from "../interfaces";
+import {  Bukhari} from "../SourceOptions/Bukhari";
+import {  Muslim} from "../SourceOptions/Muslim";
+import {  QuranIndex} from '../SourceOptions/Quran';
 declare var $: any;
 
 @Component({
@@ -50,7 +23,7 @@ export class TopbarComponent implements OnInit {
       'hadith_number': [null, Validators.required],
       'hadith_chapter': [null, Validators.required],
       'hadith_number_options': [null, Validators.required],
-      'hadith_chapter_options': [null, Validators.required],
+      'hadith_chapter_options': [null],
       'surah_number': [1, Validators.compose([Validators.required, Validators.max(114), Validators.min(1)])],
       'ayat_number': [1, Validators.compose([Validators.required, Validators.min(1)])]
     });
@@ -71,23 +44,9 @@ export class TopbarComponent implements OnInit {
   lasthadithNumbervalue;
   TheCuurentSource: string = '';
   ayatMax: number;
-
+  isValid:boolean=true;
   //FormControll
   rF: FormGroup;
-  //  SourceOptionsFC:FormControl=new FormControl(null)
-  /*
-    hadithnumberChapterFC:FormControl=new FormControl(null,[Validators.required]);
-    chapterFC:FormControl=new FormControl(null,[Validators.required]);
-
-    hadithnumberOptionChapterFC:FormControl=new FormControl(null,[Validators.required]);
-    chapterOptionsFC:FormControl=new FormControl(null,[Validators.required]);
-  */
-
-  //  SurahnumberFC:FormControl=new FormControl(null,[Validators.required,Validators.max(114),Validators.min(1)]);
-  //  AyatNumberFC:FormControl=new FormControl(1,[Validators.required,Validators.min(1)]);
-
-  SurahOptionsFC: FormControl = new FormControl(null, [Validators.required, Validators.max(114), Validators.min(1)]);
-  AyatOptionsFC: FormControl = new FormControl(null, [Validators.required, Validators.min(1)]);
 
   ngOnInit() {
 
@@ -100,7 +59,7 @@ export class TopbarComponent implements OnInit {
     this.rF.get('source_options').valueChanges.subscribe(
       (value) => {
         this.web.Select_source.next(value);
-        this.clean();
+       // this.clean();
       }
     );
     this.web.Select_source.subscribe(r => {
@@ -141,6 +100,14 @@ export class TopbarComponent implements OnInit {
       }
     });
 
+    this.rF.valueChanges.subscribe(
+      form=>{
+        this.NextValid();
+        console.log(this.isValid);
+        
+      }
+    )
+
     this.rF.get('hadith_chapter').valueChanges.subscribe(
       value => {
         if (this.lastChaptervalue == value && this.rF.get('hadith_chapter').status != 'VALID') return;
@@ -152,14 +119,14 @@ export class TopbarComponent implements OnInit {
         if (this.TheHadithaddress == null) return
 
         this.rF.get('hadith_number').setValue(this.TheHadithaddress.from)
-        this.rF.get('hadith_number').setValidators([Validators.min(this.TheHadithaddress.from),
+        this.rF.get('hadith_number').setValidators([Validators.required,Validators.min(this.TheHadithaddress.from),
           Validators.max(this.TheHadithaddress.to)
         ]);
-
 
         this.rF.get('hadith_number_options').setValidators([Validators.min(this.TheHadithaddress.from),
           Validators.max(this.TheHadithaddress.to)
         ]);
+
 
         this.lastChaptervalue = value;
         this.rF.get('hadith_chapter_options').setValue(value);
@@ -209,13 +176,25 @@ export class TopbarComponent implements OnInit {
         this.SetMaxAyat();
       }
     )
+    //validitor-checker
+    this.web.inputValidity$.subscribe(
+      Validity=>{
+        console.log(Validity);
+        
+        switch (Validity){
+          case 'hadith_invalid':{this.isValid=false;break;}
+          case 'quran_invalid':{this.isValid=false;break;}
+          case 'valid':{this.isValid=true;break;}
+        }
+      }
+    )
   }
 
 
 
   LookUp() { //Look up
+    if(!this.isValid)return
     switch (this.TheCuurentSource) {
-
       case 'hadith':
         {
           let _url = 'https://muflihun.com/svc/hadith?c=' +
@@ -286,8 +265,8 @@ export class TopbarComponent implements OnInit {
 
 
   getHadithChapternumberError() {
-    return this.rF.get('hadith_number').hasError("min") ? 'This book starts from ' + this.TheHadithaddress.from +
-      ' Hadiths' :
+    return this.TheHadithaddress==null?'please set chapter number first':
+      this.rF.get('hadith_number').hasError("min") ? 'This book starts from ' + this.TheHadithaddress.from +' Hadiths' :
       this.rF.get('hadith_number').hasError("max") ? 'This book ends at ' + this.TheHadithaddress.to +
       ' Hadiths' :
       this.rF.get('hadith_number').hasError('required') ? 'required' :
@@ -303,7 +282,7 @@ export class TopbarComponent implements OnInit {
 
   //==Quran//
   getAyatNumberError() {
-    return this.rF.get('ayat_number').hasError('required') ? 'requiured' :
+    return this.rF.get('ayat_number').hasError('required') ? 'required' :
       this.rF.get('ayat_number').hasError('max') ? 'this Surah only has ' + this.ayatMax + ' Ayat' :
       this.rF.get('ayat_number').hasError('min') ? 'Minimum is 1' :
       'Invalid input'
@@ -317,16 +296,7 @@ export class TopbarComponent implements OnInit {
   }
   //Quran==//
 
-  clean() {
-    this.rF.get('hadith_chapter').reset();
-    this.rF.get('hadith_chapter_options').reset();
-    this.rF.get('hadith_number').reset();
-    this.rF.get('hadith_number_options').reset();
-    this.rF.get('surah_number').reset();
-    this.rF.get('ayat_number').reset();
-    this.SurahOptionsFC.reset();
-    this.AyatOptionsFC.reset();
-  }
+
 
 
   GetHadithAdressByBook(book, SOURCE: hadithaddress[]) {
@@ -354,7 +324,7 @@ export class TopbarComponent implements OnInit {
     }
     if (this.TheCuurentSource == 'hadith') {
       let hadithNo = this.rF.get('hadith_number').value - 1;
-      if (hadithNo < this.TheHadithaddress.from) return
+      if ( this.TheHadithaddress==null||hadithNo < this.TheHadithaddress.from) return
       this.rF.get('hadith_number').setValue(hadithNo);
       this.LookUp();
     }
@@ -372,10 +342,49 @@ export class TopbarComponent implements OnInit {
 
     if (this.TheCuurentSource == 'hadith') {
       let hadithNo = this.rF.get('hadith_number').value + 1;
-      if (hadithNo > this.TheHadithaddress.to) return
+      if ( this.TheHadithaddress==null||hadithNo > this.TheHadithaddress.to) return
       this.rF.get('hadith_number').setValue(hadithNo);
       this.LookUp();
     }
+
+  }
+  /////////////////////////////////////////////////////////////////////
+
+  NextValid(){
+
+    if (this.TheCuurentSource == 'hadith') {
+      if( this.rF.get('hadith_number').invalid||this.rF.get('hadith_chapter').invalid ){
+        this.web.inputValidity$.next('hadith_invalid');
+        return;
+      }
+    }
+
+    if (this.TheCuurentSource == 'quran') {
+      if(this.rF.get('ayat_number').invalid||this.rF.get('surah_number').invalid){
+        this.web.inputValidity$.next('quran_invalid');
+        return;
+      }
+    }
+
+    this.web.inputValidity$.next('valid');
+
+  }
+
+
+  //===========Testing==========//
+  getvalidations(rf:FormGroup){
+    console.log('====Validation');
+    
+    Object.keys(rf.controls).forEach(key => {
+
+      let controlErrors: ValidationErrors = rf.get(key).errors;
+      if (controlErrors != null) {
+            Object.keys(controlErrors).forEach(keyError => {
+              console.log('Key control: "' + key + '", keyError: "' + keyError + '", err value: ', controlErrors[keyError]);
+            });
+          }
+        });
+    console.log('Validation====');
 
   }
 

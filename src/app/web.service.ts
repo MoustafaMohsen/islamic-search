@@ -14,6 +14,7 @@ export class WebService {
   public Select_source: Subject<any>=new Subject();
   public Loading:Subject<boolean>=new Subject();
   public apiRequest$:Subject<ApiRequest>=new Subject();
+  public inputValidity$:Subject<string>=new Subject();
 
   constructor(private http:HttpClient) { }
 
