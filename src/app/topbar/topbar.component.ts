@@ -27,7 +27,7 @@ export class TopbarComponent implements OnInit {
 
     this.rFQ=FormBuilder.group({
       'surah_number': [1, Validators.compose([Validators.required, Validators.max(114), Validators.min(1)])],
-      'ayat_number': [1, Validators.compose([Validators.required, Validators.min(1)])]
+      'ayat_number': [1, Validators.compose([Validators.required, Validators.min(1),Validators.max(7)])]
     })
   }
 
@@ -57,7 +57,8 @@ export class TopbarComponent implements OnInit {
   ngOnInit() {
 
     setTimeout(() => {
-      this.web.Select_source.next('Quran')
+      this.web.Select_source.next('Quran');
+      this.SetMaxAyat();
     }, 10);
 
     this.web.Loading.subscribe(b => this.loading = b);
@@ -176,7 +177,7 @@ export class TopbarComponent implements OnInit {
       value => {
         this.SetMaxAyat();
         this.rFQ.get('ayat_number').setValue(1)
-        this.rFQ.get('ayat_number').setValidators([Validators.required,Validators.max(this.ayatMax),Validators.min(1)])
+        //this.rFQ.get('ayat_number').setValidators([Validators.required,Validators.max(this.ayatMax),Validators.min(1)])
       }
     )
     //Value Changes=======
@@ -243,7 +244,7 @@ export class TopbarComponent implements OnInit {
             return
           }
           this.apiURL = _url;
-          //this.web.Loading.next(true);
+          this.web.Loading.next(true);
 
           let _apiRequestHadith: ApiRequest = {
             c: this.C,
@@ -255,7 +256,7 @@ export class TopbarComponent implements OnInit {
             },
             language: "textArabic"
           };
-          //this.web.apiRequest$.next(_apiRequestHadith);
+          this.web.apiRequest$.next(_apiRequestHadith);
           console.log(_apiRequestHadith);
         } break;
 
@@ -267,7 +268,7 @@ export class TopbarComponent implements OnInit {
           if (_url == this.apiURL){this.snack.open("Already sent", "X", { duration: 1000 }); return;}
           
           this.apiURL = _url;
-          //this.web.Loading.next(true);
+          this.web.Loading.next(true);
           
 
           let _apiRequestHadith: ApiRequest = {
@@ -280,7 +281,7 @@ export class TopbarComponent implements OnInit {
             },
             language: "ar"
           };
-          //this.web.apiRequest$.next(_apiRequestHadith);
+          this.web.apiRequest$.next(_apiRequestHadith);
           console.log(_apiRequestHadith);
           
         }
@@ -302,15 +303,7 @@ export class TopbarComponent implements OnInit {
     if (suran <= 0||suran > 114) return
     let Surrah = QuranIndex.filter(f => f.number == suran);
     this.ayatMax = Surrah[0].numberOfAyahs;
-    console.log('====maxAyat');
-
-    console.log(this.ayatMax);
-    console.log( this.rFQ.get('surah_number').getError('max') );
-    
-    console.log('maxAyat====');
-    this.getvalidations(this.rFQ)
-    
-    
+    this.rFQ.get('ayat_number' ).setValidators([Validators.required, Validators.min(1),Validators.max(7)])
   }
 
 

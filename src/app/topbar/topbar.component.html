@@ -54,6 +54,8 @@
           </mat-select>
         </mat-form-field>
 
+        <button (click)='LookUp()' [disabled]="!isValid||loading" type="submit" mat-raised-button color="primary" *ngIf="showQuran||showHadith">Look up</button>
+      
       </div>
 
     </form>
@@ -73,12 +75,12 @@
           <input formControlName='ayat_number' placeholder="Verse" type="number" matInput>
           <mat-error *ngIf='rFQ.get("ayat_number").invalid'>{{getAyatNumberError()}}</mat-error>
         </mat-form-field>
+        <button (click)='LookUp()' [disabled]="!isValid||loading" type="submit" mat-raised-button color="primary" *ngIf="showQuran||showHadith">Look up</button>
 
       </div>
 
     </form>
 
-      <button (click)='LookUp()' [disabled]="!isValid||loading" type="submit" mat-raised-button color="primary" *ngIf="showQuran||showHadith">Look up</button>
     
     </div>
   
