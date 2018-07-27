@@ -17,19 +17,21 @@ declare var $: any;
 })
 
 export class TopbarComponent implements OnInit {
-  constructor(private web: WebService, private snack: MatSnackBar, private _fb: FormBuilder) {
-    this.rF = _fb.group({
-      'source_options': ['Quran'],
+  constructor(private web: WebService, private snack: MatSnackBar, private FormBuilder: FormBuilder) {
+    this.rFH = FormBuilder.group({
       'hadith_number': [null, Validators.required],
       'hadith_chapter': [null, Validators.required],
       'hadith_number_options': [null, Validators.required],
-      'hadith_chapter_options': [null],
+      'hadith_chapter_options': [null]
+    });
+
+    this.rFQ=FormBuilder.group({
       'surah_number': [1, Validators.compose([Validators.required, Validators.max(114), Validators.min(1)])],
       'ayat_number': [1, Validators.compose([Validators.required, Validators.min(1)])]
-    });
+    })
   }
 
-  apiURL = ""
+  apiURL = "";
   //html controllers
   loading: boolean = false;
   currentChapter;
@@ -46,8 +48,11 @@ export class TopbarComponent implements OnInit {
   ayatMax: number;
   isValid:boolean=true;
   //FormControll
-  rF: FormGroup;
+  rFH: FormGroup;
+  rFQ: FormGroup;
+  source_options:FormControl=new FormControl('Quran',Validators.required);
 
+  //=======================================================================================ngOnInit//
   ngOnInit() {
 
     setTimeout(() => {
@@ -56,17 +61,16 @@ export class TopbarComponent implements OnInit {
 
     this.web.Loading.subscribe(b => this.loading = b);
 
-    this.rF.get('source_options').valueChanges.subscribe(
+    this.source_options.valueChanges.subscribe(
       (value) => {
         this.web.Select_source.next(value);
-       // this.clean();
       }
     );
+
     this.web.Select_source.subscribe(r => {
       switch (r) {
         case "Bukhari":
-          {
-            this.showQuran = false;
+          { this.showQuran = false;
             this.showHadith = true;
             this.CurrentChapterSource = Bukhari.length;
             this.HADITHADDRESS = Bukhari;
@@ -76,8 +80,7 @@ export class TopbarComponent implements OnInit {
           break;
 
         case "Muslim":
-          {
-            this.showQuran = false;this.showHadith = true;
+          { this.showQuran = false;this.showHadith = true;
             this.CurrentChapterSource = Muslim.length;
             this.HADITHADDRESS = Muslim;
             this.C = 2;
@@ -86,31 +89,27 @@ export class TopbarComponent implements OnInit {
           break;
 
         case "Quran":
-          {
-            this.showQuran = true;this.showHadith = false;
+          { this.showQuran = true;this.showHadith = false;
             this.TheCuurentSource = 'quran';
           }
           break;
 
-        default:
-          {
-            this.showQuran = false;this.showHadith = false;
-          }
-          break;
+        default:{ this.showQuran = false;this.showHadith = false; } break;
       }
+      
     });
 
-    this.rF.valueChanges.subscribe(
+    this.rFH.valueChanges.subscribe(
       form=>{
-        this.NextValid();
-        console.log(this.isValid);
+        //this.NextValid();
+        //console.log(this.isValid);
         
       }
     )
 
-    this.rF.get('hadith_chapter').valueChanges.subscribe(
+    this.rFH.get('hadith_chapter').valueChanges.subscribe(
       value => {
-        if (this.lastChaptervalue == value && this.rF.get('hadith_chapter').status != 'VALID') return;
+        if (this.lastChaptervalue == value && this.rFH.get('hadith_chapter').status != 'VALID') return;
 
         this.currentChapter = value;
         this.TheHadithaddress = this.GetHadithAdressByBook(this.currentChapter, this.HADITHADDRESS);
@@ -118,29 +117,29 @@ export class TopbarComponent implements OnInit {
 
         if (this.TheHadithaddress == null) return
 
-        this.rF.get('hadith_number').setValue(this.TheHadithaddress.from)
-        this.rF.get('hadith_number').setValidators([Validators.required,Validators.min(this.TheHadithaddress.from),
+        this.rFH.get('hadith_number').setValue(this.TheHadithaddress.from)
+        this.rFH.get('hadith_number').setValidators([Validators.required,Validators.min(this.TheHadithaddress.from),
           Validators.max(this.TheHadithaddress.to)
         ]);
 
-        this.rF.get('hadith_number_options').setValidators([Validators.min(this.TheHadithaddress.from),
+        this.rFH.get('hadith_number_options').setValidators([Validators.min(this.TheHadithaddress.from),
           Validators.max(this.TheHadithaddress.to)
         ]);
 
 
         this.lastChaptervalue = value;
-        this.rF.get('hadith_chapter_options').setValue(value);
+        this.rFH.get('hadith_chapter_options').setValue(value);
 
       }
     )
 
-    this.rF.get('hadith_chapter_options').valueChanges.subscribe(
+    this.rFH.get('hadith_chapter_options').valueChanges.subscribe(
       value => {
 
         if (this.lastChaptervalue != value) {
           this.lastChaptervalue = value;
           this.currentChapter = value;
-          this.rF.get('hadith_chapter').setValue(Number(this.rF.get('hadith_chapter_options').value));
+          this.rFH.get('hadith_chapter').setValue(Number(this.rFH.get('hadith_chapter_options').value));
         } else {
           return
         }
@@ -149,58 +148,88 @@ export class TopbarComponent implements OnInit {
       }
     )
 
-    this.rF.get('hadith_number').valueChanges.subscribe(
+    this.rFH.get('hadith_number').valueChanges.subscribe(
       value => {
         if (this.lasthadithNumbervalue != value) {
           this.lasthadithNumbervalue = value;
-          this.rF.get('hadith_number_options').setValue(value);
+          this.rFH.get('hadith_number_options').setValue(value);
         } else {
           return
         }
       }
     );
 
-    this.rF.get('hadith_number_options').valueChanges.subscribe(
+    this.rFH.get('hadith_number_options').valueChanges.subscribe(
       value => {
         if (this.lasthadithNumbervalue != value) {
-          //this.rF.get('hadith_number').setValue(Number(this.rF.get('hadith_number_options').value));
-          this.rF.get('hadith_number').setValue(Number(this.rF.get('hadith_number_options').value));
+          //this.rFH.get('hadith_number').setValue(Number(this.rFH.get('hadith_number_options').value));
+          this.rFH.get('hadith_number').setValue(Number(this.rFH.get('hadith_number_options').value));
         } else {
           return
         }
       }
     );
 
-    this.rF.get('surah_number').valueChanges.subscribe(
+    this.rFQ.get('surah_number').valueChanges.subscribe(
       value => {
         this.SetMaxAyat();
       }
     )
-    //validitor-checker
-    this.web.inputValidity$.subscribe(
-      Validity=>{
-        console.log(Validity);
-        
-        switch (Validity){
-          case 'hadith_invalid':{this.isValid=false;break;}
-          case 'quran_invalid':{this.isValid=false;break;}
-          case 'valid':{this.isValid=true;break;}
-        }
-      }
-    )
+
+  }//ngOnInit========================================================================================//
+
+
+
+
+
+
+  //=====================================Error Messages//
+
+  //==Hadith//
+  getHadithChapternumberError() {
+    return this.TheHadithaddress==null?'please set chapter number first':
+      this.rFH.get('hadith_number').hasError("min") ? 'This book starts from ' + this.TheHadithaddress.from +' Hadiths' :
+      this.rFH.get('hadith_number').hasError("max") ? 'This book ends at ' + this.TheHadithaddress.to +
+      ' Hadiths' :
+      this.rFH.get('hadith_number').hasError('required') ? 'required' :
+      'Invalid input';
   }
 
+  getChapternumberError() {
+    return this.rFH.get('hadith_chapter').hasError("max") ? 'This chapter only has ' + this.CurrentChapterSource +
+      ' books' :
+      this.rFH.get('hadith_chapter').hasError('min') ? 'Minimum is 1' :
+      this.rFH.get('hadith_chapter').hasError('required') ? 'required' :
+      'Invalid input';
+  }
+  //Hadith==//
+
+  //==Quran//
+  getAyatNumberError() {
+    return this.rFQ.get('ayat_number').hasError('required') ? 'required' :
+      this.rFQ.get('ayat_number').hasError('max') ? 'this Surah only has ' + this.ayatMax + ' Ayat' :
+      this.rFQ.get('ayat_number').hasError('min') ? 'Minimum is 1' :
+      'Invalid input'
+  }
+
+  getSurahError() {
+    return this.rFQ.get('surah_number').hasError('required') ? 'required' :
+      this.rFQ.get('surah_number').hasError('max') ? 'The Quran has 114 Surrah' :
+      this.rFQ.get('surah_number').hasError('min') ? 'Minimum is 1' :
+      'Invalid input'
+  }
+  //Quran==//
+
+  //Error Messages=====================================//
 
 
   LookUp() { //Look up
-    if(!this.isValid)return
     switch (this.TheCuurentSource) {
+
       case 'hadith':
         {
-          let _url = 'https://muflihun.com/svc/hadith?c=' +
-            this.C +
-            '&b=' + this.currentChapter +
-            '&h=' + this.rF.get('hadith_number').value;
+          if(this.rFH.invalid) return;
+          let _url ='https://muflihun.com/svc/hadith?c='+this.C+'&b='+this.currentChapter+'&h='+this.rFH.get('hadith_number').value;
 
           if (_url == this.apiURL) {
             this.snack.open("Already sent", "X", {
@@ -209,95 +238,52 @@ export class TopbarComponent implements OnInit {
             return
           }
           this.apiURL = _url;
-          this.web.Loading.next(true);
+          //this.web.Loading.next(true);
+
           let _apiRequestHadith: ApiRequest = {
             c: this.C,
             url: this.apiURL,
             source: "hadith",
             hadithaddress: {
               chapter: this.currentChapter,
-              hadith: this.rF.get('hadith_number').value
+              hadith: this.rFH.get('hadith_number').value
             },
             language: "textArabic"
           };
-          this.web.apiRequest$.next(_apiRequestHadith);
-
-        }
-        break;
+          //this.web.apiRequest$.next(_apiRequestHadith);
+          console.log(_apiRequestHadith);
+        } break;
 
       case 'quran':
         {
-          let _url = 'https://api.alquran.cloud/ayah/' +
-            this.rF.get('surah_number').value +
-            ':' +
-            this.rF.get('ayat_number').value +
-            '/' + 'ar' + '.asad';
-          if (_url == this.apiURL) {
-            this.snack.open("Already sent", "X", {
-              duration: 1000
-            });
-            return;
-          }
-
-          this.web.Loading.next(true);
+          if(this.rFQ.invalid)break;
+          let _url = 'https://api.alquran.cloud/ayah/'+this.rFQ.get('surah_number').value+':'+this.rFQ.get('ayat_number').value+'/'+'ar'+'.asad';
+          
+          if (_url == this.apiURL){this.snack.open("Already sent", "X", { duration: 1000 }); return;}
+          
           this.apiURL = _url;
+          //this.web.Loading.next(true);
+          
 
           let _apiRequestHadith: ApiRequest = {
             c: null,
             url: this.apiURL,
             source: "quran",
             quranaddress: {
-              surah: this.rF.get('surah_number').value,
-              ayat: this.rF.get('ayat_number').value
+              surah: this.rFQ.get('surah_number').value,
+              ayat: this.rFQ.get('ayat_number').value
             },
             language: "ar"
           };
-          this.web.apiRequest$.next(_apiRequestHadith);
+          //this.web.apiRequest$.next(_apiRequestHadith);
+          console.log(_apiRequestHadith);
+          
         }
         break;
 
-      default:
-        break;
+      default: break;
     }
   }
-
-  //on Source Select change
-
-
-  getHadithChapternumberError() {
-    return this.TheHadithaddress==null?'please set chapter number first':
-      this.rF.get('hadith_number').hasError("min") ? 'This book starts from ' + this.TheHadithaddress.from +' Hadiths' :
-      this.rF.get('hadith_number').hasError("max") ? 'This book ends at ' + this.TheHadithaddress.to +
-      ' Hadiths' :
-      this.rF.get('hadith_number').hasError('required') ? 'required' :
-      'Invalid input';
-  }
-  getChapternumberError() {
-    return this.rF.get('hadith_chapter').hasError("max") ? 'This chapter only has ' + this.CurrentChapterSource +
-      ' books' :
-      this.rF.get('hadith_chapter').hasError('min') ? 'Minimum is 1' :
-      this.rF.get('hadith_chapter').hasError('required') ? 'required' :
-      'Invalid input';
-  }
-
-  //==Quran//
-  getAyatNumberError() {
-    return this.rF.get('ayat_number').hasError('required') ? 'required' :
-      this.rF.get('ayat_number').hasError('max') ? 'this Surah only has ' + this.ayatMax + ' Ayat' :
-      this.rF.get('ayat_number').hasError('min') ? 'Minimum is 1' :
-      'Invalid input'
-  }
-
-  getSurahError() {
-    return this.rF.get('surah_number').hasError('required') ? 'required' :
-      this.rF.get('surah_number').hasError('max') ? 'The Quran has 114 Surrah' :
-      this.rF.get('surah_number').hasError('min') ? 'Minimum is 1' :
-      'Invalid input'
-  }
-  //Quran==//
-
-
-
 
   GetHadithAdressByBook(book, SOURCE: hadithaddress[]) {
     let x = SOURCE.filter(address => address.book == Number(book))
@@ -307,7 +293,7 @@ export class TopbarComponent implements OnInit {
 
 
   SetMaxAyat() {
-    let value = this.rF.get('surah_number').value;
+    let value = this.rFQ.get('surah_number').value;
     if (value <= 0) return
     let Surrah = QuranIndex.filter(f => f.number == value);
     this.ayatMax = Surrah[0].numberOfAyahs;
@@ -317,15 +303,15 @@ export class TopbarComponent implements OnInit {
   Previous() {
 
     if (this.TheCuurentSource == 'quran') {
-      let ayat = this.rF.get('ayat_number').value - 1;
+      let ayat = this.rFQ.get('ayat_number').value - 1;
       if (ayat <= 0) return;
-      this.rF.get('ayat_number').setValue(ayat)
+      this.rFQ.get('ayat_number').setValue(ayat)
       this.LookUp();
     }
     if (this.TheCuurentSource == 'hadith') {
-      let hadithNo = this.rF.get('hadith_number').value - 1;
+      let hadithNo = this.rFH.get('hadith_number').value - 1;
       if ( this.TheHadithaddress==null||hadithNo < this.TheHadithaddress.from) return
-      this.rF.get('hadith_number').setValue(hadithNo);
+      this.rFH.get('hadith_number').setValue(hadithNo);
       this.LookUp();
     }
 
@@ -334,50 +320,30 @@ export class TopbarComponent implements OnInit {
   Next() {
 
     if (this.TheCuurentSource == 'quran') {
-      let ayat = this.rF.get('ayat_number').value + 1;
+      let ayat = this.rFQ.get('ayat_number').value + 1;
       if (ayat > this.ayatMax) return;
-      this.rF.get('ayat_number').setValue(ayat)
+      this.rFQ.get('ayat_number').setValue(ayat)
       this.LookUp();
     }
 
     if (this.TheCuurentSource == 'hadith') {
-      let hadithNo = this.rF.get('hadith_number').value + 1;
+      let hadithNo = this.rFH.get('hadith_number').value + 1;
       if ( this.TheHadithaddress==null||hadithNo > this.TheHadithaddress.to) return
-      this.rF.get('hadith_number').setValue(hadithNo);
+      this.rFH.get('hadith_number').setValue(hadithNo);
       this.LookUp();
     }
 
   }
-  /////////////////////////////////////////////////////////////////////
 
-  NextValid(){
-
-    if (this.TheCuurentSource == 'hadith') {
-      if( this.rF.get('hadith_number').invalid||this.rF.get('hadith_chapter').invalid ){
-        this.web.inputValidity$.next('hadith_invalid');
-        return;
-      }
-    }
-
-    if (this.TheCuurentSource == 'quran') {
-      if(this.rF.get('ayat_number').invalid||this.rF.get('surah_number').invalid){
-        this.web.inputValidity$.next('quran_invalid');
-        return;
-      }
-    }
-
-    this.web.inputValidity$.next('valid');
-
-  }
 
 
   //===========Testing==========//
-  getvalidations(rf:FormGroup){
+  getvalidations(rFH:FormGroup){
     console.log('====Validation');
     
-    Object.keys(rf.controls).forEach(key => {
+    Object.keys(rFH.controls).forEach(key => {
 
-      let controlErrors: ValidationErrors = rf.get(key).errors;
+      let controlErrors: ValidationErrors = rFH.get(key).errors;
       if (controlErrors != null) {
             Object.keys(controlErrors).forEach(keyError => {
               console.log('Key control: "' + key + '", keyError: "' + keyError + '", err value: ', controlErrors[keyError]);
