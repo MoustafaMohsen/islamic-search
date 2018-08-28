@@ -1,11 +1,11 @@
 import { Component, OnInit,Input } from '@angular/core';
 import { DomSanitizer} from '@angular/platform-browser';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import {  WebService } from "../web.service";
 import { PartialObserver, Observable, Subject } from 'rxjs';
-
 import { MatSnackBar } from "@angular/material";
 import { HadithAddress,Quranaddress } from '../interfaces';
+declare var $: any;
 
 @Component({
   selector: 'app-hadith-box',
@@ -15,17 +15,20 @@ import { HadithAddress,Quranaddress } from '../interfaces';
 export class HadithBoxComponent implements OnInit {
   @Input() apiURL;
   @Input() update;
-  boxcontent;
+  Arabicboxcontent;
+  Englishboxcontent;
   loading;
   CurrentSource;
   hadithaddress:HadithAddress;
   quranaddress:Quranaddress;
   theC:string;
   theC$:Subject<number>=new Subject();
+  ifram_src:string = "https://www.sunnah.com/bukhari/1";
+
   constructor(private sanitizer:DomSanitizer,private http:HttpClient,private web:WebService,private snack:MatSnackBar) { }
 
   ngOnInit() {
-    this.web.Loading.subscribe(Bool=>this.loading=Bool)
+    //this.web.Loading.subscribe(Bool=>this.loading=Bool)
 
     this.web.apiRequest$.subscribe(
       (data)=>{
@@ -33,7 +36,7 @@ export class HadithBoxComponent implements OnInit {
         if(data.source=='hadith'){
         this.web.getHadith(data.url,data.language).subscribe(
           response=>{
-            this.boxcontent=response ;
+            this.Arabicboxcontent=response ;
             this.web.Loading.next(false);
             //set addresses
             this.hadithaddress=data.hadithaddress;
@@ -53,12 +56,12 @@ export class HadithBoxComponent implements OnInit {
         this.web.getQuran(data.url).subscribe(
           (ayat)=>{
             //clean data and storing it
-            this.boxcontent=ayat;
+            this.Arabicboxcontent=ayat;
             //remove the start of the first ayat
             if(data.quranaddress.ayat==1&&data.quranaddress.surah!=1){
               let firstAyat:string= String(ayat);
               firstAyat = firstAyat.replace('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ','')
-              this.boxcontent=firstAyat;
+              this.Arabicboxcontent=firstAyat;
             }
             this.CurrentSource=data.source;
             this.web.Loading.next(false)
@@ -76,6 +79,33 @@ export class HadithBoxComponent implements OnInit {
 
     )//apiRequest subscribe
 
+
+    this.web.myAPIRequest$.subscribe(
+      (request_obj)=>{
+        this.loading=true
+        
+        //SEND Request
+        this.web.getPIHadith(request_obj).subscribe(
+
+          (r)=>{
+            this.Arabicboxcontent = r.arabicText;
+            this.Englishboxcontent =r.englishText;
+            console.log("<<==========HadithBox");
+            console.log(r);
+            console.log(r.arabicText);
+            console.log("HadithBox==========>");
+            this.loading=false
+          },
+
+          (e)=>{
+            this.snack.open( "Not found","x" ,{duration:5000} )
+            this.loading=false
+          }
+        );
+
+      }
+    );
+
     this.theC$.subscribe(
       data=>{
         switch (data){
@@ -86,4 +116,6 @@ export class HadithBoxComponent implements OnInit {
     )
   }//ngOnInit
 
-}
+
+}//class
+

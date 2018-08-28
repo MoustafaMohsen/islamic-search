@@ -78,3 +78,92 @@ export interface QIndex{
   numberOfAyahs: number;
   revelationType: string;
 }
+
+
+
+
+export interface APiHadithRequest{
+  id?:number;
+  src:number;
+  number?: number;
+  in_book_refrence?: APiIn_Book_Refrence;
+  old_refrence?: APiOld_refrence
+}
+
+export interface APiOld_refrence{
+  id?: number;
+  vol: number;
+  book: number;
+  hadith: number;
+}
+
+export interface APiIn_Book_Refrence{
+  id?: number;
+  tag: string;
+  book: number;
+  hadith: number;
+  vol?:number;
+}
+
+export interface HadithModel{
+  id?:number,
+  src?: number,
+  number?: number,
+  arabicHTML?: string,
+  arabicText?: string,
+  englishHTML?: string,
+  englishText?: string,
+  in_book_refrence?: APiIn_Book_Refrence,
+  old_refrence?: APiOld_refrence
+}
+
+
+export interface ISource{
+  source:{
+    hadith:{
+      status:boolean; muslim:boolean; bukhari:boolean; nasai:boolean;name?:string;srcNu:number
+    };
+    quran:boolean;
+  };
+  methodAPI:{
+    oldAPI:{
+      state:boolean;
+      fethingmethod?:{
+        status:boolean,
+        ch:boolean,
+        chOp:boolean,
+        ha:boolean,
+        haOp:boolean,
+        nu:boolean
+      } 
+    };
+    myAPI:IMyAPIFetchingMethod
+  };
+};
+
+export interface IMyAPIFetchingMethod{
+    status:boolean;
+    new:{
+      status:boolean;ch:boolean;vol:boolean;ha:boolean
+    };
+    old:{
+      status:boolean;ch:boolean;vol:boolean;ha:boolean
+    };
+    tag:{
+      status:boolean; type:string;
+    }; 
+    number:boolean;
+}
+export interface hadithIndexch{
+  bnew: {
+      nh: number;
+      nc: number;
+  }[];
+  bold: {
+      oh: number;
+      oc: number;
+  }[];
+  maxNumber?:number;
+  maxTag?:string;
+  maxChar?:string;
+}

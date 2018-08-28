@@ -1,0 +1,10 @@
+28-7-2018
+
+-quran search engine api with the whole quran in xml file
+https://github.com/Alfanous-team/alfanous
+-alot of open Islam sources
+https://fekracomputers.github.io/blog/open-source-islamic-list#net
+-alot of hadith databases
+https://github.com/ceefour/hadith-islamware
+-another hadith database
+https://github.com/ceefour/sanad-hadith

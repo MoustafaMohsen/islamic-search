@@ -1,7 +1,11 @@
-.HadithText{
+.arabicText{
     text-align: right;
 
 }
+.englishText{
+    text-align: left;
+}
+
 .Loading{
     text-align: right;
     margin: 10px auto 10px;
@@ -9,4 +13,7 @@
 }
 .source-site{
     margin-top: 2rem;
+}
+.boxcontent{
+    z-index: -1;
 }

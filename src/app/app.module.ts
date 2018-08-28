@@ -12,7 +12,7 @@ import {
   MatButtonModule, MatCheckboxModule,MatButtonToggleModule,MatSliderModule,
   MatCardModule,MatProgressBarModule,MatToolbarModule,MatAutocompleteModule
   ,MatSlideToggleModule,MatSnackBarModule,MatDividerModule,MatProgressSpinnerModule
-  ,MatIconModule
+  ,MatIconModule,MatTabsModule
 } from '@angular/material';
 import { MatInputModule } from "@angular/material/input";
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -30,7 +30,7 @@ const material=[
   MatButtonModule, MatCheckboxModule,MatButtonToggleModule,
   MatSliderModule,MatCardModule,MatProgressBarModule,MatToolbarModule,MatAutocompleteModule,
   MatFormFieldModule,MatSlideToggleModule,MatSnackBarModule,MatDividerModule,MatProgressSpinnerModule,
-  MatInputModule,MatIconModule
+  MatInputModule,MatIconModule,MatTabsModule
 ]
 
 @NgModule({
