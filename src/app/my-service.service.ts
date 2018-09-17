@@ -12,7 +12,8 @@ export class MyServiceService {
   constructor() { }
   
   public Source:ISource;
-
+  public ResponseHadith$:Subject<HadithModel>=new Subject<HadithModel>();
+  public Navigation$:Subject<{Action:string,Value?:string}>=new Subject<{Action:string,Value?:string}>();
   
 
 }

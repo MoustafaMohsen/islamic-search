@@ -14,11 +14,20 @@
           <!--
               <mat-spinner *ngIf='loading' class="Loading" [diameter]="40"></mat-spinner>
           -->
-          <p [innerHTML]="Arabicboxcontent" class="arabicText lead" *ngIf="true"></p>
+          <div [innerHTML]="Arabicboxcontent" class="arabicText lead" *ngIf="true"></div>
 
           <mat-card-footer>
             <h5 *ngIf="hadithaddress&&CurrentSource=='hadith'&&!loading">
               Source: {{theC}} Ch:{{hadithaddress.chapter}} Hadith:{{hadithaddress.hadith}}</h5>
+            <div *ngIf="hadithRefrence" class="font-weight-bold">
+              Number: {{hadithRefrence.number}}
+             New Refrence: Ch.{{hadithRefrence.in_book_refrence.book}} 
+              Hadith{{hadithRefrence.in_book_refrence.hadith}} 
+              <span *ngIf="hadithRefrence.in_book_refrence.tag"> 
+                Tag: {{hadithRefrence.in_book_refrence.tag}}</span> 
+             Old Refrence: Ch.{{hadithRefrence.old_refrence.book}} 
+              Hadith{{hadithRefrence.old_refrence.hadith}} 
+            </div>
 
             <mat-progress-bar mode="buffer" *ngIf='loading'></mat-progress-bar>
           </mat-card-footer>
@@ -57,5 +66,15 @@
 
   <div class="col-1"></div>
 
+</div><!--row-->
 
-</div>
+<br>
+<br>
+<div class="row" *ngIf='CurrentSource||Arabicboxcontent||Englishboxcontent'>
+    <div class="col"></div>
+  <div class="col">
+      <button (click)='this.srv.Navigation$.next({Action:"next"})' [disabled]="" mat-raised-button>Next</button>
+      <button (click)='this.srv.Navigation$.next({Action:"previous"})' [disabled]="" mat-raised-button>Previous</button>
+  </div>
+  <div class="col"></div>
+</div><!--row-->

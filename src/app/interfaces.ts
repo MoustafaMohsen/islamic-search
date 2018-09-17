@@ -160,6 +160,7 @@ export interface hadithIndexch{
       nc: number;
   }[];
   bold: {
+      ohf?:number,
       oh: number;
       oc: number;
   }[];

@@ -4,7 +4,8 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import {  WebService } from "../web.service";
 import { PartialObserver, Observable, Subject } from 'rxjs';
 import { MatSnackBar } from "@angular/material";
-import { HadithAddress,Quranaddress } from '../interfaces';
+import { HadithAddress,Quranaddress, APiOld_refrence, APiIn_Book_Refrence } from '../interfaces';
+import { MyServiceService } from '../my-service.service';
 declare var $: any;
 
 @Component({
@@ -20,12 +21,13 @@ export class HadithBoxComponent implements OnInit {
   loading;
   CurrentSource;
   hadithaddress:HadithAddress;
+  hadithRefrence:{ number:number, in_book_refrence?: APiIn_Book_Refrence, old_refrence?: APiOld_refrence};
   quranaddress:Quranaddress;
   theC:string;
   theC$:Subject<number>=new Subject();
   ifram_src:string = "https://www.sunnah.com/bukhari/1";
-
-  constructor(private sanitizer:DomSanitizer,private http:HttpClient,private web:WebService,private snack:MatSnackBar) { }
+  constructor(public srv:MyServiceService,private sanitizer:DomSanitizer,private http:HttpClient,private web:WebService,private snack:MatSnackBar) 
+  { }
 
   ngOnInit() {
     //this.web.Loading.subscribe(Bool=>this.loading=Bool)
@@ -53,6 +55,7 @@ export class HadithBoxComponent implements OnInit {
       }
       //===If Quran
       if(data.source=='quran'){
+        this.web.Loading.next(true);
         this.web.getQuran(data.url).subscribe(
           (ayat)=>{
             //clean data and storing it
@@ -88,8 +91,9 @@ export class HadithBoxComponent implements OnInit {
         this.web.getPIHadith(request_obj).subscribe(
 
           (r)=>{
-            this.Arabicboxcontent = r.arabicText;
-            this.Englishboxcontent =r.englishText;
+            this.srv.ResponseHadith$.next(r);
+            this.Arabicboxcontent = r.arabicHTML;
+            this.Englishboxcontent =r.englishHTML;
             console.log("<<==========HadithBox");
             console.log(r);
             console.log(r.arabicText);
@@ -113,7 +117,19 @@ export class HadithBoxComponent implements OnInit {
           case 2:{this.theC='Muslim';break}
         }
       } 
-    )
+    );
+    this.srv.ResponseHadith$.subscribe(
+      (data)=>
+      {
+        this.hadithRefrence={
+          number : data.number,
+          in_book_refrence:data.in_book_refrence,
+          old_refrence : data.old_refrence
+        } 
+        console.log("+++++ResponseHadith$");
+        console.log(data);
+        console.log("ResponseHadith$+++++");
+      });
   }//ngOnInit
 
 

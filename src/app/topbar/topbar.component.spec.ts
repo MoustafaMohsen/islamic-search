@@ -136,3 +136,104 @@ hadiths:hadith[];
       //GETTING VALUES=================//
 
  */
+        /*
+      case false:
+        {
+          if(this.rFH.invalid) return;
+          let _url ='https://muflihun.com/svc/hadith?c='+this.C+'&b='+this.currentChapter+'&h='+this.rFH.get('hadith_number').value;
+
+          if (_url == this.apiURL) {
+            this.snack.open("Already sent", "X", {
+              duration: 1000
+            });
+            return
+          }
+          this.apiURL = _url;
+          this.web.Loading.next(true);
+
+          let _apiRequestHadith: ApiRequest = {
+            c: this.C,
+            url: this.apiURL,
+            source: "hadith",
+            hadithaddress: {
+              chapter: this.currentChapter,
+              hadith: this.rFH.get('hadith_number').value
+            },
+            language: "textArabic"
+          };
+          this.web.apiRequest$.next(_apiRequestHadith);
+          console.log(_apiRequestHadith);
+        } break;
+
+*/
+
+
+/*
+        this.rFH.valueChanges.subscribe(
+          form=>{
+            //this.NextValid();
+            //console.log(this.isValid);
+            
+          }
+        )
+    
+        this.rFH.get('hadith_chapter').valueChanges.subscribe(
+          value => {
+            if (this.lastChaptervalue == value && this.rFH.get('hadith_chapter').status != 'VALID') return;
+    
+            this.currentChapter = value;
+            this.TheHadithaddress = this.GetHadithAdressByBook(this.currentChapter, this.HADITHADDRESS);
+            this.currentVolume = this.TheHadithaddress != null ? this.TheHadithaddress.volume : null;
+    
+            if (this.TheHadithaddress == null) return
+    
+            this.rFH.get('hadith_number').setValue(this.TheHadithaddress.from)
+            this.rFH.get('hadith_number').setValidators([Validators.required,Validators.min(this.TheHadithaddress.from),
+              Validators.max(this.TheHadithaddress.to)
+            ]);
+    
+            this.rFH.get('hadith_number_options').setValidators([Validators.min(this.TheHadithaddress.from),
+              Validators.max(this.TheHadithaddress.to)
+            ]);
+    
+    
+            this.lastChaptervalue = value;
+            this.rFH.get('hadith_chapter_options').setValue(value);
+    
+          }
+        );
+    
+        this.rFH.get('hadith_chapter_options').valueChanges.subscribe(
+          value => {
+    
+            if (this.lastChaptervalue != value) {
+              this.lastChaptervalue = value;
+              this.currentChapter = value;
+              this.rFH.get('hadith_chapter').setValue(Number(this.rFH.get('hadith_chapter_options').value));
+            } else {
+              return
+            }
+          }
+        )
+    
+        this.rFH.get('hadith_number').valueChanges.subscribe(
+          value => {
+            if (this.lasthadithNumbervalue != value) {
+              this.lasthadithNumbervalue = value;
+              this.rFH.get('hadith_number_options').setValue(value);
+            } else {
+              return
+            }
+          }
+        );
+    
+        this.rFH.get('hadith_number_options').valueChanges.subscribe(
+          value => {
+            if (this.lasthadithNumbervalue != value) {
+              //this.rFH.get('hadith_number').setValue(Number(this.rFH.get('hadith_number_options').value));
+              this.rFH.get('hadith_number').setValue(Number(this.rFH.get('hadith_number_options').value));
+            } else {
+              return
+            }
+          }
+        );*/
