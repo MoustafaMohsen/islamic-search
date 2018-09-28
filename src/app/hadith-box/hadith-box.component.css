@@ -17,3 +17,7 @@
 .boxcontent{
     z-index: -1;
 }
+.StyleSecondP div:nth-child(2)  p{
+    font-weight: bold;
+}
+

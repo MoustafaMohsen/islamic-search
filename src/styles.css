@@ -10,3 +10,9 @@ button{
 .arabicText>.arabic_text_details{
     font-weight: bold;
 }
+/*
+.StyleSecondP div:nth-child(2)  p{
+    font-weight: bold;
+    color: red;
+}
+*/

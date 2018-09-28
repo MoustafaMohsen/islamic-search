@@ -5,60 +5,46 @@
   <div class="col">
 
 
-    <mat-tab-group *ngIf='CurrentSource||Arabicboxcontent||Englishboxcontent'>
-      <mat-tab label="Arabic" backgroundColor='primary' *ngIf='CurrentSource||Arabicboxcontent' class="bg-dark">
+    <mat-tab-group *ngIf='ArContentArray||EnContentArray'>
+      <mat-tab label="Arabic" backgroundColor='primary' *ngIf='ArContentArray' class="bg-dark">
 
         <!--=====Card====-->
-        <!--mat-spinner *ngIf='!loading&&!apiURL' class="Loading" [diameter]="40"></mat-spinner-->
-        <mat-card *ngIf='CurrentSource||Arabicboxcontent' class="boxcontent">
-          <!--
-              <mat-spinner *ngIf='loading' class="Loading" [diameter]="40"></mat-spinner>
-          -->
-          <div [innerHTML]="Arabicboxcontent" class="arabicText lead" *ngIf="true"></div>
 
-          <mat-card-footer>
-            <h5 *ngIf="hadithaddress&&CurrentSource=='hadith'&&!loading">
-              Source: {{theC}} Ch:{{hadithaddress.chapter}} Hadith:{{hadithaddress.hadith}}</h5>
-            <div *ngIf="hadithRefrence" class="font-weight-bold">
-              Number: {{hadithRefrence.number}}
-             New Refrence: Ch.{{hadithRefrence.in_book_refrence.book}} 
-              Hadith{{hadithRefrence.in_book_refrence.hadith}} 
-              <span *ngIf="hadithRefrence.in_book_refrence.tag"> 
-                Tag: {{hadithRefrence.in_book_refrence.tag}}</span> 
-             Old Refrence: Ch.{{hadithRefrence.old_refrence.book}} 
-              Hadith{{hadithRefrence.old_refrence.hadith}} 
-            </div>
+        <div *ngIf='ArContentArray' > 
 
+          <mat-card *ngFor="let ArContent of ArContentArray" class="StyleSecondP">
+            
+              <div *ngFor="let content of ArContent" >
+                <p [innerHTML]="content.value" class="arabicText lead content-value" *ngIf="content.value!='‏‏.‏'"></p>
+              </div>
+            
             <mat-progress-bar mode="buffer" *ngIf='loading'></mat-progress-bar>
-          </mat-card-footer>
-
-        </mat-card>
+          </mat-card>
+          
+        </div>
 
       </mat-tab>
 
 
-      <mat-tab label="English" backgroundColor='primary' *ngIf='CurrentSource||Englishboxcontent' class="bg-light">
+      <mat-tab label="English" backgroundColor='primary' *ngIf='EnContentArray' class="bg-light">
 
         <!--=====Card====-->
-        <!--mat-spinner *ngIf='!loading&&!apiURL' class="Loading" [diameter]="40"></mat-spinner-->
-        <mat-card *ngIf='CurrentSource||Englishboxcontent' class="boxcontent">
-          <!--
-                <mat-spinner *ngIf='loading' class="Loading" [diameter]="40"></mat-spinner>
-            -->
-          <p [innerHTML]="Englishboxcontent" class="englishText lead" *ngIf="true"></p>
-
-          <mat-card-footer>
-            <h5 *ngIf="hadithaddress&&CurrentSource=='hadith'&&!loading">
-              Source: {{theC}} Ch:{{hadithaddress.chapter}} Hadith:{{hadithaddress.hadith}}</h5>
-
-            <mat-progress-bar mode="buffer" *ngIf='loading'></mat-progress-bar>
-          </mat-card-footer>
-
-        </mat-card>
 
 
+        <div *ngIf='EnContentArray' > 
+  
+            <mat-card *ngFor="let EnContent of EnContentArray">
+              
+              <div *ngFor="let content of EnContent">
+                <p [innerHTML]="content.value" class="englishText lead" *ngIf="true"></p>
+              </div>
+              <mat-progress-bar mode="buffer" *ngIf='loading'></mat-progress-bar>
+            </mat-card>
+            
+        </div>
 
       </mat-tab>
+      
     </mat-tab-group>
 
 
@@ -70,7 +56,7 @@
 
 <br>
 <br>
-<div class="row" *ngIf='CurrentSource||Arabicboxcontent||Englishboxcontent'>
+<div class="row" *ngIf='false'>
     <div class="col"></div>
   <div class="col">
       <button (click)='this.srv.Navigation$.next({Action:"next"})' [disabled]="" mat-raised-button>Next</button>

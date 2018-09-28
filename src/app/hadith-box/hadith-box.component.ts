@@ -1,11 +1,10 @@
-import { Component, OnInit,Input } from '@angular/core';
-import { DomSanitizer} from '@angular/platform-browser';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import {  WebService } from "../web.service";
-import { PartialObserver, Observable, Subject } from 'rxjs';
+import { HttpClient } from "@angular/common/http";
+import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from "@angular/material";
-import { HadithAddress,Quranaddress, APiOld_refrence, APiIn_Book_Refrence } from '../interfaces';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Lib3 } from '../interfaces';
 import { MyServiceService } from '../my-service.service';
+import { WebService } from "../web.service";
 declare var $: any;
 
 @Component({
@@ -15,123 +14,228 @@ declare var $: any;
 })
 export class HadithBoxComponent implements OnInit {
   @Input() apiURL;
-  @Input() update;
-  Arabicboxcontent;
-  Englishboxcontent;
-  loading;
-  CurrentSource;
-  hadithaddress:HadithAddress;
-  hadithRefrence:{ number:number, in_book_refrence?: APiIn_Book_Refrence, old_refrence?: APiOld_refrence};
-  quranaddress:Quranaddress;
-  theC:string;
-  theC$:Subject<number>=new Subject();
-  ifram_src:string = "https://www.sunnah.com/bukhari/1";
+  //Arabicboxcontent:Lib3.Value[]//=[];
+  //Englishboxcontent:Lib3.Value[]//=[];
+
+  ArContentArray:Lib3.Value[][]//=[[]];
+  EnContentArray:Lib3.Value[][]//=[[]];
+
+  loading:boolean;
+  //hadithRefrence:{ number:number, in_book_refrence?: APiIn_Book_Refrence, old_refrence?: APiOld_refrence};
+  //theC:string;
   constructor(public srv:MyServiceService,private sanitizer:DomSanitizer,private http:HttpClient,private web:WebService,private snack:MatSnackBar) 
   { }
 
   ngOnInit() {
-    //this.web.Loading.subscribe(Bool=>this.loading=Bool)
 
-    this.web.apiRequest$.subscribe(
-      (data)=>{
+    this.web.Loading.subscribe(x=>this.loading=x);
+
+    this.web.IncomingRequests$.subscribe(
+
+      (request)=>{
         //===If Hadith
-        if(data.source=='hadith'){
-        this.web.getHadith(data.url,data.language).subscribe(
-          response=>{
-            this.Arabicboxcontent=response ;
-            this.web.Loading.next(false);
-            //set addresses
-            this.hadithaddress=data.hadithaddress;
-            this.quranaddress=data.quranaddress;
-            this.CurrentSource=data.source;
-            this.theC$.next(data.c);
-            
-          },
-          s=>{
-            this.snack.open(this.CurrentSource+' ' +this.apiURL+" Not found", "X", {duration: 5000,});
-            this.web.Loading.next(false)
-          }
-        )
-      }
-      //===If Quran
-      if(data.source=='quran'){
-        this.web.Loading.next(true);
-        this.web.getQuran(data.url).subscribe(
-          (ayat)=>{
-            //clean data and storing it
-            this.Arabicboxcontent=ayat;
-            //remove the start of the first ayat
-            if(data.quranaddress.ayat==1&&data.quranaddress.surah!=1){
-              let firstAyat:string= String(ayat);
-              firstAyat = firstAyat.replace('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ','')
-              this.Arabicboxcontent=firstAyat;
+        if(request.source=='hadith'){
+          //Loading
+          this.web.Loading.next(true)
+          ;
+          //if Single Content
+          if(request.Method!=5)
+          this.web.getHadithBlock(request).subscribe(
+            block=>{
+              console.log("====Block Response=====");
+              console.log(block);
+              
+              this.ArContentArray=[[]];
+              this.EnContentArray=[[]];
+
+              let arC:Lib3.Value[]=block.content.filter(c=>c.name.match(/ar/g) ).map(x=> 
+                {
+                  console.log("map()");
+                  console.log(parseInt(x.name.replace(/([a-z|A-Z]+):/g,""))); 
+                  let v:Lib3.Value={
+                    name:x.name.replace(/([a-z|A-Z]+):/g,""),
+                    value:x.value,
+                    id:x.id
+                  };
+                  console.log("after map()");
+                  console.log(v);
+                  
+                  return v
+                })
+              .sort((a,b)=> parseInt(a.name) - parseInt(b.name));
+              
+              let enC:Lib3.Value[]=block.content.filter(c=>c.name.match(/en/g) ).map(x=> 
+                {
+                  let v:Lib3.Value={
+                    name:x.name.replace(/([a-z|A-Z]+):/g,""),
+                    value:x.value,
+                    id:x.id
+                  };
+                  return v
+                })
+                .sort((a,b)=> parseInt(a.name) - parseInt(b.name));
+
+                  console.log("arC");
+                  
+              console.log(arC);
+              console.log(enC);
+              this.ArContentArray[0]=arC.slice();
+              this.EnContentArray[0]=enC.slice();
+              
+              this.web.Loading.next(false);
+            },
+  
+            error=>{
+              this.snack.open(' ' +request.url+" Not found", "X", {duration: 5000,});
+              this.web.Loading.next(false)
             }
-            this.CurrentSource=data.source;
-            this.web.Loading.next(false)
-          },
-          s=>{
-            this.snack.open(this.CurrentSource +" "+this.apiURL+" Not found", "X", {duration: 5000,});
-            this.web.Loading.next(false)
-          }
-        )
-        
-      }
+  
+          );
+          //if Array Content
+          if(request.Method==5)
+          this.web.getHadithBlockArray(request).subscribe(
+  
+            blocks=>{
+              this.ArContentArray=[[]];
+              this.EnContentArray=[[]];
+              
+              let arC:Lib3.Value[];
+              let enC:Lib3.Value[];
+              for (let i  = 0;  i < blocks.length; i++) {
+                const b = blocks[i];
+                arC=b.content.filter( c=>c.name.match(/ar/g) )
+                .map(x=> 
+                  {
+                    let v:Lib3.Value={
+                      name:x.name.replace(/([a-z|A-Z]+):/g,""),
+                      value:x.value,
+                      id:x.id
+                    };
+                    return v
+                  })
+                  .sort((a,b)=> parseInt(a.name) - parseInt(b.name));
 
-      }
+                enC=b.content.filter( c=>c.name.match(/en/g) )
+                .map(x=> 
+                  {
+                    let v:Lib3.Value={
+                      name:x.name.replace(/([a-z|A-Z]+):/g,""),
+                      value:x.value,
+                      id:x.id
+                    };
+                    return v
+                  })
+                  .sort((a,b)=> parseInt(a.name) - parseInt(b.name));
+                
+                this.ArContentArray[i]=arC.slice()//.sort( x=>x.value.match(/ar/g) );
+                this.EnContentArray[i]=enC.slice();
+              }//for
+              
+              this.web.Loading.next(false);
+
+            },
+  
+            error=>{
+              this.snack.open(' ' +request.url+" Not found", "X", {duration: 3000,});
+              this.web.Loading.next(false)
+            }
+  
+          )
+
+      }//If Hadith
+
+      //===If Quran
+        if(request.source=='quran'){
+          //Loading
+          this.web.Loading.next(true);
+
+          //For arabic
+          console.log(request.url);
+          
+          this.web.getQuran(request.url+'ar'+'.asad').subscribe(
+
+            (ayat)=>{
+              console.log(ayat);
+              
+              //clean request and storing it
+              this.ArContentArray=[[{value:ayat.data.text}]]
+              
+              //remove the start of the first ayat
+              if(request.value2==1&&request.value1!=1){
+                let firstAyat:string= String(ayat.data.text);
+                firstAyat = firstAyat.replace('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ','');
+                this.ArContentArray=[[{value:firstAyat}]]
+              }
+              this.web.Loading.next(false)
+            },
+
+            error=>{
+              this.snack.open(" "+request.url+" Not found", "X", {duration: 3000,});
+              this.web.Loading.next(false)
+            }
+
+          );
+
+          //For English
+          this.web.getQuran(request.url+'en'+'.asad').subscribe(
+
+            (ayat)=>{
+              //clean request and storing it
+              this.EnContentArray=[[{value:ayat.data.text}]]
+              //remove the start of the first ayat
+              if(request.value2==1&&request.value1!=1){
+                let firstAyat:string= String(ayat.data.text);
+                firstAyat = firstAyat.replace('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ','');
+                this.EnContentArray=[[{value:firstAyat}]]
+              }
+              this.web.Loading.next(false)
+            },
+
+            error=>{
+              this.snack.open(" "+request.url+" Not found", "X", {duration: 3000,});
+              this.web.Loading.next(false)
+            }
+
+          )
+          
+        }//If Quran
+
+        //If Requesting Array Content 
 
 
-    )//apiRequest subscribe
+      }//(request)
 
 
-    this.web.myAPIRequest$.subscribe(
-      (request_obj)=>{
-        this.loading=true
-        
-        //SEND Request
-        this.web.getPIHadith(request_obj).subscribe(
+    )//IncomingRequests$ subscribe
 
-          (r)=>{
-            this.srv.ResponseHadith$.next(r);
-            this.Arabicboxcontent = r.arabicHTML;
-            this.Englishboxcontent =r.englishHTML;
-            console.log("<<==========HadithBox");
-            console.log(r);
-            console.log(r.arabicText);
-            console.log("HadithBox==========>");
-            this.loading=false
-          },
-
-          (e)=>{
-            this.snack.open( "Not found","x" ,{duration:5000} )
-            this.loading=false
-          }
-        );
-
-      }
-    );
-
-    this.theC$.subscribe(
-      data=>{
-        switch (data){
-          case 1:{this.theC='Bukhari';break}
-          case 2:{this.theC='Muslim';break}
-        }
-      } 
-    );
-    this.srv.ResponseHadith$.subscribe(
-      (data)=>
-      {
-        this.hadithRefrence={
-          number : data.number,
-          in_book_refrence:data.in_book_refrence,
-          old_refrence : data.old_refrence
-        } 
-        console.log("+++++ResponseHadith$");
-        console.log(data);
-        console.log("ResponseHadith$+++++");
-      });
   }//ngOnInit
+/*
+  ShowArrayContet(array:Lib3.Value[]){
+    console.log("SHow hadith");
+    console.log(array);
+    
+    var many:boolean=array.length>1?true:false;
+    var content:string;
 
+    if (many) {
+      var firstArray =array[0].value;
+      var start = "<p class='emphisise-hadith'>";
+      var secondArray = array[1].value;
+      var otherArray="";
+      var end = "</p>";
+      for (let i = 2; i < array.length; i++) {
+        const element = array[i].value;
+        otherArray =  otherArray+element
+      }
+      content = firstArray +  start+secondArray+end  + otherArray ;
+      console.log(secondArray);
+      
+    } else {
+      content=array[0].value;
+    }
+    return content;
+  }
+*/
 
 }//class
 

@@ -7,7 +7,7 @@
         <mat-option value="Quran">Quran</mat-option>
         <mat-option value="Bukhari">Bukhari</mat-option>
         <mat-option value="Muslim">Muslim</mat-option>
-        <mat-option value="Nasai">Nasai</mat-option>
+        <!--mat-option value="Nasai">Nasai</mat-option-->
       </mat-select>
     </mat-form-field>
   </div>
@@ -44,21 +44,34 @@
     
             <!--=======OtherTag========-->
             <mat-form-field class="spacing" *ngIf='this.rFPI.get("OtherTag").enabled'>
-                <input formControlName='OtherTag' placeholder="Other Tag" type="text" matInput>
+                <input formControlName='OtherTag' placeholder="Other Tag" type="number" matInput>
                 <mat-error *ngIf='rFPI.get("OtherTag").invalid'>{{getHadithErrot({fetchingMethod:"Tag",fieldlName:"OtherTag"})}}</mat-error>
             </mat-form-field>
+
+            <mat-form-field class="spacing" *ngIf='this.rFPI.get("OtherTagChars").enabled&&this.OtherTagCharsArray'>
+                <mat-select placeholder="Choose Chapter" formControlName='OtherTagChars'>
     
+                    <div *ngFor='let c of this.OtherTagCharsArray' >
+                      <mat-option [value]="c">
+                        {{c}}
+                      </mat-option>
+                    </div>
+        
+                  </mat-select>
+                  <mat-hint>Charcter (Not Required)</mat-hint>
+            </mat-form-field>
+            <!--===New Chapter===-->
+            <mat-form-field class="spacing" *ngIf='this.rFPI.get("NewChapter").enabled'>
+              <input placeholder="New Chapter" type="number" matInput formControlName='NewChapter'>
+              <mat-error *ngIf='rFPI.get("NewChapter").invalid'>{{getHadithErrot({fetchingMethod:"Chapter",fieldlName:"NewChapter"})}}</mat-error>
+            </mat-form-field>
+
             <!--=======New Hadith========-->
             <mat-form-field class="spacing" *ngIf='this.rFPI.get("NewHadith").enabled'>
               <input formControlName='NewHadith' placeholder="New Hadith" type="number" matInput>
               <mat-error *ngIf='rFPI.get("NewHadith").invalid'>{{getHadithErrot({fetchingMethod:"Hadith",fieldlName:"NewHadith",otherfieldlName:"NewChapter"})}}</mat-error>
             </mat-form-field>
     
-            <!--===New Chapter===-->
-            <mat-form-field class="spacing" *ngIf='this.rFPI.get("NewChapter").enabled'>
-              <input placeholder="New Chapter" type="number" matInput formControlName='NewChapter'>
-              <mat-error *ngIf='rFPI.get("NewChapter").invalid'>{{getHadithErrot({fetchingMethod:"Chapter",fieldlName:"NewChapter"})}}</mat-error>
-            </mat-form-field>
     
             <!--===New Vol===-->
             <!--mat-form-field class="spacing">
@@ -67,17 +80,17 @@
             </mat-form-field-->
     
     
+            <!--===Old Chapter===-->
+            <mat-form-field class="spacing" *ngIf='this.rFPI.get("OldChapter").enabled'>
+              <input placeholder="Old Chapter" type="number" matInput formControlName='OldChapter' >
+              <mat-error *ngIf='rFPI.get("OldChapter").invalid'>{{getHadithErrot({fetchingMethod:"Chapter",fieldlName:"OldChapter"})}}</mat-error>
+            </mat-form-field>
+    
     
             <!--=======Old Hadith========-->
             <mat-form-field class="spacing" *ngIf='this.rFPI.get("OldHadith").enabled'>
               <input formControlName='OldHadith' placeholder="Old Hadith" type="number" matInput >
               <mat-error *ngIf='rFPI.get("OldHadith").invalid'>{{getHadithErrot({fetchingMethod:"Hadith",fieldlName:"OldHadith",otherfieldlName:"OldChapter"})}}</mat-error>
-            </mat-form-field>
-    
-            <!--===Old Chapter===-->
-            <mat-form-field class="spacing" *ngIf='this.rFPI.get("OldChapter").enabled'>
-              <input placeholder="Old Chapter" type="number" matInput formControlName='OldChapter' >
-              <mat-error *ngIf='rFPI.get("OldChapter").invalid'>{{getHadithErrot({fetchingMethod:"Chapter",fieldlName:"OldChapter"})}}</mat-error>
             </mat-form-field>
     
             <!--===Old Vol===-->
@@ -90,7 +103,7 @@
     
     
     
-            <button (click)='LookupPI()' [disabled]="false" *ngIf="true" type="submit" mat-raised-button color="primary">Look up</button>
+            <button (click)='LookupPI()' [disabled]="loading||this.rFPI.invalid" *ngIf="true" type="submit" mat-raised-button color="primary">Look up</button>
     
           </div>
     
@@ -113,7 +126,7 @@
           <input formControlName='ayat_number' placeholder="Verse" type="number" matInput>
           <mat-error *ngIf='rFQ.get("ayat_number").invalid'>{{getAyatNumberError()}}</mat-error>
         </mat-form-field>
-        <button (click)='LookUp()' [disabled]="!isValid||loading" type="submit" mat-raised-button color="primary" *ngIf="this.srv.Source.source.quran">Look up</button>
+        <button (click)='LookUp()' [disabled]="loading||this.rFQ.invalid" type="submit" mat-raised-button color="primary" *ngIf="this.srv.Source.source.quran">Look up</button>
 
       </div>
 
@@ -156,11 +169,23 @@
 
 <app-hadith-box [(apiURL)]='this.apiURL'></app-hadith-box>
 
+<!--mat-form-field class="spacing w-100">
+  <textarea [(ngModel)]="stringinputTest" placeholder="Test"  matInput></textarea>
+</mat-form-field-->
+<a ng-href="downloadLink" id="downloadLink"></a>
 <div class="row navigation-buttons">
 
   
+  <!---
   <button (click)='getvalidations(this.rFPI)' mat-raised-button>Log rFPI Validations</button>
-  <button (click)='Test()' mat-raised-button>Test</button>
+  <button (click)='Test()' mat-raised-button>TestRequest</button>
+  <button (click)='parseJson(stringinputTest,false)' mat-raised-button>Test Parse normal</button>
+  <button (click)='parseJson(stringinputTest,true)' mat-raised-button>Test hadiths array</button>
+  <button (click)='parseJson(stringinputTest,true,true)' mat-raised-button>Test TS array</button>
+  <button (click)='CompareIndexes()' mat-raised-button>Compare</button>
+  <button (click)='printloop()' mat-raised-button>Print</button>
+  -->
+
 </div>
 
 <!--=======Number========-
