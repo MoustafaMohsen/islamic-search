@@ -724,7 +724,7 @@ export class TopbarComponent implements OnInit {
       this.myUsingOptions=[
         {value:'number',englishName:'Hadith Number'},
         {value:'new',englishName:'In Book Refrence'},
-        {value:'old',englishName:'English Book Refrence'}
+        {value:'old',englishName:'USC-MSA Refrence'}
       ];
       console.log("Source \"Bukhari\" was choosen");
 
@@ -824,7 +824,7 @@ export class TopbarComponent implements OnInit {
       this.myUsingOptions=[
         {value:'number',englishName:'Hadith Number'},
         {value:'new',englishName:'In Book Refrence'},
-        {value:'old',englishName:'English Book Refrence'}
+        {value:'old',englishName:'USC-MSA Refrence'}
       ];
       console.log("Source \"Nasai\" was choosen");
 
