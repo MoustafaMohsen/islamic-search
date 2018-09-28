@@ -42,23 +42,23 @@ export class HadithBoxComponent implements OnInit {
           if(request.Method!=5)
           this.web.getHadithBlock(request).subscribe(
             block=>{
-              console.log("====Block Response=====");
-              console.log(block);
+             //console.log("====Block Response=====");
+             //console.log(block);
               
               this.ArContentArray=[[]];
               this.EnContentArray=[[]];
 
               let arC:Lib3.Value[]=block.content.filter(c=>c.name.match(/ar/g) ).map(x=> 
                 {
-                  console.log("map()");
-                  console.log(parseInt(x.name.replace(/([a-z|A-Z]+):/g,""))); 
+                 //console.log("map()");
+                 //console.log(parseInt(x.name.replace(/([a-z|A-Z]+):/g,""))); 
                   let v:Lib3.Value={
                     name:x.name.replace(/([a-z|A-Z]+):/g,""),
                     value:x.value,
                     id:x.id
                   };
-                  console.log("after map()");
-                  console.log(v);
+                 //console.log("after map()");
+                 //console.log(v);
                   
                   return v
                 })
@@ -75,10 +75,10 @@ export class HadithBoxComponent implements OnInit {
                 })
                 .sort((a,b)=> parseInt(a.name) - parseInt(b.name));
 
-                  console.log("arC");
+                 //console.log("arC");
                   
-              console.log(arC);
-              console.log(enC);
+             //console.log(arC);
+             //console.log(enC);
               this.ArContentArray[0]=arC.slice();
               this.EnContentArray[0]=enC.slice();
               
@@ -150,12 +150,12 @@ export class HadithBoxComponent implements OnInit {
           this.web.Loading.next(true);
 
           //For arabic
-          console.log(request.url);
+         //console.log(request.url);
           
           this.web.getQuran(request.url+'ar'+'.asad').subscribe(
 
             (ayat)=>{
-              console.log(ayat);
+             //console.log(ayat);
               
               //clean request and storing it
               this.ArContentArray=[[{value:ayat.data.text}]]

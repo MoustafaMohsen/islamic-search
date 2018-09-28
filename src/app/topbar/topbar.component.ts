@@ -105,12 +105,12 @@ export class TopbarComponent implements OnInit {
     }
     //Initial Source=======
 
-    console.log("===ngOnInit");
+   //console.log("===ngOnInit");
 
-    console.log("=Initial Source=");
-    console.log(this.srv.Source);
+   //console.log("=Initial Source=");
+   //console.log(this.srv.Source);
 
-    console.log("ngOnInit===");
+   //console.log("ngOnInit===");
 
     //Initial Source=======
     setTimeout( () => {
@@ -122,7 +122,7 @@ export class TopbarComponent implements OnInit {
     this.web.Loading.subscribe(b => this.loading = b);
     this.source_options.valueChanges.subscribe(
       (value) => {
-        console.log("=======MARK========");
+       //console.log("=======MARK========");
         
         //emit value change
         this.rFPI.get('FetchingMethod').setValue(this.rFPI.get('FetchingMethod').value);
@@ -165,11 +165,11 @@ export class TopbarComponent implements OnInit {
     );
     this.rFPI.get('FetchingMethod').valueChanges.subscribe(
       value => {
-        console.log("=======UpdateHtmlController");
+       //console.log("=======UpdateHtmlController");
         this.UpdateInputDisable();
         this.ValidateHadithInputs("method");
-        console.log(this.srv.Source);
-        console.log("UpdateHtmlController=======");
+       //console.log(this.srv.Source);
+       //console.log("UpdateHtmlController=======");
       }
     );
 
@@ -202,8 +202,8 @@ export class TopbarComponent implements OnInit {
   //==Hadith//
   
   getHadithErrot(I_type){
-    console.log("getHadithErrot()");
-    console.log(I_type);
+   //console.log("getHadithErrot()");
+   //console.log(I_type);
     
     
     switch(I_type.fetchingMethod){
@@ -231,7 +231,7 @@ export class TopbarComponent implements OnInit {
             return error;
           }      
           if(this.currentFetchingMethod=="old"){
-            console.log("Error old are reported");
+           //console.log("Error old are reported");
             let error
             if( this.rFPI.get(I_type.fieldlName).hasError("required") )
             error = 'This field is Required'
@@ -242,7 +242,7 @@ export class TopbarComponent implements OnInit {
             return error;
           }
           if(this.currentFetchingMethod== "tag"){
-            console.log("Error tag are reported");
+            //console.log("Error tag are reported");
             let error
             if( this.rFPI.get(I_type.fieldlName).hasError("required") )
             error = 'This field is Required'
@@ -281,7 +281,7 @@ export class TopbarComponent implements OnInit {
           return error;
         }      
         if(this.currentFetchingMethod=="old"){
-          console.log("Error old are reported");
+         //console.log("Error old are reported");
           let error
           if( this.rFPI.get(I_type.fieldlName).hasError("required") )
           error = 'This field is Required'
@@ -359,8 +359,8 @@ export class TopbarComponent implements OnInit {
           return;
     }
     else{
-        console.log("no source was choosen\n last source was");
-        console.log(this.srv.Source);
+       //console.log("no source was choosen\n last source was");
+       //console.log(this.srv.Source);
     }
   }
 
@@ -445,7 +445,7 @@ export class TopbarComponent implements OnInit {
   }
   UpdateInputDisable(){
     
-    console.log("UpdateInputDisable");
+   //console.log("UpdateInputDisable");
     
     if (this.rFPI.get('FetchingMethod').value=="number"&&this.currentFetchingMethod !="number") {
       this.rFPI.disable({onlySelf: true, emitEvent: false})
@@ -498,7 +498,7 @@ export class TopbarComponent implements OnInit {
   }
   //call this everytime a chapter value changes
   ValidateHadithHadithInputs(){
-    console.log("\n Validate Hadith Inputs");
+   //console.log("\n Validate Hadith Inputs");
     
     //bukhari
     if(this.srv.Source.source.hadith.bukhari){
@@ -515,7 +515,7 @@ export class TopbarComponent implements OnInit {
 
       }
       else if(this.currentFetchingMethod=="old"){
-        console.log("====oldValudate===");
+       //console.log("====oldValudate===");
         let chapter = parseInt(this.rFPI.get("OldChapter").value,10);
         let Inew=Bindex.oldList.find( (s)=>s.v1 == chapter ) ; 
         let max = Inew?Inew.v3:null
@@ -529,7 +529,7 @@ export class TopbarComponent implements OnInit {
 
     //muslim
     if(this.srv.Source.source.hadith.muslim){
-      console.log("\n muslim source validator");
+     //console.log("\n muslim source validator");
       /*
       if (this.currentFetchingMethod=="number") {
         this.rFPI.get("number").setValidators([Validators.required,Validators.max(7471),Validators.min(1)])
@@ -545,17 +545,17 @@ export class TopbarComponent implements OnInit {
 
       }
       else if(this.currentFetchingMethod=="old"){
-        console.log("====oldValudate===");
+       //console.log("====oldValudate===");
         let chapter = this.rFPI.get("OldChapter").value ;
         let Iold = Mindex.oldList.find( (s)=>s.v1 == chapter )
         let max = Iold?Iold.v3 : null;
         let min = Iold?Iold.v2 : null;
         this.rFPI.get("OldHadith").setValidators([Validators.required,Validators.max(max),Validators.min(min)])
         this.rFPI.get("OldHadith").updateValueAndValidity();
-        console.log("ch:"+chapter+" max:"+max+" min:"+ min);
+       //console.log("ch:"+chapter+" max:"+max+" min:"+ min);
       }
       else if(this.currentFetchingMethod=="tag"){
-        console.log("====OtherTagValidate===");
+       //console.log("====OtherTagValidate===");
         let tagNumber = this.rFPI.get("OtherTag").value ;
         let tag = this.MuslimTag.find( (s)=>s.match(/(\d+)/g) == tagNumber );
         let chars:string[]
@@ -574,12 +574,12 @@ export class TopbarComponent implements OnInit {
           }
         }
         {
-          console.log("==tagNumber==");
-          console.log(tagNumber);
-          console.log("==tag==");
-          console.log(tag);
-          console.log("==chars==");
-          console.log(chars);
+         //console.log("==tagNumber==");
+         //console.log(tagNumber);
+         //console.log("==tag==");
+         //console.log(tag);
+         //console.log("==chars==");
+         //console.log(chars);
         }
       }
 
@@ -631,7 +631,7 @@ export class TopbarComponent implements OnInit {
   }
   //call this only once a new method is selected
   ValidateChapterInputs(){
-    console.log("\n Validate Chapter Inputs");
+   //console.log("\n Validate Chapter Inputs");
     //bukhari
     if(this.srv.Source.source.hadith.bukhari){
       if(this.currentFetchingMethod=="number"){
@@ -651,7 +651,7 @@ export class TopbarComponent implements OnInit {
 
     //Muslim
     if(this.srv.Source.source.hadith.muslim){
-      console.log("\n muslim source validator");
+     //console.log("\n muslim source validator");
       if(this.currentFetchingMethod=="new"){
         let chaptermax = 56;
         this.rFPI.get("NewChapter").setValidators([Validators.required,Validators.max(chaptermax),Validators.min(1)]);
@@ -662,14 +662,14 @@ export class TopbarComponent implements OnInit {
         this.rFPI.get("OldChapter").setValidators([Validators.required,Validators.max(chaptermax),Validators.min(1)]);
       }
       if(this.currentFetchingMethod=="tag"){
-        console.log("tag validator was set")
+       //console.log("tag validator was set")
         this.rFPI.get("OtherTag").setValidators([Validators.required,Validators.max(3033),Validators.min(8)])
       }
     }
 
     //Nasai
     if(this.srv.Source.source.hadith.nasai){
-      console.log("\n muslim source validator");
+     //console.log("\n muslim source validator");
       if(this.currentFetchingMethod=="number"){
         let numbermax = 7471;
         this.rFPI.get("number").setValidators([Validators.required,Validators.max(numbermax),Validators.min(1)])
@@ -731,7 +731,7 @@ export class TopbarComponent implements OnInit {
         {value:'new',englishName:'In Book Refrence'},
         {value:'old',englishName:'USC-MSA Refrence'}
       ];
-      console.log("Source \"Bukhari\" was choosen");
+     //console.log("Source \"Bukhari\" was choosen");
 
       this.srv.Source=null;
       let myAPI:IMyAPIFetchingMethod={
@@ -777,7 +777,7 @@ export class TopbarComponent implements OnInit {
       //Update Validators
       this.ValidateHadithInputs("method");
 
-      console.log("Source \"Muslim\" was choosen");
+     //console.log("Source \"Muslim\" was choosen");
       this.myUsingOptions=[
         {value:'tag',englishName:'Reference'},
         {value:'new',englishName:'In Book Refrence'},
@@ -831,7 +831,7 @@ export class TopbarComponent implements OnInit {
         {value:'new',englishName:'In Book Refrence'},
         {value:'old',englishName:'USC-MSA Refrence'}
       ];
-      console.log("Source \"Nasai\" was choosen");
+     //console.log("Source \"Nasai\" was choosen");
 
       this.srv.Source=null;
       let myAPI:IMyAPIFetchingMethod={
@@ -873,9 +873,9 @@ export class TopbarComponent implements OnInit {
     }//if("Nasai")
 
     if ( value=="Quran" ) {
-      console.log("Source \"Quran\" was choosen");
+     //console.log("Source \"Quran\" was choosen");
       this.srv.Source=null;
-      console.log("Source To HtmlController quran");
+     //console.log("Source To HtmlController quran");
       let myAPI:IMyAPIFetchingMethod={
         status:false,
         new:{
@@ -913,16 +913,16 @@ export class TopbarComponent implements OnInit {
         }
       }
     }//if("Quran")
-    console.log("======UpdateSource()");    
-    console.log(this.srv.Source);
-    console.log("UpdateSource()======");
+   //console.log("======UpdateSource()");    
+   //console.log(this.srv.Source);
+   //console.log("UpdateSource()======");
 
   }//SourceToHtmlController()
 
   LookupPI(forceMethod?:string){
-    console.log("==========LookupPI");
+   //console.log("==========LookupPI");
     
-    console.log(this.rFPI);
+   //console.log(this.rFPI);
     {
       
       var src = this.srv.Source.source.hadith.srcNu;
@@ -967,8 +967,8 @@ export class TopbarComponent implements OnInit {
 
       }
       this.web.IncomingRequests$.next(request_obj);
-      console.log("====lookupI");console.log("number");console.log(request_obj);
-      console.log("====lookupI");
+     //console.log("====lookupI");console.log("number");console.log(request_obj);
+     //console.log("====lookupI");
       return;
     }
 
@@ -989,8 +989,8 @@ export class TopbarComponent implements OnInit {
 
       }
       this.web.IncomingRequests$.next(request_obj);
-      console.log("====lookupI");console.log("new");console.log(request_obj);
-      console.log("====lookupI");
+     //console.log("====lookupI");console.log("new");console.log(request_obj);
+     //console.log("====lookupI");
       return;
     }
 
@@ -1010,8 +1010,8 @@ export class TopbarComponent implements OnInit {
         url:""
       }
       this.web.IncomingRequests$.next(request_obj);
-      console.log("====lookupI");console.log("old");console.log(request_obj);
-      console.log("====lookupI");
+     //console.log("====lookupI");console.log("old");console.log(request_obj);
+     //console.log("====lookupI");
       return;
     }
 
@@ -1035,8 +1035,8 @@ export class TopbarComponent implements OnInit {
         }
         
         this.web.IncomingRequests$.next(request_obj);
-        console.log("====lookupI");console.log("tag");console.log(request_obj);
-        console.log("====lookupI");
+       //console.log("====lookupI");console.log("tag");console.log(request_obj);
+       //console.log("====lookupI");
       }else{
         var request_obj:Lib3.IncomingRequest={
           Method:4,
@@ -1055,13 +1055,13 @@ export class TopbarComponent implements OnInit {
         }
         
         this.web.IncomingRequests$.next(request_obj);
-        console.log("====lookupI");console.log("tag");console.log(request_obj);
-        console.log("====lookupI");
+       //console.log("====lookupI");console.log("tag");console.log(request_obj);
+       //console.log("====lookupI");
       }
       return;
     }
 
-    console.log("LookupPI==========");
+   //console.log("LookupPI==========");
   }
   //Look up usin My API =========//
 
@@ -1075,16 +1075,16 @@ export class TopbarComponent implements OnInit {
   //================================================Testing==================================================//
   
   getvalidations(rF:FormGroup){
-    console.log('====Validation');
+   //console.log('====Validation');
     Object.keys(rF.controls).forEach(key => {
       let controlErrors: ValidationErrors = rF.get(key).errors;
       if (controlErrors != null) {
             Object.keys(controlErrors).forEach(keyError => {
-              console.log('Key control: "' + key + '", keyError: "' + keyError + '", err value: ', controlErrors[keyError]);
+             //console.log('Key control: "' + key + '", keyError: "' + keyError + '", err value: ', controlErrors[keyError]);
             });
           }
         });
-    console.log('Validation====');
+   //console.log('Validation====');
   }
 
 
@@ -1095,13 +1095,13 @@ export class TopbarComponent implements OnInit {
     for (let i = 0; i < nasaiIndexChapter.bold.length; i++) {
       if (i+1 < nasaiEdited.length)
       if ( ( nasaiEdited[i + 1].ohf -1 ) < nasaiEdited[i].oh) {
-          console.log("nonEqual "+i);
-          console.log(nasaiEdited[i]);  
+         //console.log("nonEqual "+i);
+         //console.log(nasaiEdited[i]);  
       }      
     }
     */
-    console.log("Tag Missing Numbers");
-    console.log(this.MuslimTag.length);
+   //console.log("Tag Missing Numbers");
+   //console.log(this.MuslimTag.length);
     var allmissing:number[][]=[[]];
     for (let i = 0; i < this.MuslimTag.length; i++) {
       
@@ -1117,8 +1117,8 @@ export class TopbarComponent implements OnInit {
           missinghadithsnumbers[index]=num
           index++;
         }
-        console.log("Missing Numbers Array");
-        console.log(missinghadithsnumbers);
+       //console.log("Missing Numbers Array");
+       //console.log(missinghadithsnumbers);
         allmissing[i-9]=missinghadithsnumbers
         
         
@@ -1126,9 +1126,9 @@ export class TopbarComponent implements OnInit {
       
     }
     allmissing=this.cleanArray(allmissing);
-    console.log(allmissing);
+   //console.log(allmissing);
     var elements = {tags:this.MuslimTag,missing:allmissing}
-    console.log(elements);
+   //console.log(elements);
 
   }
   //======Extractor
