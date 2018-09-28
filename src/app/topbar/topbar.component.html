@@ -45,7 +45,7 @@
             <!--=======OtherTag========-->
             <mat-form-field class="spacing" *ngIf='this.rFPI.get("OtherTag").enabled'>
                 <input formControlName='OtherTag' placeholder="Other Tag" type="number" matInput>
-                <mat-error *ngIf='rFPI.get("OtherTag").invalid'>{{getHadithErrot({fetchingMethod:"Tag",fieldlName:"OtherTag"})}}</mat-error>
+                <mat-error *ngIf='rFPI.get("OtherTag").invalid'>{{getHadithErrot({fetchingMethod:"Chapter",fieldlName:"OtherTag"})}}</mat-error>
             </mat-form-field>
 
             <mat-form-field class="spacing" *ngIf='this.rFPI.get("OtherTagChars").enabled&&this.OtherTagCharsArray'>

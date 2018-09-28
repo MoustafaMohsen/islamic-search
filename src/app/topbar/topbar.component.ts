@@ -202,6 +202,10 @@ export class TopbarComponent implements OnInit {
   //==Hadith//
   
   getHadithErrot(I_type){
+    console.log("getHadithErrot()");
+    console.log(I_type);
+    
+    
     switch(I_type.fetchingMethod){
       case "Chapter":{
         
@@ -237,7 +241,8 @@ export class TopbarComponent implements OnInit {
             error = 'Maximum number is '+  this.rFPI.get(I_type.fieldlName).getError("max").max;
             return error;
           }
-          if(this.currentFetchingMethod=="tag"){
+          if(this.currentFetchingMethod== "tag"){
+            console.log("Error tag are reported");
             let error
             if( this.rFPI.get(I_type.fieldlName).hasError("required") )
             error = 'This field is Required'
