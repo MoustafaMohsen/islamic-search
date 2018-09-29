@@ -11,7 +11,7 @@ import { WebService } from '../web.service';
 //import * as hadithJson from "../SourceOptions/jsonPrase/bukhari.json";
 //import * as _HadithMap from "../SourceOptions/jsonPrase/BmapNew.json"
 import * as _MuslimTag from "./muslimTagsfullchar.json";
-
+import { ActivatedRoute } from "@angular/router";
 declare var $: any;
 @Component({
   selector: 'app-topbar',
@@ -37,7 +37,8 @@ export class TopbarComponent implements OnInit {
     private web: WebService, private snack: MatSnackBar, 
     private FormBuilder: FormBuilder,
     //private http:HttpClient,
-    public srv:MyServiceService
+    public srv:MyServiceService,
+    private route:ActivatedRoute
   ) {
 
     this.rFPI = FormBuilder.group({
@@ -66,7 +67,6 @@ export class TopbarComponent implements OnInit {
   //=======================================================================================ngOnInit//
   //=======================================================================================ngOnInit//
   ngOnInit() {
-    
     //=======Initial Source
     let myAPI:IMyAPIFetchingMethod={
       status:false,

@@ -19,8 +19,8 @@ export class WebService {
   public IncomingRequests$:Subject<Lib3.IncomingRequest>=new Subject();
 
   public inputValidity$:Subject<string>=new Subject();
-  //public BASEURL="http://localhost:8080";
-  public BASEURL="https://islamicsearch.herokuapp.com";
+  public BASEURL="http://localhost:5000";
+  //public BASEURL="https://islamicsearch.herokuapp.com";
   constructor(private http:HttpClient) { }
 
   getHadith(apiURL , Jsonvalue:string){
