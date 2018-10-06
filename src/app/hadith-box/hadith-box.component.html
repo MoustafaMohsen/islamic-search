@@ -31,7 +31,10 @@
               </div>
 
               <div *ngFor="let refrence of ArContent.refrence" >
-                {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}} {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
+                {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}} 
+                {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}} 
+                {{refrence.value4>0?refrence.value4:""}}
+                {{refrence.tag1!=""?refrence.tag1:""}}
               </div>
 
             <button (click)='this.CopyToClipboard(this.randomId(i,1))' mat-raised-button>Copy</button>
@@ -70,7 +73,10 @@
               </div>
 
               <div *ngFor="let refrence of EnContent.refrence" >
-                  {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}} {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
+                  {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}} 
+                  {{refrence.value2>0?refrence.value2:""}} 
+                  {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
+                  {{refrence.tag1!=""?refrence.tag1:""}}
                 </div>
   
               <button (click)='this.CopyToClipboard(this.randomId(i,2))' mat-raised-button>Copy</button>

@@ -143,7 +143,7 @@ Testvalue
     
               blocks=>{
 
-                //console.log(blocks);
+                console.log(blocks);
                 
                // this.ArContentArray=[[]];
                 //this.EnContentArray=[[]];
@@ -292,6 +292,9 @@ Testvalue
 
     this.activatedRoute.params.subscribe(
       p=>{
+        var AlrSent = (t)=>{
+          this.snack.open("alread sent","x",{duration:t})
+        }
         setTimeout(() => {
           this.CompLoaded=true;
         }, 100);
@@ -319,7 +322,7 @@ Testvalue
              return;
            }
            if (this.IncomingRequest==request) {
-            this.snack.open("Alredy SEND OBJECT","x",{duration:5000});
+            AlrSent(1000)
             return;
           }
           else{
@@ -340,7 +343,7 @@ Testvalue
               return;
             }
             if (this.IncomingRequest==request) {
-             this.snack.open("Alredy SEND OBJECT","x",{duration:5000});
+              AlrSent(1000)
              this.IncomingRequest=request;
              return;
            }
@@ -916,10 +919,6 @@ Testvalue
 
   //Error Messages=====================================//
 
-  //Validations==========================================================================//
-
-
-
   //=============Navidations//
   Previous() {
     if (
@@ -998,23 +997,32 @@ Testvalue
       });
     });*/
     tagChar = this.srv.rFPI.get("OtherTagChars").value;
-    
+    tagChar = tagChar==undefined||tagChar.length>1?"":tagChar
 
     surah=this.srv.rFQ.get("surah_number").value
     ayat=this.srv.rFQ.get("ayat_number").value
     
     var inval:boolean=false;
     
-    //console.log("CreateNAvURl");
-    //console.log(source);
-    //console.log(method);
-    //console.log(surah);
-    //console.log(ayat);
-    //console.log();
-    //console.log();
-    //console.log();
-    //console.log();
-    //console.log();
+    console.log("CreateNAvURl()Values");
+    console.log("number");
+    console.log(this.srv.rFPI.get("number").value);
+    console.log("NewChapter");
+    console.log(this.srv.rFPI.get("NewChapter").value);
+    console.log("NewHadith");
+    console.log(this.srv.rFPI.get("NewHadith").value);
+    console.log("OldChapter");
+    console.log(this.srv.rFPI.get("OldChapter").value);
+    console.log("OldHadith");
+    console.log(this.srv.rFPI.get("OldHadith").value);
+    console.log("OtherTag");
+    console.log(this.srv.rFPI.get("OtherTag").value);
+    console.log("OtherTagChars");
+    console.log(this.srv.rFPI.get("OtherTagChars").value);
+    console.log("surah");
+    console.log(this.srv.rFPI.get("surah").value);
+    console.log("ayat");
+    console.log(this.srv.rFPI.get("ayat").value);
     
 
      switch ( source ) {
@@ -1049,8 +1057,8 @@ Testvalue
 
           switch (method) {
             case "tag":{
-              //navurl=tagChar == "all"?`${source}/${method}/${tagNum}`:`${source}/${method}/${tagNum}/${tagChar}`
-              navurl=`${source}/${method}/${tagNum}/${tagChar}`
+              navurl= tagChar==undefined||tagChar.length>1?`${source}/${method}/${tagNum}`:`${source}/${method}/${tagNum}/${tagChar}`
+              //navurl=`${source}/${method}/${tagNum}/${tagChar}`
               break;
             }
             case "new":{
@@ -1134,11 +1142,11 @@ Testvalue
 
     
     let tagNum = parseInt(val1);
-    let tagChar= val2?val2:""/*"all"*/;
+    let tagChar= val2==undefined||val2.length>1?"":val2/*"all"*/;
     tagChar
-//console.log("CreateRquestFromUrl()");
-//console.log("tagChar");
-//console.log(tagChar);
+    console.log("CreateRquestFromUrl()");
+    console.log("tagChar");
+    console.log(tagChar);
 
   
     var inval:boolean=false;

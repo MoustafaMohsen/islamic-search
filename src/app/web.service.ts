@@ -19,7 +19,8 @@ export class WebService {
   public IncomingRequests$:Subject<Lib3.IncomingRequest>=new Subject();
   public inputValidity$:Subject<string>=new Subject();
   //public BASEURL="http://localhost:1860";
-  public BASEURL="https://islamicsearch.herokuapp.com";
+  //public BASEURL="https://islamicsearch.herokuapp.com";
+  public BASEURL="https://localhost:5001";
   constructor(private http:HttpClient) { 
     this.IncomingRequests$.subscribe( r=> {
       console.log("WebService IncomingRequests$");

@@ -66,9 +66,9 @@ export class MyServiceService {
       OldChapter: [ 1, Validators.compose([Validators.min(1)]) ],
       OldHadith: [ 1, Validators.compose( [Validators.min(1)]) ],
       OtherTag: [ 9 ],
-      OtherTagChars: [{ value: "" }],
-      surah: [{ value: 1 }],
-      ayat: [{ value: 1 }],
+      OtherTagChars: [ "" ],
+      surah: [ 1 ],
+      ayat: [ 1 ],
     });
 
     this.rFQ = FormBuilder.group({
