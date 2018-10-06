@@ -17,11 +17,17 @@ export class WebService {
   //public myAPIRequest$:Subject<APiHadithRequest>=new Subject();
 
   public IncomingRequests$:Subject<Lib3.IncomingRequest>=new Subject();
-
   public inputValidity$:Subject<string>=new Subject();
-  public BASEURL="http://localhost:5000";
-  //public BASEURL="https://islamicsearch.herokuapp.com";
-  constructor(private http:HttpClient) { }
+  //public BASEURL="http://localhost:1860";
+  public BASEURL="https://islamicsearch.herokuapp.com";
+  constructor(private http:HttpClient) { 
+    this.IncomingRequests$.subscribe( r=> {
+      console.log("WebService IncomingRequests$");
+      
+      console.log(r);
+    }
+    )
+  }
 
   getHadith(apiURL , Jsonvalue:string){
     console.log("web----");

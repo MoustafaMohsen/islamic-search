@@ -5,12 +5,12 @@
   <div class="col">
 
 
-    <mat-tab-group *ngIf='ArContentArray||EnContentArray'>
-      <mat-tab label="Arabic" backgroundColor='primary' *ngIf='ArContentArray' class="bg-dark">
+    <mat-tab-group *ngIf='ArContentAndRedArray||EnContentAndRedArray'>
+      <mat-tab label="Arabic" backgroundColor='primary' *ngIf='ArContentAndRedArray' class="bg-dark">
 
         <!--=====Card====-->
 
-        <div *ngIf='ArContentArray' > 
+        <!--div *ngIf='ArContentArray' > 
 
           <mat-card *ngFor="let ArContent of ArContentArray" class="StyleSecondP">
             
@@ -18,7 +18,25 @@
                 <p [innerHTML]="content.value" class="arabicText lead content-value" *ngIf="content.value!='‏‏.‏'"></p>
               </div>
             
-            <mat-progress-bar mode="buffer" *ngIf='loading'></mat-progress-bar>
+            <mat-progress-bar mode="buffer" *ngIf='this.web.Loading | async'></mat-progress-bar>
+          </mat-card>
+          
+        </div-->
+
+        <div *ngIf='ArContentAndRedArray' > 
+
+          <mat-card *ngFor="let ArContent of ArContentAndRedArray; let i = index" class="StyleSecondP" [id]="this.randomId(i,1)">
+              <div *ngFor="let content of ArContent.content" >
+                <p [innerHTML]="content.value" class="arabicText lead content-value" *ngIf="content.value!='‏‏.‏'"></p>
+              </div>
+
+              <div *ngFor="let refrence of ArContent.refrence" >
+                {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}} {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
+              </div>
+
+            <button (click)='this.CopyToClipboard(this.randomId(i,1))' mat-raised-button>Copy</button>
+
+            <mat-progress-bar mode="buffer" *ngIf='this.web.Loading | async'></mat-progress-bar>
           </mat-card>
           
         </div>
@@ -26,19 +44,38 @@
       </mat-tab>
 
 
-      <mat-tab label="English" backgroundColor='primary' *ngIf='EnContentArray' class="bg-light">
+      <mat-tab label="English" backgroundColor='primary' *ngIf='EnContentAndRedArray' class="bg-light">
 
         <!--=====Card====-->
 
 
-        <div *ngIf='EnContentArray' > 
+        <!--div *ngIf='EnContentArray' > 
   
             <mat-card *ngFor="let EnContent of EnContentArray">
               
               <div *ngFor="let content of EnContent">
                 <p [innerHTML]="content.value" class="englishText lead" *ngIf="true"></p>
               </div>
-              <mat-progress-bar mode="buffer" *ngIf='loading'></mat-progress-bar>
+              <mat-progress-bar mode="buffer" *ngIf='this.web.Loading | async'></mat-progress-bar>
+            </mat-card>
+            
+        </div-->
+
+        <div *ngIf='EnContentAndRedArray' > 
+  
+            <mat-card *ngFor="let EnContent of EnContentAndRedArray; let i = index" [id]="this.randomId(i,2)">
+              
+              <div *ngFor="let content of EnContent.content">
+                <p [innerHTML]="content.value" class="englishText lead" *ngIf="true"></p>
+              </div>
+
+              <div *ngFor="let refrence of EnContent.refrence" >
+                  {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}} {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
+                </div>
+  
+              <button (click)='this.CopyToClipboard(this.randomId(i,2))' mat-raised-button>Copy</button>
+
+              <mat-progress-bar mode="buffer" *ngIf='this.web.Loading | async'></mat-progress-bar>
             </mat-card>
             
         </div>

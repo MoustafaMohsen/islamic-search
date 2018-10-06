@@ -142,6 +142,7 @@ export interface ISource{
 };
 
 export interface IMyAPIFetchingMethod{
+    name:string;
     status:boolean;
     new:{
       status:boolean;ch:boolean;vol:boolean;ha:boolean
@@ -277,6 +278,7 @@ export namespace Lib3
         url?:string;
         lang?:string;
         name?:string;
+        navigationUrl?:string;
 
     }
     export interface Value
@@ -289,21 +291,21 @@ export namespace Lib3
 
     export interface Refrence
     {
-        id: number;
-        name: string;
-        Refrencetype: string;
-        value1: number;
-        value2: number;
-        value3: number;
-        value4: number;
-        tag1: string;
-        tag2: string;
+        id?: number;
+        name?: string;
+        Refrencetype?: string;
+        value1?: number;
+        value2?: number;
+        value3?: number;
+        value4?: number;
+        tag1?: string;
+        tag2?: string;
     }
 
     export interface HadithBlocks
     {
         id: number;
-        Refrences: Refrence[];
+        refrences: Refrence[];
         content: Value[];
         sources: Value[];
         src: number;

@@ -1,10 +1,11 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, OnDestroy, Output } from '@angular/core';
 import { MatSnackBar } from "@angular/material";
 import { DomSanitizer } from '@angular/platform-browser';
 import { Lib3 } from '../interfaces';
 import { MyServiceService } from '../my-service.service';
 import { WebService } from "../web.service";
+import { Subject } from "rxjs";
 declare var $: any;
 
 @Component({
@@ -12,203 +13,88 @@ declare var $: any;
   templateUrl: './hadith-box.component.html',
   styleUrls: ['./hadith-box.component.css']
 })
-export class HadithBoxComponent implements OnInit {
+export class HadithBoxComponent implements OnInit,AfterViewInit,OnDestroy {
   @Input() apiURL;
   //Arabicboxcontent:Lib3.Value[]//=[];
   //Englishboxcontent:Lib3.Value[]//=[];
 
-  ArContentArray:Lib3.Value[][]//=[[]];
-  EnContentArray:Lib3.Value[][]//=[[]];
+  @Input() ArContentArray:Lib3.Value[][]//=[[]];
+  @Input() EnContentArray:Lib3.Value[][]//=[[]];
+  @Input() ArContentAndRedArray:{content:Lib3.Value[],refrence:Lib3.Refrence[]}[]//=[[]];
+  @Input() EnContentAndRedArray:{content:Lib3.Value[],refrence:Lib3.Refrence[]}[]//=[[]];
 
-  loading:boolean;
+  //loading:boolean;
   //hadithRefrence:{ number:number, in_book_refrence?: APiIn_Book_Refrence, old_refrence?: APiOld_refrence};
   //theC:string;
-  constructor(public srv:MyServiceService,private sanitizer:DomSanitizer,private http:HttpClient,private web:WebService,private snack:MatSnackBar) 
+  constructor(
+    public srv:MyServiceService,
+    //private sanitizer:DomSanitizer,
+    //private http:HttpClient,
+    public web:WebService,
+    private snack:MatSnackBar
+    ) 
   { }
-
+  LastId;
   ngOnInit() {
-
-    this.web.Loading.subscribe(x=>this.loading=x);
-
-    this.web.IncomingRequests$.subscribe(
-
-      (request)=>{
-        //===If Hadith
-        if(request.source=='hadith'){
-          //Loading
-          this.web.Loading.next(true)
-          ;
-          //if Single Content
-          if(request.Method!=5)
-          this.web.getHadithBlock(request).subscribe(
-            block=>{
-             //console.log("====Block Response=====");
-             //console.log(block);
-              
-              this.ArContentArray=[[]];
-              this.EnContentArray=[[]];
-
-              let arC:Lib3.Value[]=block.content.filter(c=>c.name.match(/ar/g) ).map(x=> 
-                {
-                 //console.log("map()");
-                 //console.log(parseInt(x.name.replace(/([a-z|A-Z]+):/g,""))); 
-                  let v:Lib3.Value={
-                    name:x.name.replace(/([a-z|A-Z]+):/g,""),
-                    value:x.value,
-                    id:x.id
-                  };
-                 //console.log("after map()");
-                 //console.log(v);
-                  
-                  return v
-                })
-              .sort((a,b)=> parseInt(a.name) - parseInt(b.name));
-              
-              let enC:Lib3.Value[]=block.content.filter(c=>c.name.match(/en/g) ).map(x=> 
-                {
-                  let v:Lib3.Value={
-                    name:x.name.replace(/([a-z|A-Z]+):/g,""),
-                    value:x.value,
-                    id:x.id
-                  };
-                  return v
-                })
-                .sort((a,b)=> parseInt(a.name) - parseInt(b.name));
-
-                 //console.log("arC");
-                  
-             //console.log(arC);
-             //console.log(enC);
-              this.ArContentArray[0]=arC.slice();
-              this.EnContentArray[0]=enC.slice();
-              
-              this.web.Loading.next(false);
-            },
-  
-            error=>{
-              this.snack.open(' ' +request.url+" Not found", "X", {duration: 5000,});
-              this.web.Loading.next(false)
-            }
-  
-          );
-          //if Array Content
-          if(request.Method==5)
-          this.web.getHadithBlockArray(request).subscribe(
-  
-            blocks=>{
-              this.ArContentArray=[[]];
-              this.EnContentArray=[[]];
-              
-              let arC:Lib3.Value[];
-              let enC:Lib3.Value[];
-              for (let i  = 0;  i < blocks.length; i++) {
-                const b = blocks[i];
-                arC=b.content.filter( c=>c.name.match(/ar/g) )
-                .map(x=> 
-                  {
-                    let v:Lib3.Value={
-                      name:x.name.replace(/([a-z|A-Z]+):/g,""),
-                      value:x.value,
-                      id:x.id
-                    };
-                    return v
-                  })
-                  .sort((a,b)=> parseInt(a.name) - parseInt(b.name));
-
-                enC=b.content.filter( c=>c.name.match(/en/g) )
-                .map(x=> 
-                  {
-                    let v:Lib3.Value={
-                      name:x.name.replace(/([a-z|A-Z]+):/g,""),
-                      value:x.value,
-                      id:x.id
-                    };
-                    return v
-                  })
-                  .sort((a,b)=> parseInt(a.name) - parseInt(b.name));
-                
-                this.ArContentArray[i]=arC.slice()//.sort( x=>x.value.match(/ar/g) );
-                this.EnContentArray[i]=enC.slice();
-              }//for
-              
-              this.web.Loading.next(false);
-
-            },
-  
-            error=>{
-              this.snack.open(' ' +request.url+" Not found", "X", {duration: 3000,});
-              this.web.Loading.next(false)
-            }
-  
-          )
-
-      }//If Hadith
-
-      //===If Quran
-        if(request.source=='quran'){
-          //Loading
-          this.web.Loading.next(true);
-
-          //For arabic
-         //console.log(request.url);
-          
-          this.web.getQuran(request.url+'ar'+'.asad').subscribe(
-
-            (ayat)=>{
-             //console.log(ayat);
-              
-              //clean request and storing it
-              this.ArContentArray=[[{value:ayat.data.text}]]
-              
-              //remove the start of the first ayat
-              if(request.value2==1&&request.value1!=1){
-                let firstAyat:string= String(ayat.data.text);
-                firstAyat = firstAyat.replace('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ','');
-                this.ArContentArray=[[{value:firstAyat}]]
-              }
-              this.web.Loading.next(false)
-            },
-
-            error=>{
-              this.snack.open(" "+request.url+" Not found", "X", {duration: 3000,});
-              this.web.Loading.next(false)
-            }
-
-          );
-
-          //For English
-          this.web.getQuran(request.url+'en'+'.asad').subscribe(
-
-            (ayat)=>{
-              //clean request and storing it
-              this.EnContentArray=[[{value:ayat.data.text}]]
-              //remove the start of the first ayat
-              if(request.value2==1&&request.value1!=1){
-                let firstAyat:string= String(ayat.data.text);
-                firstAyat = firstAyat.replace('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ','');
-                this.EnContentArray=[[{value:firstAyat}]]
-              }
-              this.web.Loading.next(false)
-            },
-
-            error=>{
-              this.snack.open(" "+request.url+" Not found", "X", {duration: 3000,});
-              this.web.Loading.next(false)
-            }
-
-          )
-          
-        }//If Quran
-
-        //If Requesting Array Content 
+    console.log("Hadith box ngOnInit()");
+    
+    //this.web.Loading.subscribe(x=>this.loading=x);
 
 
-      }//(request)
-
-
-    )//IncomingRequests$ subscribe
 
   }//ngOnInit
+
+  randomId(index:number,index2:number){    
+    var r = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    r=r+r+r+r+r+r+r;
+    r=r+r;
+    var s ="";
+    for (var i=0; i < 5; i++) { s += r.charAt(index+i+index2); }
+
+    this.LastId=s
+    return s;
+  }
+
+  randomStr(m) {
+    var m = m || 9; var s = '', r = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    for (var i=0; i < m; i++) { s += r.charAt(Math.floor(Math.random()*r.length)); }
+    return s;
+  };
+
+  CopyToClipboard(containerid) {
+    if (window.getSelection) {
+        if (window.getSelection().empty) { // Chrome
+            window.getSelection().empty();
+        } else if (window.getSelection().removeAllRanges) { // Firefox
+            window.getSelection().removeAllRanges();
+        }
+    } else if ((document as any).selection) { // IE?
+      (document as any).selection.empty();
+    }
+
+    if ((document as any).selection) {
+        var range = (document.body as any).createTextRange();
+        range.moveToElementText(document.getElementById(containerid));
+        range.select().createTextRange();
+        document.execCommand("copy");
+
+    } else if (window.getSelection) {
+        //alert(containerid);
+        var range = document.createRange() as any;
+        range.selectNode(document.getElementById(containerid));
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        this.snack.open("Copied","x",{duration:1000})
+    }
+}
+  
+  ngAfterViewInit(){
+    console.log("Hadith box is loaded");
+    this.srv.ComponentTracker$.next("hadithbox");
+  }
+  ngOnDestroy(){
+    
+  }
 /*
   ShowArrayContet(array:Lib3.Value[]){
     console.log("SHow hadith");
