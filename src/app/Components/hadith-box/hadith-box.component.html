@@ -1,0 +1,86 @@
+<div class="row">
+
+  <div class="col-1"></div>
+
+  <div class="col">
+
+
+    <mat-tab-group *ngIf='ArContentAndRedArray||EnContentAndRedArray'>
+      <mat-tab label="Arabic" backgroundColor='primary' *ngIf='ArContentAndRedArray' class="bg-dark">
+
+        <!--=====Card====-->
+
+        <div *ngIf='ArContentAndRedArray'>
+
+          <mat-card *ngFor="let ArContent of ArContentAndRedArray; let i = index" class="StyleSecondP" [id]="this.randomId(i,1)">
+            <div *ngFor="let content of ArContent.content">
+              <p [innerHTML]="content.value" class="arabicText lead content-value" *ngIf="content.value!='‏‏.‏'"></p>
+            </div>
+
+            <div *ngFor="let refrence of ArContent.refrence">
+              {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
+              {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}}
+              {{refrence.value4>0?refrence.value4:""}}
+              {{refrence.tag1!=""?refrence.tag1:""}}
+            </div>
+
+            <button (click)='this.CopyToClipboard(this.randomId(i,1))' mat-raised-button>Copy</button>
+
+            <mat-progress-bar mode="buffer" *ngIf='this.web.Loading | async'></mat-progress-bar>
+          </mat-card>
+
+        </div>
+
+      </mat-tab>
+
+
+      <mat-tab label="English" backgroundColor='primary' *ngIf='EnContentAndRedArray' class="bg-light">
+
+        <!--=====Card====-->
+
+
+        <div *ngIf='EnContentAndRedArray'>
+
+          <mat-card *ngFor="let EnContent of EnContentAndRedArray; let i = index" [id]="this.randomId(i,2)">
+
+            <div *ngFor="let content of EnContent.content">
+              <p [innerHTML]="content.value" class="englishText lead" *ngIf="true"></p>
+            </div>
+
+            <div *ngFor="let refrence of EnContent.refrence">
+              {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
+              {{refrence.value2>0?refrence.value2:""}}
+              {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
+              {{refrence.tag1!=""?refrence.tag1:""}}
+            </div>
+
+            <button (click)='this.CopyToClipboard(this.randomId(i,2))' mat-raised-button>Copy</button>
+
+            <mat-progress-bar mode="buffer" *ngIf='this.web.Loading | async'></mat-progress-bar>
+          </mat-card>
+
+        </div>
+
+      </mat-tab>
+
+    </mat-tab-group>
+
+
+  </div>
+
+  <div class="col-1"></div>
+
+</div>
+<!--row-->
+
+<br>
+<br>
+<div class="row" *ngIf='false'>
+  <div class="col"></div>
+  <div class="col">
+    <button (click)='this.srv.Navigation$.next({Action:"next"})' [disabled]="" mat-raised-button>Next</button>
+    <button (click)='this.srv.Navigation$.next({Action:"previous"})' [disabled]="" mat-raised-button>Previous</button>
+  </div>
+  <div class="col"></div>
+</div>
+<!--row-->
