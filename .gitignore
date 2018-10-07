@@ -4,7 +4,6 @@
 /dist
 /tmp
 /out-tsc
-docs/CNAME
 # dependencies
 /node_modules
 
@@ -38,3 +37,4 @@ testem.log
 .DS_Store
 Thumbs.db
 docs/CNAME
+CNAME
