@@ -5,6 +5,7 @@ import { ISource } from "../../interfaces";
 import { Bindex, Mindex } from "../../Statics/myindex";
 import * as _MuslimTag from "../../Statics/muslimTagsfullchar.json";
 import { WebService } from "../web/web.service";
+import { MatSnackBar } from "@angular/material";
 declare var $: any;
 
 @Injectable({
@@ -27,7 +28,7 @@ export class MyServiceService {
   rFPI: FormGroup;
   OtherTagCharsArray;
   LoadedComponents: string[] = [];
-  constructor(FormBuilder: FormBuilder, private web: WebService) {
+  constructor(FormBuilder: FormBuilder,private snack:MatSnackBar) {
     this.rFPI = FormBuilder.group({
       FetchingMethod: [, /*"number"*/ [Validators.required]],
       number: [1, Validators.compose([Validators.min(1)])],
@@ -609,4 +610,10 @@ export class MyServiceService {
     document.execCommand("copy");
     document.body.removeChild(selBox);
   }
+  copyLink() {
+    var link = window.location.href;
+    this.copyMessage(link);
+    this.snack.open(`Copied Link "${link}"`, "x", { duration: 1500 });
+  }
+
 }

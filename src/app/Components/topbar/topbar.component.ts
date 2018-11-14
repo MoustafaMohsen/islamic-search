@@ -34,6 +34,7 @@ export class TopbarComponent implements OnInit {
   //=======================================================================================ngOnInit//
   ngOnInit() {
     //Initial Source=======
+    // TODO: Seperate Route handling, Remove timout
     this.activatedRoute.params.subscribe(p => {
       var AlrSent = t => {
         this.snack.open("alread sent", "x", { duration: t });
@@ -50,7 +51,7 @@ export class TopbarComponent implements OnInit {
       }
       if (Object.keys(p).length != 0) {
         //If quran
-        if (this.lower(p.source) == "quran") {
+        if (this.srv.lower(p.source) == "quran") {
           var request = this.CreateRquestFromUrl(p.source, "", p.par1, p.par2);
           if (!request) {
             setTimeout(() => {
@@ -145,6 +146,9 @@ export class TopbarComponent implements OnInit {
   get fh (){
     return this.srv.rFPI.controls
   }
+  get fq (){
+    return this.srv.rFQ.controls
+  }
 
   SetMaxAyat(ayat_number: AbstractControl, surahNumber) {
     let suran = surahNumber;
@@ -160,7 +164,7 @@ export class TopbarComponent implements OnInit {
   }
 
   UpdateSource(Source) {
-    var value = this.lower(Source);
+    var value = this.srv.lower(Source);
     let myAPI: IMyAPIFetchingMethod = {
       name: "",
       status: false,
@@ -495,12 +499,57 @@ export class TopbarComponent implements OnInit {
     val2?,
     val3?
   ) {
+    var SetValues=(name:string,value:any,validate="",touch=true,form?:{[key: string]: AbstractControl;})=>{
+      form=form?form:this.fh;      
+      form[name].setValue(value);
+      if(validate)
+      this.srv.ValidateHadithInputs(validate);
+      if(touch)
+      form[name].markAsTouched();
+    }
+    var createRequest=(source:string,method:number,type:string,name?:string,_src?:number,
+      value1?:number,value2?:number,value3?:number,value4?:number,
+      tag1?:number,tag2?:number,lang?:number,url?:string
+      )=>{
+      var minus=(val)=>{
+        return val||val==0?val:-2
+      }
+      var emptyfy=(str)=>{
+        return str?str:"";
+      }
+      let request_obj: Lib3.IncomingRequest = {
+        Method: method,
+        Refrencetype: type,
+        src: _src,
+        name:emptyfy(name),
+        tag1: emptyfy(tag1),
+        tag2: emptyfy(tag2),
+        value1:minus(value1),
+        value2:minus(value2),
+        value3:minus(value3),
+        value4:minus(value4),
+        source: source,
+        lang:emptyfy(lang),
+        url:emptyfy(url),
+      };
+      console.log(request_obj);
+      
+      return request_obj; 
+    }
+    
+    var noChange=(controller_name:string,compared_value:any,form?:{[key: string]: AbstractControl;})=>{
+      form=form?form:this.fh;
+      return this.fh[controller_name].value != compared_value
+    }
     var request_obj: Lib3.IncomingRequest;
 
-    let source: string = this.lower(sourceParameter);
-    let method: string = this.lower(methodParameter);
+    let source: string = this.srv.lower(sourceParameter);
+    let method: string = this.srv.lower(methodParameter);
 
     let number: number = parseInt(val1);
+
+    /// TODO: Make a Volume getter
+    let Vol:number = null;
 
     let Ch: number = val1;
     let Hadith: number = val2;
@@ -509,8 +558,7 @@ export class TopbarComponent implements OnInit {
     let ayat: number = val2;
 
     let tagNum = parseInt(val1);
-    let tagChar = val2 == undefined || val2.length > 1 ? "" : val2 /*"all"*/;
-    tagChar;
+    let tagChar = val2== undefined  || val2.length > 1 ? "" : val2 ;
     console.log("CreateRquestFromUrl()");
     console.log("tagChar");
     console.log(tagChar);
@@ -536,111 +584,44 @@ export class TopbarComponent implements OnInit {
         switch (method) {
           case "number": {
             if (
-              this.fh["number"].value != number ||
-              this.fh["FetchingMethod"].value != method
+              noChange('number',number)||
+              noChange('FetchingMethod',method)
             ) {
-              //Select Method
-              this.fh["FetchingMethod"].setValue(method);
-
-              //select values
-              this.fh["number"].setValue(number);
-              this.fh["number"].markAsTouched();
-              this.srv.ValidateHadithInputs("method");
-              this.fh["number"].markAsTouched();
+              SetValues("FetchingMethod",method,'',false)
+              SetValues("number",number,'method')
             }
-
-            request_obj = {
-              Method: 6,
-              Refrencetype: "hadith",
-              src: 1,
-              value1: number,
-              name:"DarusSalam",
-              tag1: "",
-              tag2: "",
-              value2: -2,
-              value3: -2,
-              value4: -2,
-              source: "hadith",
-              lang: "",
-              url: ""
-            };
+            request_obj=createRequest("hadith",6,"hadith","DarusSalam",1,number)
 
             break;
           }
 
           case "new": {
             if (
-              this.fh["NewChapter"].value != Ch ||
-              this.fh["NewHadith"].value != Hadith ||
-              this.fh["FetchingMethod"].value != method
+              noChange('NewChapter',Ch)||
+              noChange('NewHadith',Hadith)||
+              noChange('FetchingMethod',method)
             ) {
-              //Select Method
-              this.fh["FetchingMethod"].setValue(method);
-
-              this.srv.ValidateHadithInputs("method");
-
-              //select values
-              this.fh["NewChapter"].setValue(Ch);
-              this.srv.ValidateHadithInputs("chapter");
-              this.fh["NewChapter"].markAsTouched();
-
-              this.fh["NewHadith"].setValue(Hadith);
-              this.fh["NewHadith"].markAsTouched();
+              SetValues("FetchingMethod",method,'method',false)
+              SetValues("NewChapter",Ch,'chapter')
+              SetValues("NewHadith",Hadith)
             }
 
-            request_obj = {
-              Method: 6,
-              Refrencetype: "book hadith",
-              src: 1,
-              value1: Ch,
-              tag1: "",
-              tag2: "",
-              value2: Hadith,
-              value3: -2,
-              name:"In-Book",
-              value4: -2,
-              source: "hadith",
-              lang: "",
-              url: ""
-            };
+            request_obj=createRequest("hadith",6,"book hadith","In-Book",1,Ch,Hadith)
+
 
             break;
           }
           case "old": {
             if (
-              this.fh["OldChapter"].value != Ch ||
-              this.fh["OldHadith"].value != Hadith ||
-              this.fh["FetchingMethod"].value != method
+              noChange('OldChapter',Ch)||
+              noChange('OldHadith',Hadith)||
+              noChange('FetchingMethod',method)
             ) {
-              //Select Method
-              this.fh["FetchingMethod"].setValue(method);
-
-              this.srv.ValidateHadithInputs("method");
-
-              //select values
-              this.fh["OldChapter"].setValue(Ch);
-              this.srv.ValidateHadithInputs("chapter");
-              this.fh["OldChapter"].markAsTouched();
-
-              this.fh["OldHadith"].setValue(Hadith);
-              this.fh["OldHadith"].markAsTouched();
+              SetValues("FetchingMethod",method,'method',false)
+              SetValues("OldChapter",Ch,'chapter')
+              SetValues("OldHadith",Hadith)
             }
-
-            request_obj = {
-              Method: 6,
-              Refrencetype: "vol book hadith",
-              src: 1,
-              name:"USC-MSA",
-              value1: -2,
-              value2: Ch,
-              value3: Hadith,
-              value4: -2,
-              tag1: "",
-              tag2: "",
-              source: "hadith",
-              lang: "",
-              url: ""
-            };
+            request_obj=createRequest("hadith",6,"vol book hadith","USC-MSA",1,Vol,Ch,Hadith)
             break;
           }
 
@@ -657,131 +638,46 @@ export class TopbarComponent implements OnInit {
       case "muslim": {
         if (this.srv.source_options.value != source) {
           this.UpdateSource(source);
-          this.srv.source_options.setValue(this.lower(source));
+          this.srv.source_options.setValue(this.srv.lower(source));
         }
-
         switch (method) {
           case "tag": {
-            if (
-              this.fh["OtherTag"].value != tagNum ||
-              this.fh["FetchingMethod"].value != method
-            ) {
-              //Select Method
-              this.fh["FetchingMethod"].setValue(method);
-
-              //select values
-              this.fh["OtherTag"].setValue(tagNum);
-              this.srv.ValidateHadithInputs("method");
-              this.fh["OtherTag"].markAsTouched();
-
-              this.fh["OtherTagChars"].setValue(tagChar);
-              this.srv.ValidateHadithInputs("chapter");
-              this.fh["OtherTagChars"].markAsTouched();
+            if (noChange('OtherTag',tagNum)||noChange('FetchingMethod',method)) {
+              SetValues("FetchingMethod",method,"",false)
+              SetValues("OtherTag",tagNum,"method")
+              SetValues("OtherTagChars",tagChar,"chapter")
             }
-
-            if (tagChar == "" /*"all"*/) {
-              var request_obj: Lib3.IncomingRequest = {
-                Method: 5,
-                Refrencetype: "muslim tag",
-                src: 2,
-                value1: 0,
-                value2: 0,
-                value3: 0,
-                value4: tagNum,
-                tag1: "",
-                tag2: "",
-                source: "hadith",
-                lang: "",
-                url: ""
-              };
+            if (tagChar == "") {
+              request_obj=createRequest("hadith",6,"muslim tag","Reference",2,null,null,null,tagNum)
             } else {
-              var request_obj: Lib3.IncomingRequest = {
-                Method: 4,
-                Refrencetype: "muslim tag",
-                src: 2,
-                value1: 0,
-                value2: 0,
-                value3: 0,
-                value4: tagNum,
-                tag1: tagChar,
-                tag2: "",
-                source: "hadith",
-                lang: "",
-                url: ""
-              };
+              request_obj=createRequest("hadith",6,"muslim tag","Reference",2,null,null,null,tagNum,tagChar)
             }
-
             break;
           }
-
           case "new": {
             if (
-              this.fh["NewChapter"].value != Ch ||
-              this.fh["NewHadith"].value != Hadith ||
-              this.fh["FetchingMethod"].value != method
+              noChange('NewChapter',Ch)||
+              noChange('NewHadith',Hadith)||
+              noChange('FetchingMethod',method)
             ) {
-              //Select Method
-              this.fh["FetchingMethod"].setValue(method);
-              this.srv.ValidateHadithInputs("method");
-
-              //select values
-              this.fh["NewChapter"].setValue(Ch);
-              this.srv.ValidateHadithInputs("chapter");
-              this.fh["NewChapter"].markAsTouched();
-
-              this.fh["NewHadith"].setValue(Hadith);
-              this.fh["NewHadith"].markAsTouched();
+              SetValues("FetchingMethod",method,"method",false)
+              SetValues("NewChapter",Ch,"chapter")
+              SetValues("NewHadith",Hadith)
             }
-            request_obj = {
-              Method: 2,
-              Refrencetype: "hadith",
-              src: 2,
-              value1: Ch,
-              tag1: "",
-              tag2: "",
-              value2: Hadith,
-              value3: 0,
-              value4: 0,
-              source: "hadith",
-              lang: "",
-              url: ""
-            };
-
+            request_obj=createRequest("hadith",6,"book hadith","In-Book",2,Ch,Hadith);
             break;
           }
-
           case "old": {
             if (
-              this.fh["OldChapter"].value != Ch ||
-              this.fh["OldHadith"].value != Hadith ||
-              this.fh["FetchingMethod"].value != method
-            ) {
-              //Select Method
-              this.fh["FetchingMethod"].setValue(method);
-              this.srv.ValidateHadithInputs("method");
-
-              //select values
-              this.fh["OldChapter"].setValue(Ch);
-              this.srv.ValidateHadithInputs("chapter");
-              this.fh["OldChapter"].markAsTouched();
-
-              this.fh["OldHadith"].setValue(Hadith);
-              this.fh["OldHadith"].markAsTouched();
+              noChange('OldChapter',Ch)||
+              noChange('OldHadith',Hadith)||
+              noChange('FetchingMethod',method)
+              ) {
+              SetValues("FetchingMethod",method,"method",false)
+              SetValues("OldChapter",Ch,"chapter")
+              SetValues("OldHadith",Hadith)
             }
-            request_obj = {
-              Method: 3,
-              Refrencetype: "hadith",
-              src: 2,
-              value1: 0,
-              tag1: "",
-              tag2: "",
-              value2: Ch,
-              value3: Hadith,
-              value4: 0,
-              source: "hadith",
-              lang: "",
-              url: ""
-            };
+            request_obj=createRequest("hadith",6,"book hadith","USC-MSA",2,Ch,Hadith);
             break;
           }
           default:
@@ -796,38 +692,21 @@ export class TopbarComponent implements OnInit {
       case "quran": {
         if (this.srv.source_options.value != source) {
           this.UpdateSource(source);
-          this.srv.source_options.setValue(this.lower(source));
+          this.srv.source_options.setValue(this.srv.lower(source));
         }
         if (
-          this.srv.rFQ.get("surah_number").value != surah ||
-          this.srv.rFQ.get("ayat_number").value != ayat
+          this.fq['surah_number'].value!=surah||
+          this.fq['ayat_number'].value!=ayat
         ) {
-          this.srv.rFQ.get("surah_number").setValue(surah);
-          this.srv.rFQ.get("surah_number").markAsTouched();
-
-          this.srv.rFQ.get("ayat_number").setValue(ayat);
-          this.srv.rFQ.get("ayat_number").markAsTouched();
+          SetValues("surah_number",surah,"",true,this.fq)
+          SetValues("ayat_number",ayat,"",true,this.fq)
         }
-
-        let _url;
-        _url = `https://api.alquran.cloud/ayah/${surah}:${ayat}/`;
-        request_obj = {
-          source: "quran",
-          url: "",
-          value1: surah,
-          value2: ayat,
-          value3: 0,
-          Method: 1,
-          Refrencetype: "surah ayat lang"
-        };
-
+        request_obj=createRequest("quran",1,"surah ayat lang","Quran-Book",null,surah,ayat);
         if (this.srv.rFQ.invalid) {
           inval = true;
         }
-
         break;
       }
-
       default:
         inval = true;
         break;
@@ -841,21 +720,7 @@ export class TopbarComponent implements OnInit {
     }
   } //SetInputs();
 
-  lower(str) {
-    if (typeof str == "string") {
-      if (str == null) {
-        return null;
-      } else {
-        return str.toLowerCase();
-      }
-    }
-  } //lower
 
-  copyLink() {
-    var link = window.location.href;
-    this.srv.copyMessage(link);
-    this.snack.open(`Copied Link "${link}"`, "x", { duration: 1000 });
-  }
 
   //================================================Testing==================================================//
   //================================================Testing==================================================//

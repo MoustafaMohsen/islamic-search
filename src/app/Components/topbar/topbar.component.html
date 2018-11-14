@@ -93,7 +93,7 @@
               <mat-error *ngIf='this.srv.rFPI.get("OldHadith").hasError("max")'>Maximum number is {{this.srv.rFPI.get("OldHadith").getError("max").max}}</mat-error>
             </mat-form-field>
 
-            <button (click)="this.request.CreateNavUrl()" [disabled]="(this.web.Loading | async) ||this.srv.rFPI.invalid"  *ngIf="true" type="submit" mat-raised-button color="primary">Look up</button>
+            <button (click)="this.request.CreateNavUrl()" [disabled]="(this.web.Loading$ | async) ||this.srv.rFPI.invalid"  *ngIf="true" type="submit" mat-raised-button color="primary">Look up</button>
     
           </div>
     
@@ -118,7 +118,7 @@
           <mat-error *ngIf='this.srv.rFQ.get("ayat_number").hasError("min")'>Minimum is 1</mat-error>
           <mat-error *ngIf='this.srv.rFQ.get("ayat_number").hasError("max")'>this Surah only has {{this.srv.rFQ.get("ayat_number").getError("max").max}}</mat-error>
         </mat-form-field>
-        <button (click)="this.request.CreateNavUrl()"  [disabled]="(this.web.Loading | async) ||this.srv.rFQ.invalid" type="submit" mat-raised-button color="primary" *ngIf="this.srv.Source.source.quran">Look up</button>
+        <button (click)="this.request.CreateNavUrl()"  [disabled]="(this.web.Loading$ | async) ||this.srv.rFQ.invalid" type="submit" mat-raised-button color="primary" *ngIf="this.srv.Source.source.quran">Look up</button>
 
       </div>
 
@@ -135,10 +135,5 @@
 <app-hadith-box></app-hadith-box>
 
 <div class="row navigation-buttons">
-
-  
-  
-  
-  <button (click)='this.copyLink()' mat-raised-button>Copy Link</button>
-
+  <button (click)='this.srv.copyLink()' mat-raised-button>Copy Link</button>
 </div>

@@ -9,7 +9,7 @@ import {_baseUel} from '../../Statics/configs'
 })
 export class WebService {
   public Select_source: Subject<any> = new Subject();
-  public Loading: Subject<boolean> = new Subject();
+  public Loading$: Subject<boolean> = new Subject();
   public IncomingRequests$: Subject<Lib3.IncomingRequest> = new Subject();
   public inputValidity$: Subject<string> = new Subject();
   public BASEURL=_baseUel;

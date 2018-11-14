@@ -20,17 +20,17 @@ export class RequestService {
       request => {
         //===If Hadith
         if (request.source == "hadith") {
-          this.web.Loading.next(true);
           if (request.Method == 6) {
+          this.web.Loading$.next(true);
             this.web.getManyBlocks(request).subscribe(
               blocks => {
                 this.ArContentAndRedArray=this.loadHadithBlocks(blocks,"ar");
                 this.EnContentAndRedArray=this.loadHadithBlocks(blocks,"en");
-                this.web.Loading.next(false);
+                this.web.Loading$.next(false);
               },
               error => {
                 this.notFoundSnack()
-                this.web.Loading.next(false);
+                this.web.Loading$.next(false);
               }
             );
           }
@@ -38,8 +38,9 @@ export class RequestService {
 
         //===If Quran
         if (request.source == "quran") {
+          this.web.Loading$.next(true);
           //Loading
-          this.web.Loading.next(true);
+          this.web.Loading$.next(true);
           //For arabic
           let _url = `https://api.alquran.cloud/ayah/${request.value1}:${request.value2}/`;
 
@@ -62,11 +63,11 @@ export class RequestService {
                 firstAyat = firstAyat.replace("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ","");
                 this.ArContentAndRedArray[0].content = [{ value: firstAyat }];
               }
-              this.web.Loading.next(false);
+              this.web.Loading$.next(false);
             },
             error => {
               this.notFoundSnack()
-              this.web.Loading.next(false);
+              this.web.Loading$.next(false);
             }
           );
           //For English
@@ -82,10 +83,10 @@ export class RequestService {
                   }
                 ]
               }];
-              this.web.Loading.next(false);
+              this.web.Loading$.next(false);
             },
             error => {
-              this.web.Loading.next(false);
+              this.web.Loading$.next(false);
             }
           );
         } //If Quran
