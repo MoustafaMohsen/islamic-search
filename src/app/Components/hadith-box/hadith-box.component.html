@@ -5,14 +5,14 @@
   <div class="col">
 
 
-    <mat-tab-group *ngIf='ArContentAndRedArray||EnContentAndRedArray'>
-      <mat-tab label="Arabic" backgroundColor='primary' *ngIf='ArContentAndRedArray' class="bg-dark">
+    <mat-tab-group *ngIf='this.request.ArContentAndRedArray||this.request.EnContentAndRedArray'>
+      <mat-tab label="Arabic" backgroundColor='primary' *ngIf='this.request.ArContentAndRedArray' class="bg-dark">
 
         <!--=====Card====-->
 
-        <div *ngIf='ArContentAndRedArray'>
+        <div *ngIf='this.request.ArContentAndRedArray'>
 
-          <mat-card *ngFor="let ArContent of ArContentAndRedArray; let i = index" class="StyleSecondP" [id]="this.randomId(i,1)">
+          <mat-card *ngFor="let ArContent of this.request.ArContentAndRedArray; let i = index" class="StyleSecondP" [id]="this.randomId(i,1)">
             <div *ngFor="let content of ArContent.content">
               <p [innerHTML]="content.value" class="arabicText lead content-value" *ngIf="content.value!='‏‏.‏'"></p>
             </div>
@@ -34,14 +34,14 @@
       </mat-tab>
 
 
-      <mat-tab label="English" backgroundColor='primary' *ngIf='EnContentAndRedArray' class="bg-light">
+      <mat-tab label="English" backgroundColor='primary' *ngIf='this.request.EnContentAndRedArray' class="bg-light">
 
         <!--=====Card====-->
 
 
-        <div *ngIf='EnContentAndRedArray'>
+        <div *ngIf='this.request.EnContentAndRedArray'>
 
-          <mat-card *ngFor="let EnContent of EnContentAndRedArray; let i = index" [id]="this.randomId(i,2)">
+          <mat-card *ngFor="let EnContent of this.request.EnContentAndRedArray; let i = index" [id]="this.randomId(i,2)">
 
             <div *ngFor="let content of EnContent.content">
               <p [innerHTML]="content.value" class="englishText lead" *ngIf="true"></p>

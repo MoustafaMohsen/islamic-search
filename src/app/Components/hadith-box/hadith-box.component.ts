@@ -3,6 +3,7 @@ import { MatSnackBar } from "@angular/material";
 import { IMyAPIFetchingMethod, Lib3 } from "../../interfaces";
 import { MyServiceService } from "../../Services/my/my-handler.service";
 import { WebService } from "../../Services/web/web.service";
+import { RequestService } from "src/app/Services/request/request.service";
 declare var $: any;
 
 @Component({
@@ -11,15 +12,14 @@ declare var $: any;
   styleUrls: ["./hadith-box.component.css"]
 })
 export class HadithBoxComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input()
-  ArContentAndRedArray: { content: Lib3.Value[]; refrence: Lib3.Refrence[] }[]; //=[[]];
-  @Input()
-  EnContentAndRedArray: { content: Lib3.Value[]; refrence: Lib3.Refrence[] }[]; //=[[]];
+  //@Input()ArContentAndRedArray: { content: Lib3.Value[]; refrence: Lib3.Refrence[] }[]; //=[[]];
+  //@Input() EnContentAndRedArray: { content: Lib3.Value[]; refrence: Lib3.Refrence[] }[]; //=[[]];
 
   constructor(
     public srv: MyServiceService,
     public web: WebService,
-    private snack: MatSnackBar
+    private snack: MatSnackBar,
+    public request:RequestService
   ) {}
 
   ngOnInit() {

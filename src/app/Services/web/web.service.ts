@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { distinctUntilChanged, pluck } from "rxjs/operators";
 import { APiHadithRequest, HadithModel, Lib3, quran } from "../../interfaces";
+import {_baseUel} from '../../Statics/configs'
 @Injectable({
   providedIn: "root"
 })
@@ -11,15 +12,8 @@ export class WebService {
   public Loading: Subject<boolean> = new Subject();
   public IncomingRequests$: Subject<Lib3.IncomingRequest> = new Subject();
   public inputValidity$: Subject<string> = new Subject();
-  //public BASEURL="http://localhost:1860";
-  public BASEURL="https://islamicsearch.herokuapp.com";
-  //public BASEURL = "https://localhost:5001";
+  public BASEURL=_baseUel;
   constructor(private http: HttpClient) {
-    this.IncomingRequests$.subscribe(r => {
-      console.log("WebService IncomingRequests$");
-
-      console.log(r);
-    });
   }
 
   getHadith(apiURL, Jsonvalue: string) {
@@ -53,6 +47,15 @@ export class WebService {
 
     return this.http.post<Lib3.HadithBlocks>(
       this.BASEURL + "/api/hadith/requestb/",
+      request_obj
+    );
+  }
+  getManyBlocks(request_obj: Lib3.IncomingRequest) {
+
+    console.log(request_obj);
+
+    return this.http.post<Lib3.HadithBlocks[]>(
+      this.BASEURL + "/api/hadith/requestblocks/",
       request_obj
     );
   }
