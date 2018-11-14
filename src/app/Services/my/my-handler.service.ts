@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { Subject } from "rxjs";
 import { ISource } from "../../interfaces";
 import { Bindex, Mindex } from "../../Statics/myindex";
@@ -17,6 +17,8 @@ export class MyServiceService {
     Value?: string;
   }> = new Subject<{ Action: string; Value?: string }>();
   public ComponentTracker$: Subject<any> = new Subject();
+  source_options: FormControl = new FormControl();
+  
 
   currentFetchingMethod;
 
@@ -582,7 +584,8 @@ export class MyServiceService {
         return str.toLowerCase();
       }
     }
-  } //lower
+  }//lower
+  
   upper(str) {
     if (typeof str == "string") {
       if (str == null) {
@@ -591,7 +594,7 @@ export class MyServiceService {
         return str.toUpperCase();
       }
     }
-  } //upper
+  }//upper
 
   copyMessage(val: string) {
     let selBox = document.createElement("textarea");

@@ -6,6 +6,7 @@ import { IMyAPIFetchingMethod, Lib3 } from "../../interfaces";
 import { MyServiceService } from "../../Services/my/my-handler.service";
 import { QuranIndex } from "../../Statics/Quran";
 import { WebService } from "../../Services/web/web.service";
+import { RequestService } from "src/app/Services/request/request.service";
 declare var $: any;
 
 @Component({
@@ -19,14 +20,14 @@ export class TopbarComponent implements OnInit {
   IncomingRequest: Lib3.IncomingRequest;
   //ArContentAndRedArray: { content: Lib3.Value[]; refrence: Lib3.Refrence[] }[]; //=[[]];
   //EnContentAndRedArray: { content: Lib3.Value[]; refrence: Lib3.Refrence[] }[]; //=[[]];
-  source_options: FormControl = new FormControl();
   CompLoaded: boolean = false;
   constructor(
     public web: WebService,
     private snack: MatSnackBar,
     public srv: MyServiceService,
     public activatedRoute: ActivatedRoute,
-    public router: Router
+    public router: Router,
+    public request:RequestService
   ) {}
 
   //=======================================================================================ngOnInit//
@@ -44,7 +45,7 @@ export class TopbarComponent implements OnInit {
 
       if (!this.CompLoaded) {
         this.UpdateSource("quran");
-        this.source_options.setValue("quran", { emitEvent: true });
+        this.srv.source_options.setValue("quran", { emitEvent: true });
         this.SetMaxAyat(this.srv.rFQ.get("ayat_number"), 1);
       }
       if (Object.keys(p).length != 0) {
@@ -87,7 +88,7 @@ export class TopbarComponent implements OnInit {
       //if just open HOME page
       else {
         this.UpdateSource("quran");
-        this.source_options.setValue("quran", { emitEvent: true });
+        this.srv.source_options.setValue("quran", { emitEvent: true });
         this.SetMaxAyat(this.srv.rFQ.get("ayat_number"), 1);
         //DELETE LINE
       }
@@ -95,11 +96,11 @@ export class TopbarComponent implements OnInit {
     });
 
     this.srv.UpdateInputDisable();
-    this.source_options.valueChanges.subscribe(value => {
+    this.srv.source_options.valueChanges.subscribe(value => {
       //emit value change
       this.srv.rFPI
         .get("FetchingMethod")
-        .setValue(this.srv.rFPI.get("FetchingMethod").value);
+        .setValue(this.fh["FetchingMethod"].value);
       //update Source
       this.UpdateSource(value);
       this.srv.ValidateHadithInputs("method");
@@ -109,16 +110,16 @@ export class TopbarComponent implements OnInit {
     this.srv.rFQ.get("surah_number").valueChanges.subscribe(value => {
       this.SetMaxAyat(this.srv.rFQ.get("ayat_number"), value);
     });
-    this.srv.rFPI.get("NewChapter").valueChanges.subscribe(value => {
+    this.fh["NewChapter"].valueChanges.subscribe(value => {
       this.srv.ValidateHadithInputs("chapter");
     });
-    this.srv.rFPI.get("OldChapter").valueChanges.subscribe(value => {
+    this.fh["OldChapter"].valueChanges.subscribe(value => {
       this.srv.ValidateHadithInputs("chapter");
     });
-    this.srv.rFPI.get("OtherTag").valueChanges.subscribe(value => {
+    this.fh["OtherTag"].valueChanges.subscribe(value => {
       this.srv.ValidateHadithInputs("chapter");
     });
-    this.srv.rFPI.get("FetchingMethod").valueChanges.subscribe(value => {
+    this.fh["FetchingMethod"].valueChanges.subscribe(value => {
       this.srv.UpdateInputDisable();
       this.srv.ValidateHadithInputs("method");
     });
@@ -140,6 +141,10 @@ export class TopbarComponent implements OnInit {
   } //ngOnInit========================================================================================//
 
   //==========================================================================Validations//
+
+  get fh (){
+    return this.srv.rFPI.controls
+  }
 
   SetMaxAyat(ayat_number: AbstractControl, surahNumber) {
     let suran = surahNumber;
@@ -207,7 +212,7 @@ export class TopbarComponent implements OnInit {
 
     if (value == "bukhari") {
       //Set Default FetchingMethod
-      this.srv.rFPI.get("FetchingMethod").setValue("number");
+      this.fh["FetchingMethod"].setValue("number");
       this.myUsingOptions = [
         { value: "number", englishName: "Hadith Number" },
         { value: "new", englishName: "In Book Refrence" },
@@ -267,7 +272,7 @@ export class TopbarComponent implements OnInit {
 
     if (value == "muslim") {
       //Set Default FetchingMethod
-      this.srv.rFPI.get("FetchingMethod").setValue("tag");
+      this.fh["FetchingMethod"].setValue("tag");
       //Update Validators
       this.srv.ValidateHadithInputs("method");
 
@@ -331,7 +336,7 @@ export class TopbarComponent implements OnInit {
 
     if (value == "nasai") {
       //Set Default FetchingMethod
-      this.srv.rFPI.get("FetchingMethod").setValue("number");
+      this.fh["FetchingMethod"].setValue("number");
       this.myUsingOptions = [
         { value: "number", englishName: "Hadith Number" },
         { value: "new", englishName: "In Book Refrence" },
@@ -445,165 +450,6 @@ export class TopbarComponent implements OnInit {
     } //if("Quran")
   } //SourceToHtmlController()
 
-  //=====================================Error Messages//
-
-  //==Hadith//
-  getHadithErrot(I_type) {
-    switch (I_type.fetchingMethod) {
-      case "Chapter":
-        {
-          if (this.srv.rFPI.get("FetchingMethod").value == "number") {
-            let error;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("required"))
-              error = "This field is Required";
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("min"))
-              error =
-                "Minimum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("min").min;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("max"))
-              error =
-                "Maximum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("max").max;
-            return error;
-          }
-          if (this.srv.rFPI.get("FetchingMethod").value == "new") {
-            let error;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("required"))
-              error = "This field is Required";
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("min"))
-              error =
-                "Minimum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("min").min;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("max"))
-              error =
-                "Maximum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("max").max;
-            return error;
-          }
-          if (this.srv.rFPI.get("FetchingMethod").value == "old") {
-            let error;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("required"))
-              error = "This field is Required";
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("min"))
-              error =
-                "Minimum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("min").min;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("max"))
-              error =
-                "Maximum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("max").max;
-            return error;
-          }
-          if (this.srv.rFPI.get("FetchingMethod").value == "tag") {
-            let error;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("required"))
-              error = "This field is Required";
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("min"))
-              error =
-                "Minimum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("min").min;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("max"))
-              error =
-                "Maximum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("max").max;
-            return error;
-          }
-        }
-        break;
-      case "Hadith":
-        {
-          if (this.srv.rFPI.get("FetchingMethod").value == "number") {
-            let error;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("required"))
-              error = "This field is Required";
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("min"))
-              error =
-                "Minimum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("min").min;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("max"))
-              error =
-                "Maximum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("max").max;
-            return error;
-          }
-          if (this.srv.rFPI.get("FetchingMethod").value == "new") {
-            let error;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("required"))
-              error = "This field is Required";
-            if (this.srv.rFPI.get(I_type.otherfieldlName).invalid)
-              error = "Please enter a Valid input on chapter";
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("min"))
-              error =
-                "Minimum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("min").min;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("max"))
-              error =
-                "Maximum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("max").max;
-            return error;
-          }
-          if (this.srv.rFPI.get("FetchingMethod").value == "old") {
-            let error;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("required"))
-              error = "This field is Required";
-            if (this.srv.rFPI.get(I_type.otherfieldlName).invalid)
-              error = "Please enter a Valid input on chapter";
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("min"))
-              error =
-                "Minimum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("min").min;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("max"))
-              error =
-                "Maximum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("max").max;
-            return error;
-          }
-          if (this.srv.rFPI.get("FetchingMethod").value == "tag") {
-            let error;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("required"))
-              error = "This field is Required";
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("min"))
-              error =
-                "Minimum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("min").min;
-            if (this.srv.rFPI.get(I_type.fieldlName).hasError("max"))
-              error =
-                "Maximum number is " +
-                this.srv.rFPI.get(I_type.fieldlName).getError("max").max;
-            return error;
-          }
-        }
-        break;
-    }
-  }
-
-  //Hadith==//
-
-  //==Quran//
-  getAyatNumberError() {
-    return this.srv.rFQ.get("ayat_number").hasError("required")
-      ? "required"
-      : this.srv.rFQ.get("ayat_number").hasError("max")
-        ? "this Surah only has " +
-          this.srv.rFQ.get("ayat_number").getError("max") +
-          " Ayat"
-        : this.srv.rFQ.get("ayat_number").hasError("min")
-          ? "Minimum is 1"
-          : "Invalid input";
-  }
-
-  getSurahError() {
-    return this.srv.rFQ.get("surah_number").hasError("required")
-      ? "required"
-      : this.srv.rFQ.get("surah_number").hasError("max")
-        ? "The Quran has 114 Surrah"
-        : this.srv.rFQ.get("surah_number").hasError("min")
-          ? "Minimum is 1"
-          : "Invalid input";
-  }
-  //Quran==//
-
-  //Error Messages=====================================//
 
   //=============Navidations//
   Previous() {
@@ -613,7 +459,7 @@ export class TopbarComponent implements OnInit {
     ) {
       this.srv.rFPI
         .get("number")
-        .setValue(this.srv.rFPI.get("number").value - 1);
+        .setValue(this.fh["number"].value - 1);
     }
 
     if (this.srv.Source.source.quran) {
@@ -630,7 +476,7 @@ export class TopbarComponent implements OnInit {
     ) {
       this.srv.rFPI
         .get("number")
-        .setValue(this.srv.rFPI.get("number").value + 1);
+        .setValue(this.fh["number"].value + 1);
     }
 
     if (this.srv.Source.source.quran) {
@@ -641,153 +487,6 @@ export class TopbarComponent implements OnInit {
   }
   //Navidations=============//
 
-  CreateNavUrl() {
-    let source;
-    let method;
-
-    let number;
-
-    let Ch;
-    let Hadith;
-
-    let surah;
-    let ayat;
-
-    let tagNum;
-    let tagChar;
-
-    let navurl;
-
-    source = this.source_options.value;
-    method = this.srv.rFPI.get("FetchingMethod").value;
-
-    number = this.srv.rFPI.get("number").value;
-
-    Ch = this.srv.rFPI.get("NewChapter").disabled
-      ? this.srv.rFPI.get("OldChapter").value
-      : this.srv.rFPI.get("NewChapter").value;
-    Hadith = this.srv.rFPI.get("NewHadith").disabled
-      ? this.srv.rFPI.get("OldHadith").value
-      : this.srv.rFPI.get("NewHadith").value;
-
-    tagNum = parseInt(this.srv.rFPI.get("OtherTag").value, 10);
-    /*
-    var HoldTag: number = parseInt(this.srv.rFPI.get("OtherTag").value, 10);
-    tagNum = HoldTag;
-    //Check if input is from the Missing hadiths and correct input
-    this.MissinMuslimTag.forEach(NumArr => {
-      var firstNum = NumArr[0];
-      NumArr.forEach(num => {
-        if (HoldTag == num) {
-          tagNum = firstNum;
-        }
-      });
-    });*/
-    tagChar = this.srv.rFPI.get("OtherTagChars").value;
-    tagChar = tagChar == undefined || tagChar.length > 1 ? "" : tagChar;
-
-    surah = this.srv.rFQ.get("surah_number").value;
-    ayat = this.srv.rFQ.get("ayat_number").value;
-
-    var inval: boolean = false;
-
-    console.log("CreateNAvURl()Values");
-    console.log("number");
-    console.log(this.srv.rFPI.get("number").value);
-    console.log("NewChapter");
-    console.log(this.srv.rFPI.get("NewChapter").value);
-    console.log("NewHadith");
-    console.log(this.srv.rFPI.get("NewHadith").value);
-    console.log("OldChapter");
-    console.log(this.srv.rFPI.get("OldChapter").value);
-    console.log("OldHadith");
-    console.log(this.srv.rFPI.get("OldHadith").value);
-    console.log("OtherTag");
-    console.log(this.srv.rFPI.get("OtherTag").value);
-    console.log("OtherTagChars");
-    console.log(this.srv.rFPI.get("OtherTagChars").value);
-    console.log("surah");
-    console.log(this.srv.rFPI.get("surah").value);
-    console.log("ayat");
-    console.log(this.srv.rFPI.get("ayat").value);
-
-    switch (source) {
-      //If Bukhari
-      case "bukhari": {
-        switch (method) {
-          case "number": {
-            navurl = `${source}/${method}/${number}`;
-            break;
-          }
-
-          case "new": {
-            navurl = `${source}/${method}/${Ch}/${Hadith}`;
-            break;
-          }
-          case "old": {
-            navurl = `${source}/${method}/${Ch}/${Hadith}`;
-            break;
-          }
-          default:
-            break;
-        } //Swich Child
-        inval = this.srv.rFPI.invalid ? true : inval;
-        break;
-      }
-
-      //Muslim
-      case "muslim": {
-        switch (method) {
-          case "tag": {
-            navurl =
-              tagChar == undefined || tagChar.length > 1
-                ? `${source}/${method}/${tagNum}`
-                : `${source}/${method}/${tagNum}/${tagChar}`;
-
-            break;
-          }
-          case "new": {
-            navurl = `${source}/${method}/${Ch}/${Hadith}`;
-
-            break;
-          }
-
-          case "old": {
-            navurl = `${source}/${method}/${Ch}/${Hadith}`;
-            break;
-          }
-
-          default:
-            break;
-        } //Swich Child
-        inval = this.srv.rFPI.invalid ? true : inval;
-        break;
-      }
-
-      //Quran
-      case "quran": {
-        navurl = `${source}/${surah}/${ayat}/`;
-        inval = this.srv.rFQ.invalid ? true : inval;
-
-        break;
-      }
-
-      default:
-        inval = true;
-        break;
-    } //Swich Parent
-
-    if (inval) {
-      this.getvalidations(this.srv.rFPI);
-      this.getvalidations(this.srv.rFQ);
-      this.snack.open("Does not exist", "x", { duration: 5000 });
-      return null;
-    } else {
-      this.router.navigate([navurl]);
-
-      return navurl;
-    }
-  } //CreateNavUrl();
 
   CreateRquestFromUrl(
     sourceParameter?: string,
@@ -828,26 +527,26 @@ export class TopbarComponent implements OnInit {
     switch (source) {
       //If Bukhari
       case "bukhari": {
-        if (this.source_options.value != source) {
+        if (this.srv.source_options.value != source) {
           this.UpdateSource(source);
 
-          this.source_options.setValue(source);
+          this.srv.source_options.setValue(source);
         }
 
         switch (method) {
           case "number": {
             if (
-              this.srv.rFPI.get("number").value != number ||
-              this.srv.rFPI.get("FetchingMethod").value != method
+              this.fh["number"].value != number ||
+              this.fh["FetchingMethod"].value != method
             ) {
               //Select Method
-              this.srv.rFPI.get("FetchingMethod").setValue(method);
+              this.fh["FetchingMethod"].setValue(method);
 
               //select values
-              this.srv.rFPI.get("number").setValue(number);
-              this.srv.rFPI.get("number").markAsTouched();
+              this.fh["number"].setValue(number);
+              this.fh["number"].markAsTouched();
               this.srv.ValidateHadithInputs("method");
-              this.srv.rFPI.get("number").markAsTouched();
+              this.fh["number"].markAsTouched();
             }
 
             request_obj = {
@@ -871,22 +570,22 @@ export class TopbarComponent implements OnInit {
 
           case "new": {
             if (
-              this.srv.rFPI.get("NewChapter").value != Ch ||
-              this.srv.rFPI.get("NewHadith").value != Hadith ||
-              this.srv.rFPI.get("FetchingMethod").value != method
+              this.fh["NewChapter"].value != Ch ||
+              this.fh["NewHadith"].value != Hadith ||
+              this.fh["FetchingMethod"].value != method
             ) {
               //Select Method
-              this.srv.rFPI.get("FetchingMethod").setValue(method);
+              this.fh["FetchingMethod"].setValue(method);
 
               this.srv.ValidateHadithInputs("method");
 
               //select values
-              this.srv.rFPI.get("NewChapter").setValue(Ch);
+              this.fh["NewChapter"].setValue(Ch);
               this.srv.ValidateHadithInputs("chapter");
-              this.srv.rFPI.get("NewChapter").markAsTouched();
+              this.fh["NewChapter"].markAsTouched();
 
-              this.srv.rFPI.get("NewHadith").setValue(Hadith);
-              this.srv.rFPI.get("NewHadith").markAsTouched();
+              this.fh["NewHadith"].setValue(Hadith);
+              this.fh["NewHadith"].markAsTouched();
             }
 
             request_obj = {
@@ -909,22 +608,22 @@ export class TopbarComponent implements OnInit {
           }
           case "old": {
             if (
-              this.srv.rFPI.get("OldChapter").value != Ch ||
-              this.srv.rFPI.get("OldHadith").value != Hadith ||
-              this.srv.rFPI.get("FetchingMethod").value != method
+              this.fh["OldChapter"].value != Ch ||
+              this.fh["OldHadith"].value != Hadith ||
+              this.fh["FetchingMethod"].value != method
             ) {
               //Select Method
-              this.srv.rFPI.get("FetchingMethod").setValue(method);
+              this.fh["FetchingMethod"].setValue(method);
 
               this.srv.ValidateHadithInputs("method");
 
               //select values
-              this.srv.rFPI.get("OldChapter").setValue(Ch);
+              this.fh["OldChapter"].setValue(Ch);
               this.srv.ValidateHadithInputs("chapter");
-              this.srv.rFPI.get("OldChapter").markAsTouched();
+              this.fh["OldChapter"].markAsTouched();
 
-              this.srv.rFPI.get("OldHadith").setValue(Hadith);
-              this.srv.rFPI.get("OldHadith").markAsTouched();
+              this.fh["OldHadith"].setValue(Hadith);
+              this.fh["OldHadith"].markAsTouched();
             }
 
             request_obj = {
@@ -956,28 +655,28 @@ export class TopbarComponent implements OnInit {
 
       //Muslim
       case "muslim": {
-        if (this.source_options.value != source) {
+        if (this.srv.source_options.value != source) {
           this.UpdateSource(source);
-          this.source_options.setValue(this.lower(source));
+          this.srv.source_options.setValue(this.lower(source));
         }
 
         switch (method) {
           case "tag": {
             if (
-              this.srv.rFPI.get("OtherTag").value != tagNum ||
-              this.srv.rFPI.get("FetchingMethod").value != method
+              this.fh["OtherTag"].value != tagNum ||
+              this.fh["FetchingMethod"].value != method
             ) {
               //Select Method
-              this.srv.rFPI.get("FetchingMethod").setValue(method);
+              this.fh["FetchingMethod"].setValue(method);
 
               //select values
-              this.srv.rFPI.get("OtherTag").setValue(tagNum);
+              this.fh["OtherTag"].setValue(tagNum);
               this.srv.ValidateHadithInputs("method");
-              this.srv.rFPI.get("OtherTag").markAsTouched();
+              this.fh["OtherTag"].markAsTouched();
 
-              this.srv.rFPI.get("OtherTagChars").setValue(tagChar);
+              this.fh["OtherTagChars"].setValue(tagChar);
               this.srv.ValidateHadithInputs("chapter");
-              this.srv.rFPI.get("OtherTagChars").markAsTouched();
+              this.fh["OtherTagChars"].markAsTouched();
             }
 
             if (tagChar == "" /*"all"*/) {
@@ -1017,21 +716,21 @@ export class TopbarComponent implements OnInit {
 
           case "new": {
             if (
-              this.srv.rFPI.get("NewChapter").value != Ch ||
-              this.srv.rFPI.get("NewHadith").value != Hadith ||
-              this.srv.rFPI.get("FetchingMethod").value != method
+              this.fh["NewChapter"].value != Ch ||
+              this.fh["NewHadith"].value != Hadith ||
+              this.fh["FetchingMethod"].value != method
             ) {
               //Select Method
-              this.srv.rFPI.get("FetchingMethod").setValue(method);
+              this.fh["FetchingMethod"].setValue(method);
               this.srv.ValidateHadithInputs("method");
 
               //select values
-              this.srv.rFPI.get("NewChapter").setValue(Ch);
+              this.fh["NewChapter"].setValue(Ch);
               this.srv.ValidateHadithInputs("chapter");
-              this.srv.rFPI.get("NewChapter").markAsTouched();
+              this.fh["NewChapter"].markAsTouched();
 
-              this.srv.rFPI.get("NewHadith").setValue(Hadith);
-              this.srv.rFPI.get("NewHadith").markAsTouched();
+              this.fh["NewHadith"].setValue(Hadith);
+              this.fh["NewHadith"].markAsTouched();
             }
             request_obj = {
               Method: 2,
@@ -1053,21 +752,21 @@ export class TopbarComponent implements OnInit {
 
           case "old": {
             if (
-              this.srv.rFPI.get("OldChapter").value != Ch ||
-              this.srv.rFPI.get("OldHadith").value != Hadith ||
-              this.srv.rFPI.get("FetchingMethod").value != method
+              this.fh["OldChapter"].value != Ch ||
+              this.fh["OldHadith"].value != Hadith ||
+              this.fh["FetchingMethod"].value != method
             ) {
               //Select Method
-              this.srv.rFPI.get("FetchingMethod").setValue(method);
+              this.fh["FetchingMethod"].setValue(method);
               this.srv.ValidateHadithInputs("method");
 
               //select values
-              this.srv.rFPI.get("OldChapter").setValue(Ch);
+              this.fh["OldChapter"].setValue(Ch);
               this.srv.ValidateHadithInputs("chapter");
-              this.srv.rFPI.get("OldChapter").markAsTouched();
+              this.fh["OldChapter"].markAsTouched();
 
-              this.srv.rFPI.get("OldHadith").setValue(Hadith);
-              this.srv.rFPI.get("OldHadith").markAsTouched();
+              this.fh["OldHadith"].setValue(Hadith);
+              this.fh["OldHadith"].markAsTouched();
             }
             request_obj = {
               Method: 3,
@@ -1095,9 +794,9 @@ export class TopbarComponent implements OnInit {
 
       //Quran
       case "quran": {
-        if (this.source_options.value != source) {
+        if (this.srv.source_options.value != source) {
           this.UpdateSource(source);
-          this.source_options.setValue(this.lower(source));
+          this.srv.source_options.setValue(this.lower(source));
         }
         if (
           this.srv.rFQ.get("surah_number").value != surah ||
@@ -1181,7 +880,6 @@ export class TopbarComponent implements OnInit {
     console.log("Validation====");
   }
 
-  Test() {}
   //======Extractor
 
   cleanArray(actual) {
