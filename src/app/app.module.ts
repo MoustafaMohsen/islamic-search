@@ -40,6 +40,7 @@ import { SafePipe } from "./Pipes/safe/safe.pipe";
 import { NumberArrayPipe } from "./Pipes/number-array/number-array.pipe";
 import { AddressArrayPipe } from "./Pipes/address-array/address-array.pipe";
 import { PdfViewerComponent } from './Components/pdf-viewer/pdf-viewer.component';
+import { ContainerComponent } from './Components/boot/container/container.component';
 
 const material = [
   BrowserAnimationsModule,
@@ -69,7 +70,8 @@ const material = [
     HadithBoxComponent,
     NumberArrayPipe,
     AddressArrayPipe,
-    PdfViewerComponent
+    PdfViewerComponent,
+    ContainerComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
