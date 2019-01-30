@@ -1,0 +1,23 @@
+@import '../../../variables';
+
+
+.hadith-input{
+    margin:0.5rem auto;
+}
+
+.quran-input{
+    margin: 0.5rem auto;
+}
+.navigation-buttons{
+    position: fixed ;
+    bottom: 0;
+    z-index: 10;
+}
+
+.input-row{
+    //position: absolute;
+    background-color: $secondary;
+}
+.lookup-button{
+    background-color: $primary;
+}

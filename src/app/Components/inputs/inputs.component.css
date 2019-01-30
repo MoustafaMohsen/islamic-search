@@ -1,0 +1,46 @@
+/*
+$word-size:2em;
+$stop-time:0;
+
+$stop-time-2:1;
+
+$line-delay:1000ms  *$stop-time;
+
+$line-time:1000ms  *$stop-time;
+
+$m-Delay:(1000ms + $line-delay  )*$stop-time;
+
+$m-time:(5000ms     )*$stop-time;
+
+$word-Delay:($m-Delay+$m-time+500ms      )*$stop-time;
+
+$word-time:(500ms       )*$stop-time;
+
+
+
+$container-delay: ($word-time + $word-Delay + 1000ms    )*$stop-time-2;
+
+$container-time:(1000ms     )*$stop-time-2;
+*/
+.hadith-input {
+  margin: 0.5rem auto;
+}
+
+.quran-input {
+  margin: 0.5rem auto;
+}
+
+.navigation-buttons {
+  position: fixed;
+  bottom: 0;
+  z-index: 10;
+}
+
+.input-row {
+  background-color: #E4E4DC;
+}
+
+.lookup-button {
+  background-color: #30323D;
+}
+/*# sourceMappingURL=inputs.component.css.map */

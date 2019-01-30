@@ -1,86 +1,97 @@
-<div class="row">
-
-  <div class="col-1"></div>
-
-  <div class="col">
+<div class="row justify-content-center box-container relative">
 
 
-    <mat-tab-group *ngIf='this.request.ArContentAndRedArray||this.request.EnContentAndRedArray'>
-      <mat-tab label="Arabic" backgroundColor='primary' *ngIf='this.request.ArContentAndRedArray' class="bg-dark">
+  <div class="col-md-8 align-self-center">
 
-        <!--=====Card====-->
+    <mat-card class="box-card">
+      <mat-tab-group mat-stretch-tabs *ngIf='this.request.ArContentAndRedArray||this.request.EnContentAndRedArray'>
 
-        <div *ngIf='this.request.ArContentAndRedArray'>
+        <mat-tab label="Arabic" backgroundColor='primary' *ngIf='this.request.ArContentAndRedArray' class="bg-dark">
 
-          <mat-card *ngFor="let ArContent of this.request.ArContentAndRedArray; let i = index" class="StyleSecondP" [id]="this.randomId(i,1)">
-            <div *ngFor="let content of ArContent.content">
-              <p [innerHTML]="content.value" class="arabicText lead content-value" *ngIf="content.value!='‏‏.‏'"></p>
+          <!--=====Card====-->
+          <div class="tab-content" *ngIf='this.request.ArContentAndRedArray'>
+  
+            <!-- loop -->
+            <div *ngFor="let ArContent of this.request.ArContentAndRedArray; let i = index" class="box-content-row StyleSecondP" [id]="this.randomId(i,1)">
+
+              <div class="box-content-text" *ngFor="let content of ArContent.content">
+                <p [innerHTML]="content.value" class="arabicText lead content-value" *ngIf="content.value!='‏‏.‏'"></p>
+              </div>
+              <div class="footer-seperator"></div>
+              <div class="content-footer">
+
+                <div class="refrences-container" *ngFor="let refrence of ArContent.refrence">
+                  {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
+                  {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}}
+                  {{refrence.value4>0?refrence.value4:""}}
+                  {{refrence.tag1!=""?refrence.tag1:""}}
+                </div>
+    
+                <button class="box-copy-button" (click)='this.CopyToClipboard(this.randomId(i,1))' mat-button>Copy</button>
+
+              </div>
+  
             </div>
+  
+          </div>
+  
+        </mat-tab>
+  
+  
+        <mat-tab label="English" backgroundColor='primary' *ngIf='this.request.EnContentAndRedArray' class="bg-light">
+  
+          <!--=====Card====-->
+  
+  
+          <div class="tab-content" *ngIf='this.request.EnContentAndRedArray'>
+  
+            <!-- loop -->
+            <div *ngFor="let EnContent of this.request.EnContentAndRedArray; let i = index"  class="box-content-row" [id]="this.randomId(i,2)">
 
-            <div *ngFor="let refrence of ArContent.refrence">
-              {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
-              {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}}
-              {{refrence.value4>0?refrence.value4:""}}
-              {{refrence.tag1!=""?refrence.tag1:""}}
+              <div class="box-content-text" *ngFor="let content of EnContent.content">
+                <p [innerHTML]="content.value" class="englishText lead" *ngIf="true"></p>
+              </div>
+
+              <div class="footer-seperator"></div>  
+              <div class="content-footer">
+                <div class="refrences-container" *ngFor="let refrence of EnContent.refrence">
+                  {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
+                  {{refrence.value2>0?refrence.value2:""}}
+                  {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
+                  {{refrence.tag1!=""?refrence.tag1:""}}
+                </div>
+    
+                <button  class="box-copy-button" (click)='this.CopyToClipboard(this.randomId(i,2))' mat-button>Copy</button>
+              </div>
+  
             </div>
+  
+          </div>
+  
+        </mat-tab>
+  
+      </mat-tab-group>
 
-            <button (click)='this.CopyToClipboard(this.randomId(i,1))' mat-raised-button>Copy</button>
-
-            <mat-progress-bar mode="buffer" *ngIf='this.web.Loading | async'></mat-progress-bar>
-          </mat-card>
-
-        </div>
-
-      </mat-tab>
-
-
-      <mat-tab label="English" backgroundColor='primary' *ngIf='this.request.EnContentAndRedArray' class="bg-light">
-
-        <!--=====Card====-->
-
-
-        <div *ngIf='this.request.EnContentAndRedArray'>
-
-          <mat-card *ngFor="let EnContent of this.request.EnContentAndRedArray; let i = index" [id]="this.randomId(i,2)">
-
-            <div *ngFor="let content of EnContent.content">
-              <p [innerHTML]="content.value" class="englishText lead" *ngIf="true"></p>
-            </div>
-
-            <div *ngFor="let refrence of EnContent.refrence">
-              {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
-              {{refrence.value2>0?refrence.value2:""}}
-              {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
-              {{refrence.tag1!=""?refrence.tag1:""}}
-            </div>
-
-            <button (click)='this.CopyToClipboard(this.randomId(i,2))' mat-raised-button>Copy</button>
-
-            <mat-progress-bar mode="buffer" *ngIf='this.web.Loading | async'></mat-progress-bar>
-          </mat-card>
-
-        </div>
-
-      </mat-tab>
-
-    </mat-tab-group>
-
-
+      
+    </mat-card>
+    
   </div>
-
-  <div class="col-1"></div>
-
+  
+  
 </div>
+
 <!--row-->
 
-<br>
-<br>
-<div class="row" *ngIf='false'>
-  <div class="col"></div>
-  <div class="col">
-    <button (click)='this.srv.Navigation$.next({Action:"next"})' [disabled]="" mat-raised-button>Next</button>
-    <button (click)='this.srv.Navigation$.next({Action:"previous"})' [disabled]="" mat-raised-button>Previous</button>
+
+<!-- Navigations
+  <mat-progress-bar mode="buffer" *ngIf='this.web.Loading$ | async'></mat-progress-bar>
+  <div class="row" *ngIf='false'>
+    <div class="col"></div>
+    <div class="col">
+      <button (click)='this.srv.Navigation$.next({Action:"next"})' [disabled]="" mat-raised-button>Next</button>
+      <button (click)='this.srv.Navigation$.next({Action:"previous"})' [disabled]="" mat-raised-button>Previous</button>
+    </div>
+    <div class="col"></div>
   </div>
-  <div class="col"></div>
-</div>
+-->
 <!--row-->

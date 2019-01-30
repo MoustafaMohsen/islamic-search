@@ -1,3 +1,11 @@
+@import './variables';
+
+html,body,main{
+    height: 100%;;
+}
+body{
+    background-color: $compelmentary;
+}
 button{
     outline:0 !important;
 }
@@ -19,4 +27,7 @@ button{
 }
 .relative{
     position: relative;
+}
+.transition{
+    transition: all 500ms ease-in-out;
 }

@@ -1,14 +1,52 @@
-.hadith-input {
-  margin: 0.5rem auto;
+/*
+$word-size:2em;
+$stop-time:0;
+
+$stop-time-2:1;
+
+$line-delay:1000ms  *$stop-time;
+
+$line-time:1000ms  *$stop-time;
+
+$m-Delay:(1000ms + $line-delay  )*$stop-time;
+
+$m-time:(5000ms     )*$stop-time;
+
+$word-Delay:($m-Delay+$m-time+500ms      )*$stop-time;
+
+$word-time:(500ms       )*$stop-time;
+
+
+
+$container-delay: ($word-time + $word-Delay + 1000ms    )*$stop-time-2;
+
+$container-time:(1000ms     )*$stop-time-2;
+*/
+.top-navbar {
+  max-height: 50px;
+  overflow: hidden;
+  background-color: #30323D;
 }
 
-.quran-input {
-  margin: 0.5rem auto;
-}
-
-.navigation-buttons {
-  position: fixed;
+.top-navbar .nav-logo img {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
   bottom: 0;
-  z-index: 10;
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+}
+
+.top-navbar .nav-buttons {
+  margin-left: auto;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.top-navbar .nav-buttons button {
+  float: left;
 }
 /*# sourceMappingURL=topbar.component.css.map */

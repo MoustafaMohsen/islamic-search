@@ -1,3 +1,35 @@
+/*
+$word-size:2em;
+$stop-time:0;
+
+$stop-time-2:1;
+
+$line-delay:1000ms  *$stop-time;
+
+$line-time:1000ms  *$stop-time;
+
+$m-Delay:(1000ms + $line-delay  )*$stop-time;
+
+$m-time:(5000ms     )*$stop-time;
+
+$word-Delay:($m-Delay+$m-time+500ms      )*$stop-time;
+
+$word-time:(500ms       )*$stop-time;
+
+
+
+$container-delay: ($word-time + $word-Delay + 1000ms    )*$stop-time-2;
+
+$container-time:(1000ms     )*$stop-time-2;
+*/
+html, body, main {
+  height: 100%;
+}
+
+body {
+  background-color: #2B4162;
+}
+
 button {
   outline: 0 !important;
 }
@@ -20,5 +52,10 @@ button {
 
 .relative {
   position: relative;
+}
+
+.transition {
+  -webkit-transition: all 500ms ease-in-out;
+  transition: all 500ms ease-in-out;
 }
 /*# sourceMappingURL=styles.css.map */

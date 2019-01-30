@@ -1,3 +1,27 @@
+/*
+$word-size:2em;
+$stop-time:0;
+
+$stop-time-2:1;
+
+$line-delay:1000ms  *$stop-time;
+
+$line-time:1000ms  *$stop-time;
+
+$m-Delay:(1000ms + $line-delay  )*$stop-time;
+
+$m-time:(5000ms     )*$stop-time;
+
+$word-Delay:($m-Delay+$m-time+500ms      )*$stop-time;
+
+$word-time:(500ms       )*$stop-time;
+
+
+
+$container-delay: ($word-time + $word-Delay + 1000ms    )*$stop-time-2;
+
+$container-time:(1000ms     )*$stop-time-2;
+*/
 .arabicText {
   text-align: right;
 }
@@ -21,5 +45,44 @@
 
 .StyleSecondP div:nth-child(2) p {
   font-weight: bold;
+}
+
+.box-container {
+  margin-top: 50px;
+}
+
+.box-container .box-card .tab-content {
+  padding: 20px 0px 0px;
+}
+
+.box-container .box-card .tab-content .box-content-text p {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.box-container .box-card .tab-content .footer-seperator {
+  height: 1px;
+  width: 80%;
+  background-color: #e0e0e0;
+  margin: 40px auto 20px;
+}
+
+.box-container .box-card .tab-content .content-footer {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.box-container .box-card .tab-content .content-footer .refrences-container {
+  font-size: 0.8em;
+  color: gray;
+  margin: 18px 0px;
+}
+
+.box-container .box-card .tab-content .content-footer .box-copy-button {
+  background-color: #E4E4DC;
+  padding: 0px 32px;
+  min-height: 0;
+  font-size: 0.8em;
 }
 /*# sourceMappingURL=hadith-box.component.css.map */

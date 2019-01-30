@@ -1,0 +1,58 @@
+$my-white:#F9F9F9;
+
+// work section
+$primary:#30323D;
+$primary-2:#4D5061;
+//$primary-3:#1B1C24;
+$secondary:#E4E4DC;
+$compelmentary:#2B4162;
+//$tertiary:#E0FF4F;
+
+@mixin line-middle {
+    position: absolute;
+    animation-fill-mode: forwards;
+    top: 50%;
+    left: 15%;
+    width: 70%;
+    height: 4px;
+    background-color: white;
+    border-radius: 2px;
+}
+
+@mixin center-word {
+    margin-left: auto;
+    margin-right: auto;
+    width:fit-content;
+}
+
+
+$break-x: 575.98px;
+$break-s: 767.98px;
+$break-m: 991.98px;
+$break-l: 1199.98px;
+
+
+/*
+$word-size:2em;
+$stop-time:0;
+
+$stop-time-2:1;
+
+$line-delay:1000ms  *$stop-time;
+
+$line-time:1000ms  *$stop-time;
+
+$m-Delay:(1000ms + $line-delay  )*$stop-time;
+
+$m-time:(5000ms     )*$stop-time;
+
+$word-Delay:($m-Delay+$m-time+500ms      )*$stop-time;
+
+$word-time:(500ms       )*$stop-time;
+
+
+
+$container-delay: ($word-time + $word-Delay + 1000ms    )*$stop-time-2;
+
+$container-time:(1000ms     )*$stop-time-2;
+*/

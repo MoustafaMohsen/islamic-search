@@ -1,136 +1,15 @@
-<div class="row">
+<div class="row justify-content-between  top-navbar relative">
 
-  <div class="col-md-2">
-    <!--=======Select Source========-->
-    <mat-form-field>
-      <mat-select placeholder="Select Source" [formControl]='this.srv.source_options'>
-        <mat-option value="quran">Quran</mat-option>
-        <mat-option value="bukhari">Bukhari</mat-option>
-        <mat-option value="muslim">Muslim</mat-option>
-        <!--mat-option value="Nasai">Nasai</mat-option-->
-      </mat-select>
-    </mat-form-field>
-  </div>
+    <div class="col-4 nav-logo">
+        <img src="../../../assets/img/youtube.png" alt="">
+    </div>
 
-  <div class="col-md">
+    <div class="col-4"> 
+        <div class="nav-buttons">
+            <button mat-button >quran</button>
+            <button mat-button >bukhari</button>
+            <button mat-button >muslim</button>
+        </div>
+    </div>
 
-      <form [formGroup]='this.srv.rFPI'>
-
-          <!--===============Hadith===================-->
-          <div class="hadith-input" *ngIf="this.srv.Source.source.hadith.status">
-    
-            <!--=======What option========-->
-            <mat-form-field *ngIf="this.srv.Source.methodAPI.myAPI.status">
-              <mat-select placeholder="Choose Chapter" formControlName='FetchingMethod'>
-    
-                <div *ngFor='let c of myUsingOptions' >
-                  <mat-option [value]="c.value">
-                    {{c.englishName}}
-                  </mat-option>
-                </div>
-    
-              </mat-select>
-              <mat-hint>Fetching Method</mat-hint>
-            </mat-form-field>
-    
-            <!--=======Number========-->
-            <mat-form-field class="spacing" *ngIf='this.srv.rFPI.get("number").enabled'>
-              <input formControlName='number' placeholder="Number" type="number" matInput>
-              <mat-error *ngIf='this.srv.rFPI.get("number").hasError("required")'>This field is Required</mat-error>
-              <mat-error *ngIf='this.srv.rFPI.get("number").hasError("min")'>Minimum number is {{this.srv.rFPI.get("number").getError("min").min}}</mat-error>
-              <mat-error *ngIf='this.srv.rFPI.get("number").hasError("max")'>Maximum number is {{this.srv.rFPI.get("number").getError("max").max}}</mat-error>
-            </mat-form-field>
-    
-            <!--=======OtherTag========-->
-            <mat-form-field class="spacing" *ngIf='this.srv.rFPI.get("OtherTag").enabled'>
-                <input formControlName='OtherTag' placeholder="Other Tag" type="number" matInput>
-                <mat-error *ngIf='this.srv.rFPI.get("OtherTag").hasError("required")'>This field is Required</mat-error>
-                <mat-error *ngIf='this.srv.rFPI.get("OtherTag").hasError("min")'>Minimum number is {{this.srv.rFPI.get("OtherTag").getError("min").min}}</mat-error>
-                <mat-error *ngIf='this.srv.rFPI.get("OtherTag").hasError("max")'>Maximum number is {{this.srv.rFPI.get("OtherTag").getError("max").max}}</mat-error>
-              </mat-form-field>
-
-            <mat-form-field class="spacing" *ngIf='this.srv.rFPI.get("OtherTagChars").enabled&&this.srv.OtherTagCharsArray'>
-                <mat-select placeholder="Choose Chapter" formControlName='OtherTagChars'>
-    
-                    <div *ngFor='let c of this.srv.OtherTagCharsArray' >
-                      <mat-option [value]="c.value">
-                        {{c.name}}
-                      </mat-option>
-                    </div>
-        
-                  </mat-select>
-                  <mat-hint>Charcter (Not Required)</mat-hint>
-            </mat-form-field>
-            <!--===New Chapter===-->
-            <mat-form-field class="spacing" *ngIf='this.srv.rFPI.get("NewChapter").enabled'>
-              <input placeholder="New Chapter" type="number" matInput formControlName='NewChapter'>
-              <mat-error *ngIf='this.srv.rFPI.get("NewChapter").hasError("required")'>This field is Required</mat-error>
-              <mat-error *ngIf='this.srv.rFPI.get("NewChapter").hasError("min")'>Minimum number is {{this.srv.rFPI.get("NewChapter").getError("min").min}}</mat-error>
-              <mat-error *ngIf='this.srv.rFPI.get("NewChapter").hasError("max")'>Maximum number is {{this.srv.rFPI.get("NewChapter").getError("max").max}}</mat-error>
-            </mat-form-field>
-
-            <!--=======New Hadith========-->
-            <mat-form-field class="spacing" *ngIf='this.srv.rFPI.get("NewHadith").enabled'>
-              <input formControlName='NewHadith' placeholder="New Hadith" type="number" matInput>
-              <mat-error *ngIf='this.srv.rFPI.get("NewHadith").hasError("required")'>This field is Required</mat-error>
-              <mat-error *ngIf='this.srv.rFPI.get("NewHadith").hasError("min")'>Minimum number is {{this.srv.rFPI.get("NewHadith").getError("min").min}}</mat-error>
-              <mat-error *ngIf='this.srv.rFPI.get("NewHadith").hasError("max")'>Maximum number is {{this.srv.rFPI.get("NewHadith").getError("max").max}}</mat-error>
-            </mat-form-field>
-    
-            <!--===Old Chapter===-->
-            <mat-form-field class="spacing" *ngIf='this.srv.rFPI.get("OldChapter").enabled'>
-              <input placeholder="Old Chapter" type="number" matInput formControlName='OldChapter' >
-              <mat-error *ngIf='this.srv.rFPI.get("OldChapter").hasError("required")'>This field is Required</mat-error>
-              <mat-error *ngIf='this.srv.rFPI.get("OldChapter").hasError("min")'>Minimum number is {{this.srv.rFPI.get("OldChapter").getError("min").min}}</mat-error>
-              <mat-error *ngIf='this.srv.rFPI.get("OldChapter").hasError("max")'>Maximum number is {{this.srv.rFPI.get("OldChapter").getError("max").max}}</mat-error>
-            </mat-form-field>
-    
-            <!--=======Old Hadith========-->
-            <mat-form-field class="spacing" *ngIf='this.srv.rFPI.get("OldHadith").enabled'>
-              <input formControlName='OldHadith' placeholder="Old Hadith" type="number" matInput >
-              <mat-error *ngIf='this.srv.rFPI.get("OldHadith").hasError("required")'>This field is Required</mat-error>
-              <mat-error *ngIf='this.srv.rFPI.get("OldHadith").hasError("min")'>Minimum number is {{this.srv.rFPI.get("OldHadith").getError("min").min}}</mat-error>
-              <mat-error *ngIf='this.srv.rFPI.get("OldHadith").hasError("max")'>Maximum number is {{this.srv.rFPI.get("OldHadith").getError("max").max}}</mat-error>
-            </mat-form-field>
-
-            <button (click)="this.request.CreateNavUrl()" [disabled]="(this.web.Loading$ | async) ||this.srv.rFPI.invalid"  *ngIf="true" type="submit" mat-raised-button color="primary">Look up</button>
-    
-          </div>
-    
-        </form>
-
-    <form [formGroup]='this.srv.rFQ'>
-      <!--================Quran=====================-->
-      <div class="quran-input" *ngIf="this.srv.Source.source.quran">
-
-        <!--=======Surah========-->
-        <mat-form-field class="spacing">
-          <input formControlName='surah_number' placeholder="Surah" type="number" matInput>
-          <mat-error *ngIf='this.srv.rFQ.get("surah_number").hasError("required")'>This field is Required</mat-error>
-          <mat-error *ngIf='this.srv.rFQ.get("surah_number").hasError("min")'>Minimum number is 1</mat-error>
-          <mat-error *ngIf='this.srv.rFQ.get("surah_number").hasError("max")'>The Quran has 114 Surrah</mat-error>
-    </mat-form-field>
-
-        <!--=======Verse========-->
-        <mat-form-field class="spacing">
-          <input formControlName='ayat_number' placeholder="Verse" type="number" matInput>
-          <mat-error *ngIf='this.srv.rFQ.get("ayat_number").hasError("required")'>This field is Required</mat-error>
-          <mat-error *ngIf='this.srv.rFQ.get("ayat_number").hasError("min")'>Minimum is 1</mat-error>
-          <mat-error *ngIf='this.srv.rFQ.get("ayat_number").hasError("max")'>this Surah only has {{this.srv.rFQ.get("ayat_number").getError("max").max}}</mat-error>
-        </mat-form-field>
-        <button (click)="this.request.CreateNavUrl()"  [disabled]="(this.web.Loading$ | async) ||this.srv.rFQ.invalid" type="submit" mat-raised-button color="primary" *ngIf="this.srv.Source.source.quran">Look up</button>
-
-      </div>
-
-    </form>
-
-  </div>
-
-  <div class="col-md-2">
-  </div>
-  
-</div>
-
-<div class="row navigation-buttons">
-  <button (click)='this.srv.copyLink()' mat-raised-button>Copy Link</button>
 </div>
