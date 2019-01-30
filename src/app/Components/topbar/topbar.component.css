@@ -22,13 +22,14 @@ $container-delay: ($word-time + $word-Delay + 1000ms    )*$stop-time-2;
 
 $container-time:(1000ms     )*$stop-time-2;
 */
-.top-navbar {
+.top-navbar-container {
   max-height: 50px;
-  overflow: hidden;
   background-color: #30323D;
+  margin-right: -15px;
+  margin-left: -15px;
 }
 
-.top-navbar .nav-logo img {
+.top-navbar-container .nav-logo img {
   position: absolute;
   left: 0;
   right: 0;
@@ -36,17 +37,17 @@ $container-time:(1000ms     )*$stop-time-2;
   bottom: 0;
   max-width: 100%;
   max-height: 100%;
-  width: 100%;
 }
 
-.top-navbar .nav-buttons {
+.top-navbar-container .nav-buttons {
   margin-left: auto;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
 
-.top-navbar .nav-buttons button {
+.top-navbar-container .nav-buttons button {
   float: left;
+  color: white;
 }
 /*# sourceMappingURL=topbar.component.css.map */

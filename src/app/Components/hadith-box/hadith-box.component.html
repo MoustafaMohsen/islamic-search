@@ -1,83 +1,86 @@
-<div class="row justify-content-center box-container relative">
+<div class="container">
 
-
-  <div class="col-md-8 align-self-center">
-
-    <mat-card class="box-card">
-      <mat-tab-group mat-stretch-tabs *ngIf='this.request.ArContentAndRedArray||this.request.EnContentAndRedArray'>
-
-        <mat-tab label="Arabic" backgroundColor='primary' *ngIf='this.request.ArContentAndRedArray' class="bg-dark">
-
-          <!--=====Card====-->
-          <div class="tab-content" *ngIf='this.request.ArContentAndRedArray'>
+  <div class="row justify-content-center box-container relative">
   
-            <!-- loop -->
-            <div *ngFor="let ArContent of this.request.ArContentAndRedArray; let i = index" class="box-content-row StyleSecondP" [id]="this.randomId(i,1)">
-
-              <div class="box-content-text" *ngFor="let content of ArContent.content">
-                <p [innerHTML]="content.value" class="arabicText lead content-value" *ngIf="content.value!='‏‏.‏'"></p>
-              </div>
-              <div class="footer-seperator"></div>
-              <div class="content-footer">
-
-                <div class="refrences-container" *ngFor="let refrence of ArContent.refrence">
-                  {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
-                  {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}}
-                  {{refrence.value4>0?refrence.value4:""}}
-                  {{refrence.tag1!=""?refrence.tag1:""}}
-                </div>
+  
+    <div class="col-md-8 align-self-center">
+  
+      <mat-card class="box-card">
+        <mat-tab-group mat-stretch-tabs *ngIf='this.request.ArContentAndRedArray||this.request.EnContentAndRedArray'>
+  
+          <mat-tab label="Arabic" backgroundColor='primary' *ngIf='this.request.ArContentAndRedArray' class="bg-dark">
+  
+            <!--=====Card====-->
+            <div class="tab-content" *ngIf='this.request.ArContentAndRedArray'>
     
-                <button class="box-copy-button" (click)='this.CopyToClipboard(this.randomId(i,1))' mat-button>Copy</button>
-
-              </div>
+              <!-- loop -->
+              <div *ngFor="let ArContent of this.request.ArContentAndRedArray; let i = index" class="box-content-row StyleSecondP" [id]="this.randomId(i,1)">
   
-            </div>
-  
-          </div>
-  
-        </mat-tab>
-  
-  
-        <mat-tab label="English" backgroundColor='primary' *ngIf='this.request.EnContentAndRedArray' class="bg-light">
-  
-          <!--=====Card====-->
-  
-  
-          <div class="tab-content" *ngIf='this.request.EnContentAndRedArray'>
-  
-            <!-- loop -->
-            <div *ngFor="let EnContent of this.request.EnContentAndRedArray; let i = index"  class="box-content-row" [id]="this.randomId(i,2)">
-
-              <div class="box-content-text" *ngFor="let content of EnContent.content">
-                <p [innerHTML]="content.value" class="englishText lead" *ngIf="true"></p>
-              </div>
-
-              <div class="footer-seperator"></div>  
-              <div class="content-footer">
-                <div class="refrences-container" *ngFor="let refrence of EnContent.refrence">
-                  {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
-                  {{refrence.value2>0?refrence.value2:""}}
-                  {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
-                  {{refrence.tag1!=""?refrence.tag1:""}}
+                <div class="box-content-text" *ngFor="let content of ArContent.content">
+                  <p [innerHTML]="content.value" class="arabicText lead content-value" *ngIf="content.value!='‏‏.‏'"></p>
                 </div>
-    
-                <button  class="box-copy-button" (click)='this.CopyToClipboard(this.randomId(i,2))' mat-button>Copy</button>
-              </div>
+                <div class="footer-seperator"></div>
+                <div class="content-footer">
   
-            </div>
-  
-          </div>
-  
-        </mat-tab>
-  
-      </mat-tab-group>
-
+                  <div class="refrences-container" *ngFor="let refrence of ArContent.refrence">
+                    {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
+                    {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}}
+                    {{refrence.value4>0?refrence.value4:""}}
+                    {{refrence.tag1!=""?refrence.tag1:""}}
+                  </div>
       
-    </mat-card>
+                  <button class="box-copy-button" (click)='this.CopyToClipboard(this.randomId(i,1))' mat-button>Copy</button>
+  
+                </div>
+    
+              </div>
+    
+            </div>
+    
+          </mat-tab>
+    
+    
+          <mat-tab label="English" backgroundColor='primary' *ngIf='this.request.EnContentAndRedArray' class="bg-light">
+    
+            <!--=====Card====-->
+    
+    
+            <div class="tab-content" *ngIf='this.request.EnContentAndRedArray'>
+    
+              <!-- loop -->
+              <div *ngFor="let EnContent of this.request.EnContentAndRedArray; let i = index"  class="box-content-row" [id]="this.randomId(i,2)">
+  
+                <div class="box-content-text" *ngFor="let content of EnContent.content">
+                  <p [innerHTML]="content.value" class="englishText lead" *ngIf="true"></p>
+                </div>
+  
+                <div class="footer-seperator"></div>  
+                <div class="content-footer">
+                  <div class="refrences-container" *ngFor="let refrence of EnContent.refrence">
+                    {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
+                    {{refrence.value2>0?refrence.value2:""}}
+                    {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
+                    {{refrence.tag1!=""?refrence.tag1:""}}
+                  </div>
+      
+                  <button  class="box-copy-button" (click)='this.CopyToClipboard(this.randomId(i,2))' mat-button>Copy</button>
+                </div>
+    
+              </div>
+    
+            </div>
+    
+          </mat-tab>
+    
+        </mat-tab-group>
+  
+        
+      </mat-card>
+      
+    </div>
+    
     
   </div>
-  
-  
 </div>
 
 <!--row-->

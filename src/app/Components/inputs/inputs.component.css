@@ -36,8 +36,10 @@ $container-time:(1000ms     )*$stop-time-2;
   z-index: 10;
 }
 
-.input-row {
+.input-container {
   background-color: #E4E4DC;
+  margin-right: -15px;
+  margin-left: -15px;
 }
 
 .lookup-button {

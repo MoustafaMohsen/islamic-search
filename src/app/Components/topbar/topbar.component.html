@@ -1,15 +1,23 @@
-<div class="row justify-content-between  top-navbar relative">
+<div class="top-navbar-container">
 
-    <div class="col-4 nav-logo">
-        <img src="../../../assets/img/youtube.png" alt="">
-    </div>
-
-    <div class="col-4"> 
-        <div class="nav-buttons">
-            <button mat-button >quran</button>
-            <button mat-button >bukhari</button>
-            <button mat-button >muslim</button>
+    <div class="container ">
+    
+        <div class="row justify-content-between  top-navbar relative transition">
+        
+            <div class="col-md-4 col-sm-5 col-3 nav-logo transition">
+                <a href="./">
+                    <img src="../../../assets/img/islamic_search_logos/w-s-min.png" alt="">
+                </a>
+            </div>
+        
+            <div class="col transition"> 
+                <div class="nav-buttons">
+                    <button mat-button (click)="setQuran()" >quran</button>
+                    <button mat-button (click)="setBukhari()" >bukhari</button>
+                    <button mat-button (click)="setMuslim()" >muslim</button>
+                </div>
+            </div>
+        
         </div>
     </div>
-
 </div>
