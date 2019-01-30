@@ -31,3 +31,21 @@ button{
 .transition{
     transition: all 500ms ease-in-out;
 }
+
+
+.primary-background{
+    background-color: $primary;
+}
+.secondary-background{
+    background-color: $primary;
+}
+.compelmentary-background{
+    background-color: $primary;
+}
+
+
+[disabled]{
+    color: #b3b3b3 !important;
+    background-color: #dbdbdb !important;
+    border-color: transparent !important;
+}

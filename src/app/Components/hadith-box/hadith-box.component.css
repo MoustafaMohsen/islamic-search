@@ -80,7 +80,6 @@ $container-time:(1000ms     )*$stop-time-2;
 }
 
 .box-container .box-card .tab-content .content-footer .box-copy-button {
-  background-color: #E4E4DC;
   padding: 0px 32px;
   min-height: 0;
   font-size: 0.8em;

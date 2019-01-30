@@ -27,7 +27,7 @@ html, body, main {
 }
 
 body {
-  background-color: #2B4162;
+  background-color: #e8e8e8;
 }
 
 button {
@@ -57,5 +57,23 @@ button {
 .transition {
   -webkit-transition: all 500ms ease-in-out;
   transition: all 500ms ease-in-out;
+}
+
+.primary-background {
+  background-color: #333333;
+}
+
+.secondary-background {
+  background-color: #333333;
+}
+
+.compelmentary-background {
+  background-color: #333333;
+}
+
+[disabled] {
+  color: #b3b3b3 !important;
+  background-color: #dbdbdb !important;
+  border-color: transparent !important;
 }
 /*# sourceMappingURL=styles.css.map */

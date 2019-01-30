@@ -12,9 +12,13 @@
         
             <div class="col transition"> 
                 <div class="nav-buttons">
-                    <button mat-button (click)="setQuran()" >quran</button>
-                    <button mat-button (click)="setBukhari()" >bukhari</button>
-                    <button mat-button (click)="setMuslim()" >muslim</button>
+
+                    <button [ngClass]="this.srv.source_options.value == 'quran'?'nav-active':'nav-inactive'" mat-button (click)="setQuran()" >Quran</button>
+
+                    <button [ngClass]="this.srv.source_options.value == 'bukhari'?'nav-active':'nav-inactive'" mat-button (click)="setBukhari()" >Bukhari</button>
+
+                    <button [ngClass]="this.srv.source_options.value == 'muslim'?'nav-active':'nav-inactive'" mat-button (click)="setMuslim()" >Muslim</button>
+
                 </div>
             </div>
         

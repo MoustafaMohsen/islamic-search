@@ -1,8 +1,9 @@
 .footer-text{
-    position: absolute;
-    bottom: 0;
-    right: 50%;
-    transform: translate3d(50%,0,0);
+    position: relative;
+    bottom: 0%;
+    right: -50%;
+    transform: translate3d(-50%, 0, 0);
+    width: fit-content;
     p{
         font-size: 0.8em;
         margin-bottom: 0.5em;
