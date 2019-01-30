@@ -3,9 +3,8 @@ import { NgModule } from "@angular/core";
 //modules
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-
 //components
-import { AppComponent } from "./Components/boot/app.component";
+import { AppComponent } from "./app.component";
 import { TopbarComponent } from "./Components/topbar/topbar.component";
 import { HadithBoxComponent } from "./Components/hadith-box/hadith-box.component";
 
@@ -15,6 +14,7 @@ import { routes } from "./Statics/routes";
 
 //material
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+
 import {
   MatButtonModule,
   MatCheckboxModule,
@@ -39,6 +39,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { SafePipe } from "./Pipes/safe/safe.pipe";
 import { NumberArrayPipe } from "./Pipes/number-array/number-array.pipe";
 import { AddressArrayPipe } from "./Pipes/address-array/address-array.pipe";
+import { PdfViewerComponent } from './Components/pdf-viewer/pdf-viewer.component';
 
 const material = [
   BrowserAnimationsModule,
@@ -67,7 +68,8 @@ const material = [
     TopbarComponent,
     HadithBoxComponent,
     NumberArrayPipe,
-    AddressArrayPipe
+    AddressArrayPipe,
+    PdfViewerComponent
   ],
   imports: [
     RouterModule.forRoot(routes),

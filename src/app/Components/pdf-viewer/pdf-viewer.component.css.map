@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "pdf-viewer.component.scss"
+    ],
+    "names": [],
+    "file": "pdf-viewer.component.css"
+}

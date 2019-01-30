@@ -1,12 +1,14 @@
-.hadith-input{
-    margin:0.5rem auto;
+.hadith-input {
+  margin: 0.5rem auto;
 }
 
-.quran-input{
-    margin: 0.5rem auto;
+.quran-input {
+  margin: 0.5rem auto;
 }
-.navigation-buttons{
-    position: fixed ;
-    bottom: 0;
-    z-index: 10;
+
+.navigation-buttons {
+  position: fixed;
+  bottom: 0;
+  z-index: 10;
 }
+/*# sourceMappingURL=topbar.component.css.map */
