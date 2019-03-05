@@ -16,7 +16,6 @@ import { RequestService } from "src/app/Services/request/request.service";
 export class InputsComponent implements OnInit {
   ayatMax: number;
   myUsingOptions: { value: string; englishName: string }[] = [];
-  IncomingRequest: Lib3.IncomingRequest;
   //ArContentAndRedArray: { content: Lib3.Value[]; refrence: Lib3.Refrence[] }[]; //=[[]];
   //EnContentAndRedArray: { content: Lib3.Value[]; refrence: Lib3.Refrence[] }[]; //=[[]];
   CompLoaded: boolean = false;
@@ -59,13 +58,13 @@ export class InputsComponent implements OnInit {
             this.router.navigate([""]);
             return;
           }
-          if (this.IncomingRequest == request) {
+          if (this.srv.IncomingRequest == request) {
             AlrSent(1000);
             return;
           } else {
             this.web.IncomingRequests$.next(request);
           }
-          this.IncomingRequest = request;
+          this.srv.IncomingRequest = request;
         }
         //If hadith
         else {
@@ -77,9 +76,9 @@ export class InputsComponent implements OnInit {
             this.router.navigate([""]);
             return;
           }
-          if (this.IncomingRequest == request) {
+          if (this.srv.IncomingRequest == request) {
             AlrSent(1000);
-            this.IncomingRequest = request;
+            this.srv.IncomingRequest = request;
             return;
           }
           this.web.IncomingRequests$.next(request);

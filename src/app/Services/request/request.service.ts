@@ -219,9 +219,18 @@ export class RequestService {
     } //Swich Parent
 
     if (inval) {
-      this.snack.open("Does not exist", "x", { duration: 5000 });
+      this.snack.open("Does not exist", "x", { duration: 3000 });
       return null;
     } else {
+      let lastUrl = `${this.router.url}/`;
+      let currentUrl = `/${navurl}`;
+      console.log("-----lastUrl",lastUrl);
+      console.log("-----currentUrl",currentUrl);
+      
+      if (lastUrl === currentUrl) {
+        this.snack.open("Already sent", "x", { duration: 3000 });
+        return navurl;
+      }
       this.router.navigate([navurl]);
       return navurl;
     }

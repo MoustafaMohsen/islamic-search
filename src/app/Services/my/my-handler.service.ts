@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { Subject } from "rxjs";
-import { ISource } from "../../interfaces";
+import { ISource, Lib3 } from "../../interfaces";
 import { Bindex, Mindex } from "../../Statics/myindex";
 import * as _MuslimTag from "../../Statics/muslimTagsfullchar.json";
 import { WebService } from "../web/web.service";
@@ -12,6 +12,7 @@ declare var $: any;
   providedIn: "root"
 })
 export class MyServiceService {
+  IncomingRequest: Lib3.IncomingRequest;
   public Source: ISource;
   public Navigation$: Subject<{
     Action: string;
