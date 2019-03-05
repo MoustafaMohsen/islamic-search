@@ -105,7 +105,7 @@
               </div>
               <!-- ======== Submit button ====== -->
               <div class="row justify-content-center">
-                <button class="col-8 align-self-center lookup-button secondary-background" (click)="this.request.CreateNavUrl()" [disabled]="(this.web.Loading$ | async) ||this.srv.rFPI.invalid"  *ngIf="true" type="submit" mat-raised-button >Look up</button>
+                <button class="col-8 align-self-center lookup-button" (click)="this.request.CreateNavUrl()" [disabled]="(this.web.Loading$ | async) ||this.srv.rFPI.invalid"  *ngIf="true" type="submit" mat-raised-button >Look up</button>
               </div>
     
             </div>
@@ -138,7 +138,7 @@
             
           </div>
           <div class="row justify-content-center">
-            <button class="col-8 align-self-center lookup-button secondary-background" (click)="this.request.CreateNavUrl()"  [disabled]="(this.web.Loading$ | async) ||this.srv.rFQ.invalid" type="submit" mat-raised-button  *ngIf="this.srv.Source.source.quran">Look up</button>
+            <button class="col-8 align-self-center lookup-button" (click)="this.request.CreateNavUrl()"  [disabled]="(this.web.Loading$ | async) ||this.srv.rFQ.invalid" type="submit" mat-raised-button  *ngIf="this.srv.Source.source.quran">Look up</button>
           </div>
     
         </form>

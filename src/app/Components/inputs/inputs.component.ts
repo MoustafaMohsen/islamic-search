@@ -557,10 +557,7 @@ export class InputsComponent implements OnInit {
     let ayat: number = val2;
 
     let tagNum = parseInt(val1);
-    let tagChar = val2== undefined  || val2.length > 1 ? "" : val2 ;
-    console.log("CreateRquestFromUrl()");
-    console.log("tagChar");
-    console.log(tagChar);
+    let tagChar = val2 == "all"? "all": val2 == undefined  || val2.length > 1 ? "" : val2 ;
 
     var inval: boolean = false;
 
@@ -646,8 +643,13 @@ export class InputsComponent implements OnInit {
               SetValues("OtherTag",tagNum,"method")
               SetValues("OtherTagChars",tagChar,"chapter")
             }
-            if (tagChar == "") {
-              request_obj=createRequest("hadith",6,"muslim tag","Reference",2,null,null,null,tagNum)
+            console.log("IntagCreateRequest");
+            console.log("tagChar",tagChar);
+            console.log("tagNum",tagNum);
+            
+            if (tagChar == "all") {
+              
+              request_obj=createRequest("hadith",5,"muslim tag","Reference",2,null,null,null,tagNum)
             } else {
               request_obj=createRequest("hadith",6,"muslim tag","Reference",2,null,null,null,tagNum,tagChar)
             }

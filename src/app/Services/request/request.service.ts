@@ -36,6 +36,23 @@ export class RequestService {
           }
         } //If Hadith
 
+        if (request.source == "hadith") {
+          if (request.Method == 5) {
+          this.web.Loading$.next(true);
+            this.web.getHadithBlockArray(request).subscribe(
+              blocks => {
+                this.ArContentAndRedArray=this.loadHadithBlocks(blocks,"ar");
+                this.EnContentAndRedArray=this.loadHadithBlocks(blocks,"en");
+                this.web.Loading$.next(false);
+              },
+              error => {
+                this.notFoundSnack()
+                this.web.Loading$.next(false);
+              }
+            );
+          }
+        } //If Hadith
+
         //===If Quran
         if (request.source == "quran") {
           this.web.Loading$.next(true);
@@ -137,7 +154,11 @@ export class RequestService {
       : this.srv.rFPI.get("NewHadith").value;
     let tagNum = parseInt(this.srv.rFPI.get("OtherTag").value, 10);
     let tagChar = this.srv.rFPI.get("OtherTagChars").value;
-    tagChar = tagChar == undefined || tagChar.length > 1 ? "" : tagChar;
+    console.log("---tagChar");
+    console.log(tagChar);
+    tagChar = tagChar == undefined || tagChar.length > 1 ? "all" : tagChar;
+    console.log(tagChar);
+    console.log("tagChar---");
     let surah = this.srv.rFQ.get("surah_number").value;
     let ayat = this.srv.rFQ.get("ayat_number").value;
     var inval: boolean = false;
@@ -168,10 +189,7 @@ export class RequestService {
       case "muslim": {
         switch (method) {
           case "tag": {
-            navurl =
-              tagChar == undefined || tagChar.length > 1
-                ? `${source}/${method}/${tagNum}`
-                : `${source}/${method}/${tagNum}/${tagChar}`;
+            navurl = `${source}/${method}/${tagNum}/${tagChar}`;
             break;
           }
           case "new": {

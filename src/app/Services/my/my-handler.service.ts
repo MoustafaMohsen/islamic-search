@@ -148,7 +148,7 @@ export class MyServiceService {
             };
           }
 
-          CharsArray.unshift({ name: "All", value: "" });
+          CharsArray.unshift({ name: "All", value: "all" });
         }
       }
       return { CharsArray: CharsArray };
@@ -223,7 +223,7 @@ export class MyServiceService {
         let chars = this.HIndex(true, null, "tag", tagNumber).CharsArray;
         this.OtherTagCharsArray = chars;
         if (chars) {
-          this.rFPI.get("OtherTagChars").setValue("");
+          this.rFPI.get("OtherTagChars").setValue("all");
         }
       }
     } //if muslim
@@ -352,6 +352,7 @@ export class MyServiceService {
   } //isMethodValid
 
   //call this everytime a chapter value changes
+  /*
   ValidateHadithHadithInputsBackUp() {
     //bukhari
     if (this.Source.source.hadith.bukhari) {
@@ -470,9 +471,10 @@ export class MyServiceService {
       }
       
     }//if nasai
-    */
-    }
   }
+}
+*/
+
   //call this only once a new method is selected Or number is set
   ValidateChapterInputs() {
     //bukhari

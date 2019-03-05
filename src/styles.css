@@ -71,9 +71,89 @@ button {
   background-color: #333333;
 }
 
+.tertiary-background {
+  background-color: #333333;
+}
+
 [disabled] {
   color: #b3b3b3 !important;
   background-color: #dbdbdb !important;
   border-color: transparent !important;
+}
+
+.my-button {
+  margin: 10px 0 !important;
+  display: block !important;
+  position: relative !important;
+  width: -webkit-fit-content !important;
+  width: -moz-fit-content !important;
+  width: fit-content !important;
+  padding: 10px 20px !important;
+  white-space: nowrap !important;
+  color: #e8e8e8 !important;
+  background-color: transparent !important;
+  border-radius: 0px !important;
+  border: 2px solid #e8e8e8 !important;
+  -webkit-transition: 200ms !important;
+  transition: 200ms !important;
+}
+
+.my-button P {
+  font-size: 20px !important;
+  line-height: 20px !important;
+  margin: 0 !important;
+}
+
+.my-button[disabled] {
+  color: #b3b3b3 !important;
+  background-color: #dbdbdb !important;
+  border-color: transparent !important;
+}
+
+.my-button:hover:not([disabled]) {
+  background-color: #0d47a1 !important;
+  border-color: #0d47a1 !important;
+  -webkit-transition: 200ms !important;
+  transition: 200ms !important;
+}
+
+@media screen and (max-width: 767.98px) {
+  .my-button-xs-scall {
+    -webkit-transform: scale(0.6);
+            transform: scale(0.6);
+  }
+}
+
+.my-button-secondary {
+  color: #0d47a1 !important;
+  border: 2px solid #0d47a1 !important;
+}
+
+.my-button-secondary:hover:not([disabled]) {
+  background-color: #0d47a1 !important;
+  border-color: #0d47a1 !important;
+  color: #e8e8e8 !important;
+}
+
+.my-button-tertiary {
+  color: #1B1C24 !important;
+  border: 2px solid #1B1C24 !important;
+}
+
+.my-button-tertiary:hover:not([disabled]) {
+  background-color: #1B1C24 !important;
+  border-color: #1B1C24 !important;
+  color: #e8e8e8 !important;
+}
+
+.my-button-primary {
+  color: #333333 !important;
+  border: 2px solid #333333 !important;
+}
+
+.my-button-primary:hover:not([disabled]) {
+  background-color: #333333 !important;
+  border-color: #333333 !important;
+  color: #e8e8e8 !important;
 }
 /*# sourceMappingURL=styles.css.map */
