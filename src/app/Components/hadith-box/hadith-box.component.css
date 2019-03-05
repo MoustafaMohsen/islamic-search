@@ -49,6 +49,7 @@ $container-time:(1000ms     )*$stop-time-2;
 
 .box-container {
   margin-top: 50px;
+  padding: 0;
 }
 
 .box-container .box-card .tab-content {
