@@ -1,7 +1,7 @@
 
 # Islamic Search
 
-Project Url [Here](https://moustafamohsen.github.io/islame-search/)
+Project Url [Here](https://moustafamohsen.github.io/islamic-search/)
 
 Search any references or sources from different books, one place that connects all the different book references
 
@@ -23,7 +23,7 @@ These instructions will get you a copy of the project up and running on your loc
 Create folder and clone the project 
 
 ```sh
-$ git clone https://github.com/MoustafaMohsen/islame-search.git
+$ git clone https://github.com/MoustafaMohsen/islamic-search.git
 $ npm install
 ```
 open /src/app/statics/config.ts and set your API URL
@@ -72,7 +72,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
-Please read [CONTRIBUTING.md](https://github.com/MoustafaMohsen/islame-search/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://github.com/MoustafaMohsen/islamic-search/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
