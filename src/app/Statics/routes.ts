@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router'; 
 import { ContainerComponent } from '../Components/boot/container/container.component';
+import { InputsComponent } from '../Components/inputs/inputs.component';
 
 export const routes:Routes =[
     {path:'' , component:ContainerComponent },

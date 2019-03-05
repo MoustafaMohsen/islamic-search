@@ -3,15 +3,16 @@
   <div class="row justify-content-center box-container relative">
   
   
-    <div class="col-md-8 align-self-center">
+    <div class="col-md-10 col-12 align-self-center">
   
-      <mat-card class="box-card">
+      <mat-card class="box-card content" [ngClass]="Classes()">
         <mat-tab-group mat-stretch-tabs *ngIf='this.request.ArContentAndRedArray||this.request.EnContentAndRedArray'>
   
-          <mat-tab label="Arabic" backgroundColor='primary' *ngIf='this.request.ArContentAndRedArray' class="bg-dark">
+          <!-- ============= Arabic Tab =============== -->
+          <mat-tab label="Arabic" backgroundColor='primary' *ngIf='this.request.ArContentAndRedArray.length > 0' class="bg-dark">
   
             <!--=====Card====-->
-            <div class="tab-content" *ngIf='this.request.ArContentAndRedArray'>
+            <div class="tab-content" *ngIf='this.request.ArContentAndRedArray.length > 0'>
     
               <!-- loop -->
               <div *ngFor="let ArContent of this.request.ArContentAndRedArray; let i = index" class="box-content-row StyleSecondP" [id]="this.randomId(i,1)">
@@ -20,16 +21,22 @@
                   <p [innerHTML]="content.value" class="arabicText lead content-value" *ngIf="content.value!='‏‏.‏'"></p>
                 </div>
                 <div class="footer-seperator"></div>
-                <div class="content-footer">
+                <div class="content-footer row justify-content-between">
   
-                  <div class="refrences-container" *ngFor="let refrence of ArContent.refrence">
-                    {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
-                    {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}}
-                    {{refrence.value4>0?refrence.value4:""}}
-                    {{refrence.tag1!=""?refrence.tag1:""}}
+                  <div class="col-sm-6 col-12">
+                    <div class="refrences-container" *ngFor="let refrence of ArContent.refrence">
+                      {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
+                      {{refrence.value2>0?refrence.value2:""}} {{refrence.value3>0?refrence.value3:""}}
+                      {{refrence.value4>0?refrence.value4:""}}
+                      {{refrence.tag1!=""?refrence.tag1:""}}
+                    </div>
                   </div>
-      
-                  <button class="box-copy-button  secondary-background" (click)='this.CopyToClipboard(this.randomId(i,1))' mat-button>Copy</button>
+                  
+                  <div class="col-sm-4 col-12 relative">
+                    <div class="row justify-content-end">
+                      <button class="align-self-end box-copy-button  secondary-background" (click)='this.CopyToClipboard(this.randomId(i,1))' mat-button><i class="far fa-copy"></i></button>
+                    </div>
+                  </div>
   
                 </div>
     
@@ -39,13 +46,13 @@
     
           </mat-tab>
     
-    
-          <mat-tab label="English" backgroundColor='primary' *ngIf='this.request.EnContentAndRedArray' class="bg-light">
+          <!-- ============= English Tab =============== -->    
+          <mat-tab label="English" backgroundColor='primary' *ngIf='this.request.EnContentAndRedArray.length > 0' class="bg-light">
     
             <!--=====Card====-->
     
     
-            <div class="tab-content" *ngIf='this.request.EnContentAndRedArray'>
+            <div class="tab-content" *ngIf='this.request.EnContentAndRedArray.length > 0'>
     
               <!-- loop -->
               <div *ngFor="let EnContent of this.request.EnContentAndRedArray; let i = index"  class="box-content-row" [id]="this.randomId(i,2)">
@@ -55,15 +62,20 @@
                 </div>
   
                 <div class="footer-seperator"></div>  
-                <div class="content-footer">
-                  <div class="refrences-container" *ngFor="let refrence of EnContent.refrence">
-                    {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
-                    {{refrence.value2>0?refrence.value2:""}}
-                    {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
-                    {{refrence.tag1!=""?refrence.tag1:""}}
+                <div class="content-footer row justify-content-between">
+                  <div class="col-sm-6 col-12">
+                    <div class="refrences-container" *ngFor="let refrence of EnContent.refrence">
+                        {{refrence.name}}: {{refrence.value1>0?refrence.value1:""}}
+                        {{refrence.value2>0?refrence.value2:""}}
+                        {{refrence.value3>0?refrence.value3:""}} {{refrence.value4>0?refrence.value4:""}}
+                        {{refrence.tag1!=""?refrence.tag1:""}}
+                    </div>
                   </div>
-      
-                  <button  class="box-copy-button secondary-background" (click)='this.CopyToClipboard(this.randomId(i,2))' mat-button>Copy</button>
+                  <div class="col-sm-4 col-12 relative">
+                      <div class="row justify-content-end">
+                        <button  class="align-self-end box-copy-button  secondary-background" (click)='this.CopyToClipboard(this.randomId(i,2))' mat-button><i class="far fa-copy"></i></button>
+                      </div>
+                  </div>
                 </div>
     
               </div>

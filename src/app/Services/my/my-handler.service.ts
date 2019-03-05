@@ -37,7 +37,7 @@ export class MyServiceService {
       OldVol: [{ value: null }],
       OldChapter: [1, Validators.compose([Validators.min(1)])],
       OldHadith: [1, Validators.compose([Validators.min(1)])],
-      OtherTag: [9],
+      OtherTag: [8],
       OtherTagChars: [""],
       surah: [1],
       ayat: [1]

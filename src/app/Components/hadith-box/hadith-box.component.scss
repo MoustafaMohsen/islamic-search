@@ -38,6 +38,14 @@
                     margin: 0;
                 }
             }
+            .box-content-row {
+                margin-bottom: 21px;
+                padding-top: 39px;
+                border-top: solid 4px;
+            }
+            .box-content-row:first-child {
+                border-top: none;
+            }
             .footer-seperator{
                 height: 1px;
                 width: 80%;
@@ -45,7 +53,8 @@
                 margin: 40px auto 20px;
             }
             .content-footer{
-                width: fit-content;
+                margin-right: 15px;
+                margin-left: 15px;
                 .refrences-container{
                     font-size:0.8em;
                     color: gray;
@@ -53,17 +62,29 @@
                 }
     
                 .box-copy-button{
-                    //background-color: $secondary;
                     //position: absolute;
-                    padding: 0px 32px;
+                    padding: 0px;
                     min-height: 0;
                     font-size: 0.8em;
-                
-                    
+                    background-color: transparent;
+                    color: $primary;
+
+                    position: absolute;
+                    top: 100%;
+                    transform: translateY(-100%);
                 }
             }
             
         }
     }
 
+}
+.mat-card{
+    padding: 0 16px;
+}
+.content{
+}
+.hide-content{
+}
+.show-content{
 }

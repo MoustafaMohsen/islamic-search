@@ -60,6 +60,16 @@ $container-time:(1000ms     )*$stop-time-2;
   margin: 0;
 }
 
+.box-container .box-card .tab-content .box-content-row {
+  margin-bottom: 21px;
+  padding-top: 39px;
+  border-top: solid 4px;
+}
+
+.box-container .box-card .tab-content .box-content-row:first-child {
+  border-top: none;
+}
+
 .box-container .box-card .tab-content .footer-seperator {
   height: 1px;
   width: 80%;
@@ -68,9 +78,8 @@ $container-time:(1000ms     )*$stop-time-2;
 }
 
 .box-container .box-card .tab-content .content-footer {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
+  margin-right: 15px;
+  margin-left: 15px;
 }
 
 .box-container .box-card .tab-content .content-footer .refrences-container {
@@ -80,8 +89,18 @@ $container-time:(1000ms     )*$stop-time-2;
 }
 
 .box-container .box-card .tab-content .content-footer .box-copy-button {
-  padding: 0px 32px;
+  padding: 0px;
   min-height: 0;
   font-size: 0.8em;
+  background-color: transparent;
+  color: #333333;
+  position: absolute;
+  top: 100%;
+  -webkit-transform: translateY(-100%);
+          transform: translateY(-100%);
+}
+
+.mat-card {
+  padding: 0 16px;
 }
 /*# sourceMappingURL=hadith-box.component.css.map */

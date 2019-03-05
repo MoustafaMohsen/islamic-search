@@ -74,6 +74,16 @@ export class HadithBoxComponent implements OnInit, AfterViewInit, OnDestroy {
       this.snack.open("Copied", "x", { duration: 1000 });
     }
   }
+  Classes(){
+    let isContent = this.request.ArContentAndRedArray.length > 0|| this.request.EnContentAndRedArray.length > 0;
+    
+    let content={
+      'show-content':isContent,
+      'hide-content':!isContent,
+    };
+    return content;
+  }
+
 
   ngAfterViewInit() {
     console.log("Hadith box is loaded");
