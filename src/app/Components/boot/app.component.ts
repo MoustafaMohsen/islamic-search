@@ -1,4 +1,6 @@
-import { Component } from "@angular/core";
+import { Component,OnInit } from "@angular/core";
+import { GoogleService } from "../../Services/google.service";
+import { AnalyticsId } from "src/app/Statics/configs";
 
 @Component({
   selector: "app-root",
@@ -7,6 +9,11 @@ import { Component } from "@angular/core";
       <router-outlet></router-outlet>
   `
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = "app";
+  constructor(private googleServ:GoogleService){
+  }
+  ngOnInit(){
+    this.googleServ.Script(AnalyticsId);
+  }
 }
